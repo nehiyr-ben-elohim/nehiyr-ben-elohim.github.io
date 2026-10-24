@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import FloatingHeader from '../components/FloatingHeader.astro'
+import Foot from '../components/Foot.astro'
+---
+
+<BaseLayout title="Page introuvable — Jean-jacques AKAKPO">
+  <FloatingHeader
+    restricted
+    expanded={{ title: '404 --perdu', hints: ["Cette page n'existe pas (ou plus)", 'Retour à l’accueil en haut à droite'] }}
+  />
+  <section class="row not-found">
+    <a href="/" class="btn">accueil</a>
+  </section>
+  <Foot />
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40vh;
+  }
+</style>

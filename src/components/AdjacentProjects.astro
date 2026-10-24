@@ -1,0 +1,27 @@
+---
+import { adjacent, type Activity } from '../lib/activities'
+import ProjectItem from './ProjectItem.astro'
+
+interface Props {
+  center: Activity
+  list: Activity[]
+}
+const { center, list } = Astro.props
+const { prev, next } = adjacent(list, center.key)
+---
+
+<div class="container">
+  <div class="adjacents-row">
+    {prev && <a href={prev.href} class="adjacents-control adjacents-control-prev">&lt; préc.</a>}
+
+    <div class="adjacents-project-item">{prev && <ProjectItem item={prev} mini />}</div>
+
+    <div class="adjacents-project-item">{next && <ProjectItem item={next} mini />}</div>
+
+    {next && <a href={next.href} class="adjacents-control adjacents-control-next">suiv. &gt;</a>}
+  </div>
+</div>
+
+<style lang="scss">
+  @import '../styles/components/adjacents-projects.scss';
+</style>

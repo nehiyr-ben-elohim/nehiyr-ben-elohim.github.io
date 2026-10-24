@@ -1,0 +1,110 @@
+---
+import type { GetStaticPaths } from 'astro'
+import { Image } from 'astro:assets'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import FloatingHeader from '../../components/FloatingHeader.astro'
+import ProjectMetaItem from '../../components/ProjectMetaItem.astro'
+import SocialLinks from '../../components/SocialLinks.astro'
+import AdjacentProjects from '../../components/AdjacentProjects.astro'
+import Contact from '../../components/Contact.astro'
+import Foot from '../../components/Foot.astro'
+import { getProjects } from '../../lib/collection'
+import { resolveMetas, type Activity } from '../../lib/activities'
+import { resolveImage } from '../../lib/images'
+
+export const getStaticPaths = (async () => {
+  const projects = await getProjects()
+  return projects.map(item => ({ params: { slug: item.slug }, props: { item, projects } }))
+}) satisfies GetStaticPaths
+
+interface Props {
+  item: Activity
+  projects: Activity[]
+}
+const { item, projects } = Astro.props
+const media = resolveImage(item.mediaURL)
+// http logos would be blocked as mixed content
+const clientLogo = item.clientLogo?.startsWith('https://') ? item.clientLogo : undefined
+---
+
+<BaseLayout title={`${item.title} — Jean-jacques AKAKPO`} description={item.description} image={media}>
+  <section class="row project-item-row">
+    <FloatingHeader expanded={{ title: item.title, resolve: item.resolve }} height="big" dashTitle restricted>
+      <div class="shared-element" transition:name={`media-${item.key}`}>
+        <Image src={media} alt="" width={1920} loading="eager" class="shared-element-media" />
+      </div>
+    </FloatingHeader>
+
+    <div class="project-item-metas container">
+      <ul class="metas-list">
+        {resolveMetas(item).map(meta => <ProjectMetaItem item={meta} />)}
+        {
+          clientLogo && (
+            <li class="logo-client">
+              <span class="img-wrapper">
+                <img src={clientLogo} alt={`Logo ${item.title}`} loading="lazy" referrerpolicy="no-referrer" />
+              </span>
+            </li>
+          )
+        }
+      </ul>
+    </div>
+
+    <div class="the-concept container">
+      {
+        item.resolve && (
+          <ul class="actions">
+            <li class="action-item">
+              <a href={item.resolve} target="_blank" rel="noopener noreferrer" class="btn btn-small">voir le site web</a>
+            </li>
+            <SocialLinks shareLink={item.resolve} size="small" />
+          </ul>
+        )
+      }
+
+      <h4 class="title prefixed-text">{item.title}, le concept</h4>
+
+      <!-- concept is trusted HTML from the repo's JSON, rendered at build time -->
+      <p class="description" set:html={item.concept} />
+    </div>
+
+    <div class="report container">
+      <h4 class="title prefixed-text">{item.report.title}</h4>
+      <p class="description">{item.report.description}</p>
+
+      {
+        item.shoots.map(shoot => (
+          <div class="shoot-item">
+            <p class="shoot-description">{shoot.description}</p>
+            <span class="img-wrapper shoot-media">
+              <Image src={resolveImage(shoot.mediaURL)} alt={shoot.description} width={1600} />
+            </span>
+          </div>
+        ))
+      }
+    </div>
+
+    <AdjacentProjects center={item} list={projects} />
+
+    <Contact stepIndicator={false} />
+
+    <Foot />
+  </section>
+</BaseLayout>
+
+<style lang="scss">
+  @import '../../styles/components/project-single-item.scss';
+
+  .shared-element {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .shared-element-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

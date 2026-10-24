@@ -1,0 +1,21 @@
+---
+import type { Meta } from '../lib/activities'
+
+interface Props {
+  item: Meta
+}
+const { item } = Astro.props
+---
+
+<li class="details-item">
+  <div class="details-item--title">
+    <span>{item.title}</span>
+  </div>
+  <div class="details-item--content">
+    <span>{item.value}</span>
+  </div>
+</li>
+
+<style lang="scss">
+  @import '../styles/components/project-meta-item.scss';
+</style>

@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import FloatingHeader from '../../components/FloatingHeader.astro'
+import Projects from '../../components/Projects.astro'
+import Contact from '../../components/Contact.astro'
+import Foot from '../../components/Foot.astro'
+import { getProjects } from '../../lib/collection'
+
+const projects = await getProjects()
+---
+
+<BaseLayout title="Mes réalisations — Jean-jacques AKAKPO" description="Tous les projets et travaux de Jean-jacques AKAKPO.">
+  <FloatingHeader
+    restricted
+    expanded={{
+      title: 'tous mes projets, travaux, ...',
+      hints: [
+        "Certains d'entre eux ne sont pas disponibles en ligne",
+        'Certains d’entre eux sont encore en cours',
+        'Défiler vers le bas pour voir plus',
+      ],
+    }}
+  />
+  <Projects items={projects} showAll stepIndicator={false} />
+  <Contact stepIndicator={false} />
+  <Foot />
+</BaseLayout>
