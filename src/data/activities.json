@@ -14,8 +14,8 @@
       "title": "resultat...",
       "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     },
-    "startedAt": "1515909567",
-    "finishedAt": "1470528000",
+    "startedAt": "1470528000",
+    "finishedAt": "1515909567",
     "shoots": [
       {
         "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
@@ -39,7 +39,11 @@
       }
     ],
     "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    "techs": [ "Laravel", "VueJS", "MySQL" ],
+    "techs": [
+      "Laravel",
+      "VueJS",
+      "MySQL"
+    ],
     "metas": [
       {
         "title": "Client",
@@ -96,7 +100,11 @@
       }
     ],
     "description": "Le Groupe Carrere vous propose des résidences sur Toulouse et très prochainement sur Bordeaux, Nantes, Lille, Le Havre, Annecy, Aix en Provence et Neuilly sur Seine. Il se met à votre disposition pour des conseils sur le lexique de l'immobilier, les avantages de l'immobilier neuf et plus encore...",
-    "techs": [ "Drupal", "JavaScript", "MySQL" ],
+    "techs": [
+      "Drupal",
+      "JavaScript",
+      "MySQL"
+    ],
     "metas": [
       {
         "title": "Client",
@@ -140,7 +148,11 @@
     "finishedAt": "1533663000",
     "shoots": [],
     "description": "Liebherr est une entreprise d'origine allemande et de droit suisse, fabricant d'engins de construction, machines-outils, de réfrigérateurs et d'équipements aéronautiques. Désirant avoir une idée sur les besoins de sa clientèle, nous avons été contactés pour développer une application quizz à cette fin.",
-    "techs": [ "PHP", "JavaScript", "MySQL" ],
+    "techs": [
+      "PHP",
+      "JavaScript",
+      "MySQL"
+    ],
     "metas": [
       {
         "title": "Client",
@@ -197,7 +209,12 @@
       }
     ],
     "description": "Site web mobile pour la promotion de la culture de la ville Saint-Louis, Sénégal. Le site offre des parcours en passant par des lieux clés, des informations sur les événements/festivals de la ville",
-    "techs": [ "NuxtJS", "Vuex", "Firebase", "Google Maps" ],
+    "techs": [
+      "NuxtJS",
+      "Vuex",
+      "Firebase",
+      "Google Maps"
+    ],
     "metas": [
       {
         "title": "Client",
@@ -254,7 +271,11 @@
       }
     ],
     "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    "techs": [ "Angular 6", "Laravel", "Google Maps" ],
+    "techs": [
+      "Angular 6",
+      "Laravel",
+      "Google Maps"
+    ],
     "metas": [
       {
         "title": "Client",
@@ -315,7 +336,10 @@
       }
     ],
     "description": "Site web dédié à la promotion des produits de beauté de qualité; offrant également des conseils pour le bien-être. Ushuaia-Beauté s'est engagée pour offrir des produits avec des ingrédients d'origine naturelle tout en respectant les écosystèmes.",
-    "techs": [ "Wordpress", "JavaScript" ],
+    "techs": [
+      "Wordpress",
+      "JavaScript"
+    ],
     "metas": [
       {
         "title": "Client",
@@ -364,7 +388,9 @@
       }
     ],
     "description": "1 To 1 Services est une entreprise dans la prestation de plusieurs services entre autres : l'électricité, la plomberie, les travaux de construction. J'ai été approché dans l'optique de la conception de leur logo que voici.",
-    "techs": [ "Photoshop" ],
+    "techs": [
+      "Photoshop"
+    ],
     "metas": [
       {
         "title": "Client",
@@ -417,7 +443,9 @@
       }
     ],
     "description": "Wola Social Coders est un groupe opérant dans le domaine technologique. Nous avons donc développé un placeholder de site web en attendant la version officielle.",
-    "techs": [ "NuxtJS" ],
+    "techs": [
+      "NuxtJS"
+    ],
     "metas": [
       {
         "title": "Client",
@@ -461,7 +489,11 @@
     "finishedAt": "1466066031",
     "shoots": [],
     "description": "Plateforme d'envoi de mails en masse, utilisé en interne par la structure immobilière Confortis basée au Togo.",
-    "techs": [ "Python", "JavaScript", "MongoDB" ],
+    "techs": [
+      "Python",
+      "JavaScript",
+      "MongoDB"
+    ],
     "metas": [
       {
         "title": "Client",
@@ -505,7 +537,10 @@
     "finishedAt": "1469176431",
     "shoots": [],
     "description": "Application web qui facilite la suivi de la messe dans les églises.",
-    "techs": [ "HTML - CSS", "JavaScript" ],
+    "techs": [
+      "HTML - CSS",
+      "JavaScript"
+    ],
     "metas": [
       {
         "title": "Client",
@@ -554,7 +589,10 @@
       }
     ],
     "description": "Application mobile Android de commande de plats en ligne dans le restaurant 'Le Nubien'",
-    "techs": [ "Java - XML Android", "Firebase" ],
+    "techs": [
+      "Java - XML Android",
+      "Firebase"
+    ],
     "metas": [
       {
         "title": "Client",
@@ -594,8 +632,8 @@
       "title": "resultat...",
       "description": ""
     },
-    "startedAt": "1515909567",
-    "finishedAt": "1470528000",
+    "startedAt": "1470528000",
+    "finishedAt": "1515909567",
     "shoots": [
       {
         "description": "Formulaire de contact + Compétences",
@@ -603,7 +641,9 @@
       }
     ],
     "description": "Site web de la structure ITLabo, spécialisée dans le développement des solutions informatiques et la maintenance informatique.",
-    "techs": [ "VueJS" ],
+    "techs": [
+      "VueJS"
+    ],
     "metas": [
       {
         "title": "Client",
