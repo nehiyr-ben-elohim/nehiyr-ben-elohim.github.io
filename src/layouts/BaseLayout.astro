@@ -38,9 +38,21 @@ const ogImage = image ? new URL((await getImage({ src: image, width: 1200, forma
     {ogImage && <meta property="og:image" content={ogImage} />}
     <meta name="twitter:card" content="summary_large_image" />
     <script is:inline>document.documentElement.classList.add('js')</script>
+    <noscript>
+      <style>
+        [data-scrollbreak], [data-scrollbreak] *, .project-item, .project-item *, .content-header-title, .content-header-title * {
+          opacity: 1 !important;
+          visibility: visible !important;
+          transform: none !important;
+        }
+      </style>
+    </noscript>
     <ClientRouter />
   </head>
   <body class={bodyClass}>
     <slot />
+    <script>
+      import '../scripts/lifecycle'
+    </script>
   </body>
 </html>
