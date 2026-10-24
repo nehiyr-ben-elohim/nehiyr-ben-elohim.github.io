@@ -46,22 +46,12 @@
       // Social links for my profile
       socialProfiles: [
         {
-          resolve: 'https://twitter.com/AkakpoJacques',
-          mediaURL: '/img/brands/twitter.svg',
-          title: 'Follow me on Twitter'
-        },
-        {
-          resolve: 'https://www.linkedin.com/in/jeanjacques-akakpo',
+          resolve: 'https://www.linkedin.com/in/justin-potchona',
           mediaURL: '/img/brands/linkedin.svg',
           title: 'Connect with me on LinkedIn'
         },
         {
-          resolve: 'skype:jeanjacques.akakpo?userinfo',
-          mediaURL: '/img/brands/skype.svg',
-          title: 'Call me on Skype'
-        },
-        {
-          resolve: 'https://github.com/phareal',
+          resolve: 'https://github.com/nehiyr-ben-elohim',
           mediaURL: '/img/brands/github.svg',
           title: 'Join me on GitHub'
         }

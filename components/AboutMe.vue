@@ -83,13 +83,13 @@ export default {
   methods: {
     // getSpeechTitle
     getSpeechTitle() {
-      return "appele-moi Jean-Jacques";
+      return "appelle-moi Justin";
     },
 
     // getSpeechText
     getSpeechText() {
       return `
-          je suis un développeur JavaScript Full Stack. j'aime travailler sur des projets innovants, pleins de défis. je suis collaboratif et perfectionniste.
+          je suis développeur logiciel, passionné par mon métier et par les nouvelles technologies. particulièrement intéressé par les usages du machine learning, je veux poursuivre ma carrière sur des projets de machine learning ou de développement backend. passionné, motivé et autonome.
         `;
     }
   }

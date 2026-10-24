@@ -2,7 +2,7 @@
   <div class="brand-wrapper">
     <a href="/" class="brand">
       <span class="img-wrapper">
-        <img src="/img/logo.jpg" class="img-fluid" width="30px">
+        <img src="/img/logo.svg" class="img-fluid" width="30px">
       </span>
     </a>
   </div>

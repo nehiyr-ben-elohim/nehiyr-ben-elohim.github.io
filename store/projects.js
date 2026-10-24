@@ -90,7 +90,11 @@ export const mutations = {
 
         // Build dates
         item['startedAt'] = unixTimestampToDate(item['startedAt'])
-        item['finishedAt'] = unixTimestampToDate(item['finishedAt'])
+        if (item['finishedAt'] === 'TODAY') {
+          item['finishedAt'] = new Date()
+        } else {
+          item['finishedAt'] = unixTimestampToDate(item['finishedAt'])
+        }
 
         // Reformat metadata
         item['metas'].map(meta => {

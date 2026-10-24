@@ -6,12 +6,12 @@
         class="goto-top"><i class="material-icons">keyboard_arrow_up</i></button>
 
       <div>
-        <h6>&copy; 2019 jean-jacques Akakpo. Tous droits réservés.</h6>
+        <h6>&copy; 2026 Justin POTCHONA. Tous droits réservés.</h6>
         <h6>Designed by love and code</h6>
       </div>
 
       <div>
-        <h6><a href="mailto:akakpo.jeanjacques@gmail.com?subject=Greetings">akakpo.jeanjacques@gmail.com</a></h6>
+        <h6><a href="mailto:potchjust@gmail.com?subject=Greetings">potchjust@gmail.com</a></h6>
       </div>
     </div>
   </section>

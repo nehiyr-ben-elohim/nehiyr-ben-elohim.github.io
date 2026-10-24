@@ -99,7 +99,7 @@ export default {
 
     // getWhatIsItText
     getWhatIsItText() {
-      return "Ceci est juste un autre portfolio. Point.";
+      return "Développeur logiciel. Backend & machine learning.";
     },
 
     // onScroll

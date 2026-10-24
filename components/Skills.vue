@@ -15,18 +15,19 @@
         </header>
 
         <p data-scrollbreak="150" class="skills-speech">
-          Pour une application Web complète, je sépare le front-end [visuel] du
-          back-end [logique applicative]. Le front-end, étant principalement en
-          <a href="#">HTML</a> - <a href="#">CSS [SASS/LESS]</a> -
-          <a href="#">JS [VueJS/ReactJS]</a> avec un petit coup de
-          <a href="#">Bootstrap</a> ou carrément <a href="#">VuetifyJS</a> pour
-          le matérial design, communique avec le back-end [<a href="#"
-            >PHP/Lumen/Laravel</a
-          >
-          ou <a href="#">NodeJS</a>] par <a href="#">AJAX [Axios/SocketIO]</a>.
-          Je la préfère native donc je pars sur du <a href="#">Java Android</a>,
-          avec <a href="#">Android Studio</a> ou du
-          <a href="#">React Native</a> pour mes applications mobiles.
+          Côté langages, je travaille avec <a href="#">Java</a>,
+          <a href="#">C# [.Net]</a>, <a href="#">TypeScript</a>,
+          <a href="#">JavaScript</a>, <a href="#">Go</a> et
+          <a href="#">Python</a>. Pour les frameworks, j'utilise
+          <a href="#">Symfony</a>, <a href="#">Laravel</a>,
+          <a href="#">Django</a> et <a href="#">Gin</a> côté back-end,
+          <a href="#">Vue.js/Nuxt</a> et <a href="#">React</a> côté front-end,
+          <a href="#">Flutter</a> et <a href="#">React Native</a> pour le mobile.
+          Mes données vivent dans <a href="#">PostgreSQL</a>,
+          <a href="#">MySQL</a>, <a href="#">SQL Server</a>,
+          <a href="#">MongoDB</a> ou <a href="#">Neo4j</a>. Je m'intéresse aussi
+          au <a href="#">NLP</a>, au <a href="#">machine learning</a> et au
+          <a href="#">DevOps</a>.
         </p>
       </div>
     </div>

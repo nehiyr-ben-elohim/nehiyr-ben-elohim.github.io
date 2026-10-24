@@ -9,7 +9,7 @@
       @click.prevent.stop="loadProject(p_item)" 
       :href="p_item.link()">
       <span class="img-wrapper">
-        <img src="" alt="" :style="{ 'background-image': `url(${p_item.mediaURL})` }" class="img-fluid project-item--image">
+        <img alt="" :style="{ 'background-image': `url(${p_item.mediaURL})` }" class="img-fluid project-item--image">
       </span>
       <div class="project-item-inner">
         <p class="project-item-desc">{{ p_item.description }}</p>

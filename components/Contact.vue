@@ -99,10 +99,9 @@ import { mapGetters } from "vuex";
 import {
   APP_NAME,
   PATHS,
-  FLEXMAILER_API_HOST,
   BLOG_URL
 } from "@@/illuminate/config";
-import { animateElements, ajaxPost } from "@@/illuminate/utils";
+import { animateElements } from "@@/illuminate/utils";
 import CurrentStep from "@/components/CurrentStep";
 import SocialLinks from "@/components/SocialLinks";
 
@@ -181,17 +180,12 @@ export default {
     sendMail() {
       this.sendingMail = true;
 
-      // Send request
-      ajaxPost(FLEXMAILER_API_HOST, {
-        fullName: this.message.fullName,
-        email: this.message.email,
-        messageBody: this.message.messageBody,
-        to: `akakpo.jeanjacques@gmail.com`,
-        subject: `${this.message.fullName} a visité ${APP_NAME}`
-      }).then(response => {
-        this.sendingMail = false;
-        this.mailSent = true;
-      });
+      // Open mail client
+      const subject = `${this.message.fullName} a visité ${APP_NAME}`;
+      const body = `${this.message.messageBody}\n\n${this.message.fullName} <${this.message.email}>`;
+      window.location.href = `mailto:potchjust@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      this.sendingMail = false;
+      this.mailSent = true;
     },
 
     // getContactHeaderText

@@ -1,10 +1,10 @@
 /* eslint-disable */
 
 // APP_NAME
-export const APP_NAME = "jeanjacquesakakpo.me";
+export const APP_NAME = "nehiyr-ben-elohim.github.io";
 
 // APP_URL
-export const APP_URL = "https://jeanjacquesakakpo.me";
+export const APP_URL = "https://nehiyr-ben-elohim.github.io";
 
 // BLOG_URL
 export const BLOG_URL = "/blog";

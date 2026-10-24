@@ -3,11 +3,11 @@ module.exports = {
 
   // Headers of the page
   head: {
-    title: 'Jean-jacques AKAKPO',
+    title: 'Justin POTCHONA',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'This is just another portfolio. Period.' }
+      { hid: 'description', name: 'description', content: 'Justin POTCHONA, développeur logiciel backend et machine learning à Lomé, Togo.' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
