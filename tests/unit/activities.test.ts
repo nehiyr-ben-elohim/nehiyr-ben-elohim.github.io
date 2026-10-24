@@ -15,6 +15,8 @@ const make = (over: Partial<ActivityData> & { key: string; finishedAt: Date }): 
   description: '',
   concept: '',
   mediaURL: '/img/x.png',
+  resolve: undefined,
+  clientLogo: undefined,
   techs: ['Vue', 'Sass'],
   metas: [],
   report: { title: '', description: '' },
