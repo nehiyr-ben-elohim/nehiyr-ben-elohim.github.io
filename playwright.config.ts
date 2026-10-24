@@ -9,5 +9,6 @@ export default defineConfig({
     url: 'http://localhost:4321',
     reuseExistingServer: false,
     timeout: 180_000,
+    env: { PUBLIC_FORMSPREE_ENDPOINT: 'https://formspree.io/f/test' },
   },
 })

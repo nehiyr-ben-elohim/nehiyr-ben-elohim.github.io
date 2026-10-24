@@ -8,6 +8,7 @@ interface Props {
 }
 const { stepIndicator = true, bg } = Astro.props
 const endpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? ''
+if (!endpoint) console.warn('[contact] PUBLIC_FORMSPREE_ENDPOINT is not set: the contact form will not send.')
 ---
 
 <section class="row contact-row" id="contact">
@@ -58,6 +59,10 @@ const endpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? ''
 
 <style lang="scss">
   @import '../styles/components/contact.scss';
+
+  [hidden] {
+    display: none !important;
+  }
 
   .contact-honeypot {
     position: absolute;
