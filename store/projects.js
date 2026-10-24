@@ -8,7 +8,7 @@ export const actions = {
 
   // Fetch all projects from activities
   fetch (store, params) {
-    ajaxGet('/data/activities.json')
+    ajaxGet(`/data/activities.json?v=${Date.now()}`)
       .then(response => {
         store.commit('UPDATE_PROJECTS', { payload: JSON.parse(response) })
       })
