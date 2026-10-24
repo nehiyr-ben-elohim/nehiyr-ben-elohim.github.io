@@ -17,6 +17,7 @@ const make = (over: Partial<ActivityData> & { key: string; finishedAt: Date }): 
   mediaURL: '/img/x.png',
   resolve: undefined,
   clientLogo: undefined,
+  layout: { x: 50 },
   techs: ['Vue', 'Sass'],
   metas: [],
   report: { title: '', description: '' },
@@ -111,4 +112,12 @@ test('activities.json: historical slugs unchanged', () => {
     'groupe-carrere', 'liebherr', 'touki-saint-louis', 'ushuaia-beaute',
     '1-to-1-services', 'wola-group', 'mailar', 'followad', 'fast-foud',
   ]))
+})
+
+test('schema keeps layout.x (blog card width), default 50', async () => {
+  const { activitySchema } = await import('../../src/lib/schema')
+  const first = (raw as Array<Record<string, unknown>>)[0]
+  expect(activitySchema.parse(first).layout).toEqual({ x: 50 })
+  const { layout: _, ...rest } = first
+  expect(activitySchema.parse(rest).layout).toEqual({ x: 50 })
 })

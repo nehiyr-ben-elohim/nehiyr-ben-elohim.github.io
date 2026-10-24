@@ -1,0 +1,15 @@
+---
+interface Props {
+  year: number | string
+}
+const { year } = Astro.props
+---
+
+<div class="articles-by-year" data-group-year={typeof year === 'number' ? year : undefined}>
+  <h6 class="group-year">{year}</h6>
+  <slot />
+</div>
+
+<style lang="scss">
+  @import '../styles/components/blog-article-group.scss';
+</style>

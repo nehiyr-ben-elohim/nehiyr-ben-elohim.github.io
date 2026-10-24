@@ -1,0 +1,70 @@
+---
+import type { GetStaticPaths } from 'astro'
+import { Image } from 'astro:assets'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import FloatingHeader from '../../components/FloatingHeader.astro'
+import Contact from '../../components/Contact.astro'
+import Foot from '../../components/Foot.astro'
+import { getBlogPosts } from '../../lib/collection'
+import { formatDate, type Activity } from '../../lib/activities'
+import { resolveImage } from '../../lib/images'
+
+export const getStaticPaths = (async () =>
+  (await getBlogPosts()).map(item => ({ params: { slug: item.slug }, props: { item } }))) satisfies GetStaticPaths
+
+interface Props {
+  item: Activity
+}
+const { item } = Astro.props
+const media = resolveImage(item.mediaURL)
+---
+
+<BaseLayout title={`${item.title} — Jean-jacques AKAKPO`} description={item.description} image={media}>
+  <section class="row article-item-row">
+    <FloatingHeader height="small" restricted />
+
+    <section class="article-content">
+      <div class="article-headings">
+        <div class="article-headings-inner container">
+          <div class="article-headings-1">
+            <h1 class="article-title">{item.title}</h1>
+          </div>
+          <div class="article-headings-2">
+            <h5 class="article-scope">{item.type}</h5>
+            <h5 class="article-finishedAt">{formatDate(item.finishedAt)}</h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="article-banner">
+        <div class="article-media-wrapper">
+          <div class="shared-element" transition:name={`media-${item.key}`}>
+            <Image src={media} alt="" width={1920} loading="eager" class="shared-element-media" />
+          </div>
+        </div>
+
+        {item.resolve && <a href={item.resolve} title="Read on Medium" class="read-on">Read on Medium</a>}
+      </div>
+    </section>
+
+    <Contact stepIndicator={false} />
+    <Foot />
+  </section>
+</BaseLayout>
+
+<style lang="scss">
+  @import '../../styles/components/article-single-item.scss';
+
+  .shared-element {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .shared-element-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

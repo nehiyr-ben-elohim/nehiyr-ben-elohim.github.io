@@ -1,0 +1,79 @@
+---
+import type { Activity } from '../lib/activities'
+import { groupByYear, groupByMonth } from '../lib/activities'
+import BlogArticleGroup from './BlogArticleGroup.astro'
+import BlogArticle from './BlogArticle.astro'
+import Logo from './Logo.astro'
+
+interface Props {
+  items: Activity[]
+}
+const { items } = Astro.props
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+const MONTHS_FULLNAME = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+const byYear = groupByYear(items)
+const years = byYear.map(g => g.year)
+---
+
+<section class="row blog-row">
+  <div class="row-inner">
+    <div class="blog-content" id="js--blog-content">
+      <div class="blog-header" id="js--blog-header">
+        <div class="blog-header-inner container">
+          <div class="blog-search-selectors">
+            <i class="material-icons blog-search-icon">event</i>
+
+            <div class="blog-search-year">
+              <div class="search-params-list-wrapper">
+                <ul class="search-params-list" data-years={JSON.stringify(years)}>
+                  {years.map(year => <li><h5 class="blog-search-content">{year}</h5></li>)}
+                </ul>
+              </div>
+              <label class="blog-search-label">year</label>
+            </div>
+
+            <div class="blog-search-month">
+              <div class="search-params-list-wrapper">
+                <ul class="search-params-list" data-months>
+                  {MONTHS_FULLNAME.map(month => <li><h5 class="blog-search-content">{month}</h5></li>)}
+                </ul>
+              </div>
+              <label class="blog-search-label">month</label>
+            </div>
+          </div>
+
+          <Logo />
+        </div>
+      </div>
+
+      <div class="blog-articles-list container">
+        {
+          byYear.map(group => (
+            <BlogArticleGroup year={group.year}>
+              {groupByMonth(group.entries).map(byMonth => (
+                <div class="articles-by-month">
+                  <h6 class="group-month">{MONTHS[byMonth.month]}</h6>
+                  <div class="group-entries">
+                    {byMonth.entries.map(item => <BlogArticle item={item} />)}
+                  </div>
+                </div>
+              ))}
+            </BlogArticleGroup>
+          ))
+        }
+        <BlogArticleGroup year="the end" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initBlogTimeline } from '../scripts/blog-timeline'
+  initBlogTimeline()
+</script>
+
+<style lang="scss">
+  @import '../styles/components/blog.scss';
+</style>

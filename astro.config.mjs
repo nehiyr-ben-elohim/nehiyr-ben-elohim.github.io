@@ -9,7 +9,7 @@ export default defineConfig({
     css: {
       preprocessorOptions: {
         // legacy SCSS still uses @import; migrating to @use is out of scope
-        scss: { silenceDeprecations: ['import'] },
+        scss: { silenceDeprecations: ['import', 'slash-div'] },
       },
     },
   },

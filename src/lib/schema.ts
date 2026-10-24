@@ -26,6 +26,7 @@ export const activitySchema = z
     techs: z.array(z.string()).default([]),
     metas: z.array(z.object({ title: z.string(), value: z.string() })).default([]),
     report: z.object({ title: z.string(), description: z.string() }),
+    layout: z.object({ x: z.number() }).default({ x: 50 }),
     shoots: z.array(z.object({ description: z.string(), mediaURL: z.string() })).default([]),
     startedAt: unixDate,
     // 'TODAY' = ongoing, resolved at build time
