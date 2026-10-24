@@ -193,14 +193,14 @@
 
 }
 
-.brand-wrapper {
+:global(.brand-wrapper) {
   @include d-none();
 }
 
 
 /* Under 1024 */
 @media only screen and (max-width: 1024px) {
-  .blog-content.fix-blog-header .brand-wrapper {
+  .blog-content.fix-blog-header :global(.brand-wrapper) {
     @include d-flex();
 
     position: static;

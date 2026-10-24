@@ -1,0 +1,30 @@
+---
+import { Image } from 'astro:assets'
+import type { Activity } from '../lib/activities'
+import { resolveImage } from '../lib/images'
+
+interface Props {
+  item: Activity
+  mini?: boolean
+}
+const { item, mini = false } = Astro.props
+---
+
+<article id={item.slug} class:list={['project-item', { 'project-item-mini': mini }]}>
+  <a class="project-item-link" href={item.href}>
+    <span class="img-wrapper" transition:name={`media-${item.key}`}>
+      <Image src={resolveImage(item.mediaURL)} alt={item.title} width={800} class="img-fluid project-item--image" />
+    </span>
+    <div class="project-item-inner">
+      <p class="project-item-desc">{item.description}</p>
+      <div class="project-item-footer">
+        <p class="project-item-techs">{item.techs.join(', ')}</p>
+        <header class="project-item-name dashed-text">{item.title}</header>
+      </div>
+    </div>
+  </a>
+</article>
+
+<style lang="scss">
+  @import '../styles/components/project-item.scss';
+</style>

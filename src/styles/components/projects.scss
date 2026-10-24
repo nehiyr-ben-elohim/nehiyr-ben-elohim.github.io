@@ -30,7 +30,7 @@
 
     height: initial;
 
-    .project-item {
+    :global(.project-item) {
       @include m-0();
       @include mb-5();
 

@@ -140,7 +140,7 @@
       .action-item {
         @include mb-4();
       }
-      .social-links {
+      :global(.social-links) {
         @include justify-content-start();
 
         position: relative;

@@ -1,0 +1,45 @@
+---
+import { SITE_URL, SHARE_TEXT } from '../lib/site'
+
+interface Props {
+  size?: 'big' | 'small'
+  shareLink?: string
+}
+const { size = 'big', shareLink } = Astro.props
+
+const profiles = [
+  { href: 'https://twitter.com/AkakpoJacques', media: '/img/brands/twitter.svg', title: 'Follow me on Twitter' },
+  { href: 'https://www.linkedin.com/in/jeanjacques-akakpo', media: '/img/brands/linkedin.svg', title: 'Connect with me on LinkedIn' },
+  { href: 'skype:jeanjacques.akakpo?userinfo', media: '/img/brands/skype.svg', title: 'Call me on Skype' },
+  { href: 'https://github.com/phareal', media: '/img/brands/github.svg', title: 'Join me on GitHub' },
+]
+
+const text = encodeURIComponent(SHARE_TEXT)
+const sharing = shareLink
+  ? [
+      { base: 'https://www.facebook.com/sharer/sharer.php?u=', media: '/img/brands/facebook.svg', title: 'Share on Facebook' },
+      { base: `https://twitter.com/intent/tweet?text=${text}&url=`, media: '/img/brands/twitter.svg', title: 'Share on Twitter' },
+      { base: `https://www.linkedin.com/shareArticle?mini=true&summary=${text}&source=${encodeURIComponent(SITE_URL)}&url=`, media: '/img/brands/linkedin.svg', title: 'Post on LinkedIn' },
+      { base: `whatsapp://send?text=${text}`, media: '/img/brands/whatsapp.svg', title: 'Share on WhatsApp' },
+      { base: `https://telegram.me/share/url?text=${text}&url=`, media: '/img/brands/telegram.svg', title: 'Share on Telegram' },
+    ].map(s => ({ href: `${s.base}${encodeURIComponent(shareLink)}`, media: s.media, title: s.title }))
+  : []
+
+const links = shareLink ? sharing : profiles
+---
+
+<ul class:list={['social-links', `size-${size}`]}>
+  {
+    links.map(link => (
+      <li class="social-link-wrapper dashed-text no-rotate-dash">
+        <a href={link.href} class="social-link" target="_blank" rel="noopener noreferrer" title={link.title}>
+          <img src={link.media} alt={link.title} class="social-link-media" />
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style lang="scss">
+  @import '../styles/components/social-links.scss';
+</style>

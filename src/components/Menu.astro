@@ -1,0 +1,39 @@
+---
+import { NAV_SECTIONS } from '../lib/site'
+import LatestActivities from './LatestActivities.astro'
+
+// on inner pages, anchors must point back to the homepage
+const onHome = Astro.url.pathname === '/'
+const href = (h: string) => (h.startsWith('#') && !onHome ? `/${h}` : h)
+---
+
+<section class="menu-wrapper" data-menu>
+  <div class="menu-overlay" data-menu-toggle></div>
+
+  <div class="menu-content" id="js--menuContent">
+    <div class="stuff">
+      <LatestActivities />
+    </div>
+
+    <div class="menu-items">
+      <ul class="navbar">
+        {
+          NAV_SECTIONS.map(section => (
+            <li class="nav-item" data-nav-target={section.href}>
+              <a href={href(section.href)} data-menu-link>
+                {section.title.toLowerCase()}
+              </a>
+            </li>
+          ))
+        }
+        <li class="nav-item latest-activities-opener">
+          <a href="#" role="button" data-latest-open>Latest activities</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @import '../styles/components/menu.scss';
+</style>

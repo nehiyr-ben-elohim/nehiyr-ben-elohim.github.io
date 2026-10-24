@@ -1,0 +1,17 @@
+---
+interface Props {
+  text: string
+  class?: string
+}
+const { text, class: className } = Astro.props
+---
+
+<div class:list={['curstep-wrapper', className]}>
+  <div class="curstep-inner">
+    <h5 class="curstep-text dashed-text">{text}</h5>
+  </div>
+</div>
+
+<style lang="scss">
+  @import '../styles/components/curstep.scss';
+</style>

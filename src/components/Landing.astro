@@ -1,0 +1,24 @@
+---
+import CurrentStep from './CurrentStep.astro'
+---
+
+<section class="row landing-row" id="hi">
+  <CurrentStep text="bienvenue" />
+
+  <div class="row-inner">
+    <div class="landing-header-text-wrapper">
+      <div id="js--masked-text" class="d-inline-flex masked-text dashed-text">
+        <h1 data-scrollbreak="600" class="landing-header-text landing-header-text--1">hello</h1>
+        <h1 data-scrollbreak="750" class="landing-header-text landing-header-text--2">world!</h1>
+      </div>
+    </div>
+
+    <div class="what-is-it-wrapper">
+      <h6 data-scrollbreak="1350" class="what-is-it--text">Ceci est juste un autre portfolio. Point.</h6>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @import '../styles/components/landing.scss';
+</style>

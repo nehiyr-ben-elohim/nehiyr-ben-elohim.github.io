@@ -1,0 +1,66 @@
+---
+import CurrentStep from './CurrentStep.astro'
+import SocialLinks from './SocialLinks.astro'
+
+interface Props {
+  stepIndicator?: boolean
+  bg?: string
+}
+const { stepIndicator = true, bg } = Astro.props
+const endpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? ''
+---
+
+<section class="row contact-row" id="contact">
+  {bg && <div class="contact-bg" style={`background-image: url(${bg})`} />}
+
+  {stepIndicator && <CurrentStep text="me contacter" class="prevent-w-100" />}
+
+  <div class="row-inner">
+    <div class:list={['contact-content', { 'bg-applied': bg }]}>
+      <header data-scrollbreak="150" class="contact-header-text">
+        <span>on se donne rendez-vous ?</span>
+      </header>
+      <p data-scrollbreak="550" class="contact-subheader-text">
+        nous pouvons parler de ton projet "amazing" autour d'un café.
+      </p>
+
+      <div data-scrollbreak="350" class="contact-form-wrapper">
+        <form action={endpoint} method="POST" class="contact-form" data-contact-form>
+          <div class="contact-form-group">
+            <input name="name" type="text" required placeholder="comment je peux t'appeler ?" class="contact-form-field" />
+          </div>
+
+          <div class="contact-form-group">
+            <input name="email" type="email" required placeholder="renseigne ton adresse email" class="contact-form-field" />
+          </div>
+
+          <div class="contact-form-group">
+            <textarea name="message" required placeholder="alors, dis-moi" rows="6" class="contact-form-field"></textarea>
+          </div>
+
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="contact-honeypot" aria-hidden="true" />
+
+          <h6 class="message-sent" hidden>Et voilà le facteur est passé prendre l'enveloppe.</h6>
+          <h6 class="message-error" role="alert" hidden>Oups, l'enveloppe s'est perdue en route. Réessaie dans un instant.</h6>
+
+          <div class="contact-form-group contact-form-btn-wrapper">
+            <button name="send" type="submit" class="btn" title="Say hello">Hello</button>
+
+            <div class="contact-social">
+              <SocialLinks />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @import '../styles/components/contact.scss';
+
+  .contact-honeypot {
+    position: absolute;
+    left: -9999px;
+  }
+</style>

@@ -1,0 +1,31 @@
+---
+import { getActivities } from '../lib/collection'
+import { groupByYear } from '../lib/activities'
+import ActivityItem from './ActivityItem.astro'
+
+const groups = groupByYear(await getActivities())
+---
+
+<section class="latest-activities-wrapper">
+  <h6 class="latest-activities-wrapper--title prefixed-text">My recents activities</h6>
+  <a href="#" role="button" class="latest-activities-wrapper--title latest-activities-wrapper--close" data-latest-close>
+    &lt; goto menu
+  </a>
+
+  <ul class="latest-activities">
+    {
+      groups.map(group => (
+        <li class="l-activity-group">
+          <header class="l-activity-group--header">{group.year}</header>
+          <ul class="l-activity-group--entries">
+            {group.entries.map(item => <ActivityItem item={item} />)}
+          </ul>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style lang="scss">
+  @import '../styles/components/latestactivities.scss';
+</style>

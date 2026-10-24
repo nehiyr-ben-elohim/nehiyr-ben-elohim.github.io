@@ -1,0 +1,101 @@
+---
+import Logo from './Logo.astro'
+
+export interface Expanded {
+  title: string
+  bg?: string
+  hints?: string[]
+  resolve?: string
+}
+
+interface Props {
+  expanded?: Expanded
+  height?: 'big' | 'medium' | 'small'
+  dashTitle?: boolean
+  restricted?: boolean
+  colorScheme?: 'light' | 'dark'
+}
+
+const { expanded, height = 'medium', dashTitle = false, restricted = false, colorScheme = 'dark' } = Astro.props
+
+// "--word" renders as outlined (stroke) text
+const words = expanded ? `> ${expanded.title}`.split(' ').map(w => ({ text: w.split('--').join(''), stroke: w.includes('--') })) : []
+---
+
+<header
+  class:list={[
+    'floating-header',
+    {
+      expanded: restricted,
+      'big-size': height === 'big',
+      'small-size': height === 'small',
+      'dark-scheme': colorScheme === 'dark',
+      'light-scheme': colorScheme === 'light',
+    },
+  ]}
+>
+  {expanded?.bg && <div id="js--parallax-header" class="floating-header-backdrop" style={`background-image: url(${expanded.bg})`} />}
+
+  <Logo />
+
+  <div class="right-controls-wrapper">
+    {
+      !restricted && (
+        <div class="menu-toggler-wrapper">
+          <a href="#" role="button" aria-label="Menu" class="menu-toggler" data-menu-toggle>
+            <span />
+            <span />
+            <span />
+          </a>
+        </div>
+      )
+    }
+
+    {
+      restricted && expanded?.resolve && (
+        <div class="visit-site-wrapper">
+          <a target="_blank" rel="noopener noreferrer" title="Visit website" href={expanded.resolve}>
+            <span>voir le site web</span>
+            <i class="material-icons dashed-text no-rotate-dash">open_in_new</i>
+          </a>
+        </div>
+      )
+    }
+
+    {
+      restricted && (
+        <div class="go-home-wrapper">
+          <a href="/">accueil</a>
+        </div>
+      )
+    }
+  </div>
+
+  {
+    restricted && expanded && (
+      <div class="expanded-content container">
+        <div class="expanded-content-inner">
+          <h1
+            class:list={['content-header-title', { 'dashed-text no-rotate-dash': dashTitle }]}
+            data-nb-children={words.length}
+          >
+            {words.map(w => (w.stroke ? <span stroke>{w.text}</span> : <span>{w.text}</span>))}
+          </h1>
+          {expanded.hints && (
+            <h6 class="content-header-hints">
+              {expanded.hints.map(hint => (
+                <span>{hint}</span>
+              ))}
+            </h6>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  <slot />
+</header>
+
+<style lang="scss">
+  @import '../styles/components/floatingheader.scss';
+</style>

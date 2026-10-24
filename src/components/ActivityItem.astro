@@ -1,0 +1,53 @@
+---
+import type { Activity } from '../lib/activities'
+import { SITE_URL } from '../lib/site'
+
+interface Props {
+  item: Activity
+}
+const { item } = Astro.props
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+const search = (tech: string) =>
+  `https://www.google.com/search?safe=active&source=${encodeURIComponent(SITE_URL)}&q=${encodeURIComponent(`${tech} wikipedia`)}`
+---
+
+<li class="l-activity-item">
+  <div class="header">
+    <a href={item.href}>
+      <div class="headings">
+        <h5 class="title">{item.title}</h5>
+        <h6 class="type">{item.type}</h6>
+      </div>
+
+      <div class="timing">
+        {
+          [item.startedAt, item.finishedAt].map(date => (
+            <div class="timing-item">
+              <span class="timing-item-date">{date.getUTCDate()}</span>
+              <span class="timing-item-month">{MONTHS[date.getUTCMonth()]}</span>
+            </div>
+          ))
+        }
+      </div>
+    </a>
+  </div>
+
+  {
+    item.techs.length > 0 && (
+      <ul class="techs">
+        {item.techs.map(tech => (
+          <li class="tech-item">
+            <a href={search(tech)} title={tech} target="_blank" rel="noopener noreferrer">
+              {tech}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</li>
+
+<style lang="scss">
+  @import '../styles/components/activityitem.scss';
+</style>

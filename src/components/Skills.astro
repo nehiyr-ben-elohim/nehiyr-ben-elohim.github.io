@@ -1,0 +1,29 @@
+---
+import CurrentStep from './CurrentStep.astro'
+---
+
+<section class="row skills-row" id="skills">
+  <CurrentStep text="compétences" />
+
+  <div class="row-inner">
+    <div class="skills-content">
+      <header data-scrollbreak="50" class="skills-header-text">
+        <span>Compétences</span>
+      </header>
+
+      <p data-scrollbreak="150" class="skills-speech">
+        Pour une application Web complète, je sépare le front-end [visuel] du back-end [logique applicative]. Le
+        front-end, étant principalement en <a href="#">HTML</a> - <a href="#">CSS [SASS/LESS]</a> -
+        <a href="#">JS [VueJS/ReactJS]</a> avec un petit coup de <a href="#">Bootstrap</a> ou carrément
+        <a href="#">VuetifyJS</a> pour le matérial design, communique avec le back-end [<a href="#">PHP/Lumen/Laravel</a>
+        ou <a href="#">NodeJS</a>] par <a href="#">AJAX [Axios/SocketIO]</a>. Je la préfère native donc je pars sur du
+        <a href="#">Java Android</a>, avec <a href="#">Android Studio</a> ou du <a href="#">React Native</a> pour mes
+        applications mobiles.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @import '../styles/components/skills.scss';
+</style>
