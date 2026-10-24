@@ -1,14 +1,9 @@
-import { initActiveSection } from './active-section'
-import { initBlogTimeline } from './blog-timeline'
+import { initContactForm } from './contact-form'
 import { initEntrance } from './entrance'
 import { initHome } from './home'
-import { initContactForm } from './contact-form'
-import { initMenu } from './menu'
-import { initParallax } from './parallax'
-import { initReveal } from './reveal'
 import type { Cleanup } from './types'
 
-const inits: Array<() => Cleanup> = [initReveal, initActiveSection, initMenu, initParallax, initBlogTimeline, initContactForm, initEntrance, initHome]
+const inits: Array<() => Cleanup> = [initEntrance, initHome, initContactForm]
 let cleanups: Cleanup[] = []
 
 // Bundled scripts run once: (re)bind per page, unbind before the DOM swap.
@@ -21,6 +16,3 @@ document.addEventListener('astro:before-swap', () => {
   cleanups.forEach(c => c())
   cleanups = []
 })
-
-// ClientRouter replaces <html> attributes on swap
-document.addEventListener('astro:after-swap', () => document.documentElement.classList.add('js'))

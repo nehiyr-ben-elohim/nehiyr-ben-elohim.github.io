@@ -1,18 +1,16 @@
 import { test, expect } from 'vitest'
-import raw from '../../src/data/activities.json'
+import { getCaseStudies } from '../../src/lib/case-studies'
 import { resolveImage } from '../../src/lib/images'
-
-test('resolveImage resolves a JSON media path', () => {
-  expect(resolveImage('/img/activities/groupe-carrere/0.png').src).toBeTruthy()
-})
+import { getProfile } from '../../src/lib/profile'
 
 test('resolveImage throws with the faulty path', () => {
   expect(() => resolveImage('/img/nope.png')).toThrow('/img/nope.png')
 })
 
-test('every mediaURL / shoots / clientLogo in activities.json resolves', () => {
-  const paths = (raw as Array<{ mediaURL: string; clientLogo?: string; shoots?: { mediaURL: string }[] }>)
-    .flatMap(a => [a.mediaURL, a.clientLogo, ...(a.shoots ?? []).map(s => s.mediaURL)])
-    .filter((p): p is string => !!p && p.startsWith('/'))
+test('every image path in the data resolves', () => {
+  const paths = [
+    ...getCaseStudies().flatMap(s => [s.shot, s.shot2]),
+    ...getProfile().interests.map(i => i.photo),
+  ].filter((p): p is string => !!p)
   for (const p of paths) expect(() => resolveImage(p), p).not.toThrow()
 })

@@ -1,10 +1,10 @@
 {
-  "name": "jeanjacquesakakpo.me",
+  "name": "nehiyr-ben-elohim.github.io",
   "type": "module",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "private": true,
   "description": "This is just another portfolio. Period.",
-  "author": "Jean-jacques AKAKPO",
+  "author": "Justin Potchona",
   "engines": {
     "node": ">=22.23.4"
   },
@@ -24,7 +24,6 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
     "@playwright/test": "^1.64.1",
-    "sass": "^1.106.1",
     "typescript": "^6.0.3",
     "vitest": "^5.0.5"
   }

@@ -1,6 +1,6 @@
-# jeanjacquesakakpo.me
+# nehiyr-ben-elohim.github.io
 
-Portfolio de Jean-jacques AKAKPO, site statique généré avec [Astro](https://astro.build).
+Portfolio de Justin Potchona, site statique généré avec [Astro](https://astro.build).
 
 ## Prérequis
 
@@ -27,8 +27,11 @@ cp .env.example .env   # puis renseigner PUBLIC_FORMSPREE_ENDPOINT
 
 ## Contenu
 
-Les projets et activités sont dans `src/data/activities.json`, validés au build par le schéma de `src/lib/schema.ts`.
-Les images référencées (`mediaURL`, `shoots`) doivent exister sous `src/assets/img/` : sinon le build échoue.
+- Projets / études de cas : `src/data/case-studies.json` (schéma `src/lib/case-studies.ts`). L'ordre du fichier = ordre d'affichage.
+- Profil (chiffres clés, compétences, parcours, centres d'intérêt) : `src/data/profile.json` (schéma `src/lib/profile.ts`).
+- Captures et photos : champs optionnels `shot`, `shot2` (projets) et `photo` (centres d'intérêt), chemins `/img/...` vers `src/assets/img/`. Absent = bloc de remplacement ; chemin introuvable = build en échec.
+- Lien `code ↗` d'un projet : champ optionnel `code` (URL https), masqué sinon.
+- Icônes : `public/img/devicons/` ([devicon](https://devicon.dev) v2.16.0), liste dans `src/lib/devicons.ts`.
 
 ## Formulaire de contact
 
@@ -39,10 +42,4 @@ d'environnement de l'hébergeur. Sans cette variable, le build de production éc
 ## Déploiement
 
 Le site est 100 % statique : publier le dossier `dist/` sur n'importe quel hébergeur statique
-(Cloudflare Pages, Netlify, GitHub Pages…). Commande de build : `npm run build`.
-
-## Crédits
-
-<a href="https://fr.freepik.com/photos-vecteurs-libre/infographie">Infographie de vecteur conçu par Eightonesix - Freepik.com</a>
-<a href='https://fr.freepik.com/photos-libre/espace-de-travail-business-freelance-concept-vue-de-dessus-au-dessus-de-flat-lay-toning_1349476.htm'>Designed by Freepik</a>
-<a href='https://fr.freepik.com/photos-libre/bureau-avec-un-ordinateur-portable-une-tasse-de-cafe-et-un-calendrier_878794.htm'>Designed by Freepik</a>
+(GitHub Pages pour `nehiyr-ben-elohim.github.io`). Commande de build : `npm run build`.
