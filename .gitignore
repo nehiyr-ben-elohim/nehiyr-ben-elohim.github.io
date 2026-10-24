@@ -1,14 +1,22 @@
 # dependencies
-node_modules
+node_modules/
+
+# build output / generated types
+dist/
+.astro/
+
+# tests
+test-results/
+playwright-report/
+
+# env
+.env
+.env.production
 
 # logs
-npm-debug.log
+npm-debug.log*
 
-# Nuxt build
-.nuxt
-
-# Nuxt generate
-dist
-
+.DS_Store
 .idea/
 .vscode/
+.superpowers/
