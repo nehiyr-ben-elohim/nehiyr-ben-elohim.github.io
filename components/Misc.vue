@@ -51,7 +51,7 @@
     data: () => ({
       // currentStep
       currentStep: {
-        text: 'Misc'
+        text: "centres d'intérêt"
       },
 
       // miscs
@@ -61,19 +61,19 @@
           categ: 'misc-musics',
           scenes: [
             {
-              dataURL: 'https://www.youtube.com/watch?v=uZs1AHQBz24?ref=jeanjacquesakakpo',
+              dataURL: 'https://www.youtube.com/watch?v=uZs1AHQBz24',
               style: {
                 backgroundImage: 'url(\'img/misc/music_1.jpg\')'
               }
             },
             {
-              dataURL: 'https://www.youtube.com/watch?v=Az-mGR-CehY?ref=jeanjacquesakakpo',
+              dataURL: 'https://www.youtube.com/watch?v=Az-mGR-CehY',
               style: {
                 backgroundImage: 'url(\'img/misc/music_2.jpg\')'
               }
             },
             {
-              dataURL: 'https://www.youtube.com/watch?v=YgBynbRGv74?ref=jeanjacquesakakpo',
+              dataURL: 'https://www.youtube.com/watch?v=YgBynbRGv74',
               style: {
                 backgroundImage: 'url(\'img/misc/music_3.jpg\')'
               }

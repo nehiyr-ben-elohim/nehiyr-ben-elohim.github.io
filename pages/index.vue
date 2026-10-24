@@ -14,7 +14,7 @@
 
     <Skills />
 
-    <!-- <Misc /> -->
+    <Misc />
 
     <Contact />
 
