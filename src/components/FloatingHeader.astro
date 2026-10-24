@@ -19,6 +19,7 @@ interface Props {
 const { expanded, height = 'medium', dashTitle = false, restricted = false, colorScheme = 'dark' } = Astro.props
 
 // "--word" renders as outlined (stroke) text
+const STROKE: Record<string, string> = { stroke: "" }
 const words = expanded ? `> ${expanded.title}`.split(' ').map(w => ({ text: w.split('--').join(''), stroke: w.includes('--') })) : []
 ---
 
@@ -79,7 +80,7 @@ const words = expanded ? `> ${expanded.title}`.split(' ').map(w => ({ text: w.sp
             class:list={['content-header-title', { 'dashed-text no-rotate-dash': dashTitle }]}
             data-nb-children={words.length}
           >
-            {words.map(w => (w.stroke ? <span stroke>{w.text}</span> : <span>{w.text}</span>))}
+            {words.map(w => <span {...(w.stroke ? STROKE : {})}>{w.text}</span>)}
           </h1>
           {expanded.hints && (
             <h6 class="content-header-hints">
