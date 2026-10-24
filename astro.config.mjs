@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config'
 import sitemap from '@astrojs/sitemap'
 
 export default defineConfig({
-  site: 'https://jeanjacquesakakpo.me',
+  site: 'https://nehiyr-ben-elohim.github.io',
   output: 'static',
   // historical URLs have no trailing slash: emit /x.html, served as /x
   trailingSlash: 'never',

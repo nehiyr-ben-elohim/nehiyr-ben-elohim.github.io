@@ -4,25 +4,72 @@
     "name": "Plateforme d’audit",
     "title": "Plateforme d’audit",
     "kind": "mission client",
+    "cat": "client",
+    "featured": true,
     "color": "#212b6a",
     "period": "avr. 2021 – aujourd’hui",
     "cta": "voir mon GitHub",
     "lead": "Plateforme utilisée par l’un des 10 plus grands cabinets d’audit au monde. J’y développe de nouvelles fonctionnalités, corrige les bugs et assure le support production, en mission via TheCodingMachine.",
+    "summary": "Plateforme d’audit pour l’un des 10 plus grands cabinets au monde : fonctionnalités, bugs et support production.",
+    "role": "Backend · API · Support prod",
+    "metric": {
+      "v": "3 → 8",
+      "k": "développeurs dans l’équipe depuis mon arrivée"
+    },
+    "tags": [
+      "symfony",
+      "nuxt.js",
+      "php",
+      "sylius",
+      "m-files",
+      "phpstan"
+    ],
     "meta": [
-      { "k": "Rôle", "v": "Développeur full-stack" },
-      { "k": "Client", "v": "Cabinet d’audit (Top 10)" },
-      { "k": "Cadre", "v": "Freelance · TheCodingMachine" },
-      { "k": "Équipe", "v": "3 → 8 développeurs" }
+      {
+        "k": "Rôle",
+        "v": "Développeur full-stack"
+      },
+      {
+        "k": "Client",
+        "v": "Cabinet d’audit (Top 10)"
+      },
+      {
+        "k": "Cadre",
+        "v": "Freelance · TheCodingMachine"
+      },
+      {
+        "k": "Équipe",
+        "v": "3 → 8 développeurs"
+      }
     ],
     "stack": [
-      { "name": "Symfony", "icon": "symfony" },
-      { "name": "Nuxt.js", "icon": "nuxtjs" },
-      { "name": "PHP", "icon": "php" },
-      { "name": "PostgreSQL", "icon": "postgresql" },
-      { "name": "Docker", "icon": "docker" }
+      {
+        "name": "Symfony",
+        "icon": "symfony"
+      },
+      {
+        "name": "Nuxt.js",
+        "icon": "nuxtjs"
+      },
+      {
+        "name": "PHP",
+        "icon": "php"
+      },
+      {
+        "name": "PostgreSQL",
+        "icon": "postgresql"
+      },
+      {
+        "name": "Docker",
+        "icon": "docker"
+      }
     ],
     "sections": [
-      { "n": "01", "title": "Contexte", "body": "Le cabinet avait besoin d’un outil unique pour centraliser ses missions d’audit, ses documents et ses validations, jusque-là éclatés entre plusieurs logiciels et des échanges par email." },
+      {
+        "n": "01",
+        "title": "Contexte",
+        "body": "Le cabinet avait besoin d’un outil unique pour centraliser ses missions d’audit, ses documents et ses validations, jusque-là éclatés entre plusieurs logiciels et des échanges par email."
+      },
       {
         "n": "02",
         "title": "Mon rôle",
@@ -34,8 +81,16 @@
           "Support et correction des incidents en production"
         ]
       },
-      { "n": "03", "title": "Défis techniques", "body": "Une base de code en croissance continue, utilisée chaque jour par des équipes d’audit : chaque évolution doit rester rétrocompatible et sans interruption de service." },
-      { "n": "04", "title": "Résultat", "body": "La plateforme est aujourd’hui l’outil de référence des équipes, et l’équipe technique est passée de 3 à 8 développeurs pour suivre la demande." }
+      {
+        "n": "03",
+        "title": "Défis techniques",
+        "body": "Une base de code en croissance continue, utilisée chaque jour par des équipes d’audit : chaque évolution doit rester rétrocompatible et sans interruption de service."
+      },
+      {
+        "n": "04",
+        "title": "Résultat",
+        "body": "La plateforme est aujourd’hui l’outil de référence des équipes, et l’équipe technique est passée de 3 à 8 développeurs pour suivre la demande."
+      }
     ],
     "caption": "Interface de suivi des missions (données anonymisées)."
   },
@@ -44,24 +99,65 @@
     "name": "Plateforme e-learning",
     "title": "Plateforme e-learning",
     "kind": "full-stack",
+    "cat": "client",
     "color": "#6b3b20",
     "period": "2026",
     "cta": "voir le code",
     "lead": "Développement full-stack d’une plateforme de formation en ligne : parcours, contenus et suivi des apprenants.",
+    "summary": "Formation en ligne : parcours, contenus et suivi des apprenants.",
+    "role": "Full-stack · API · Front",
+    "metric": {
+      "v": "0",
+      "k": "outil tiers pour publier et suivre"
+    },
+    "tags": [
+      "php",
+      "typescript",
+      "nuxt",
+      "symfony"
+    ],
     "meta": [
-      { "k": "Rôle", "v": "Développeur full-stack" },
-      { "k": "Type", "v": "Plateforme web" },
-      { "k": "Période", "v": "2026" },
-      { "k": "Statut", "v": "En production" }
+      {
+        "k": "Rôle",
+        "v": "Développeur full-stack"
+      },
+      {
+        "k": "Type",
+        "v": "Plateforme web"
+      },
+      {
+        "k": "Période",
+        "v": "2026"
+      },
+      {
+        "k": "Statut",
+        "v": "En production"
+      }
     ],
     "stack": [
-      { "name": "PHP", "icon": "php" },
-      { "name": "Symfony", "icon": "symfony" },
-      { "name": "TypeScript", "icon": "typescript" },
-      { "name": "Nuxt", "icon": "nuxtjs" }
+      {
+        "name": "PHP",
+        "icon": "php"
+      },
+      {
+        "name": "Symfony",
+        "icon": "symfony"
+      },
+      {
+        "name": "TypeScript",
+        "icon": "typescript"
+      },
+      {
+        "name": "Nuxt",
+        "icon": "nuxtjs"
+      }
     ],
     "sections": [
-      { "n": "01", "title": "Contexte", "body": "Un organisme de formation souhaitait proposer ses cours en ligne, avec un suivi clair de la progression de chaque apprenant." },
+      {
+        "n": "01",
+        "title": "Contexte",
+        "body": "Un organisme de formation souhaitait proposer ses cours en ligne, avec un suivi clair de la progression de chaque apprenant."
+      },
       {
         "n": "02",
         "title": "Mon rôle",
@@ -72,7 +168,11 @@
           "Interface Nuxt typée en TypeScript"
         ]
       },
-      { "n": "03", "title": "Résultat", "body": "Une plateforme unique pour publier les contenus et suivre les apprenants, sans outil tiers." }
+      {
+        "n": "03",
+        "title": "Résultat",
+        "body": "Une plateforme unique pour publier les contenus et suivre les apprenants, sans outil tiers."
+      }
     ],
     "caption": "Tableau de bord apprenant."
   },
@@ -81,23 +181,60 @@
     "name": "2Aud.io",
     "title": "2Aud.io",
     "kind": "projet perso",
+    "cat": "perso",
     "color": "#115e50",
     "period": "2026",
     "cta": "voir le code",
     "lead": "Projet personnel autour du traitement audio, avec un backend Python et une interface React.",
+    "summary": "Traitement audio par ML, backend Python et interface React.",
+    "role": "Conception · Backend ML · Front",
+    "metric": {
+      "v": "ML",
+      "k": "traitement audio depuis le navigateur"
+    },
+    "tags": [
+      "python",
+      "typescript",
+      "react"
+    ],
     "meta": [
-      { "k": "Rôle", "v": "Conception & développement" },
-      { "k": "Type", "v": "Projet personnel" },
-      { "k": "Période", "v": "2026" },
-      { "k": "Statut", "v": "En cours" }
+      {
+        "k": "Rôle",
+        "v": "Conception & développement"
+      },
+      {
+        "k": "Type",
+        "v": "Projet personnel"
+      },
+      {
+        "k": "Période",
+        "v": "2026"
+      },
+      {
+        "k": "Statut",
+        "v": "En cours"
+      }
     ],
     "stack": [
-      { "name": "Python", "icon": "python" },
-      { "name": "TypeScript", "icon": "typescript" },
-      { "name": "React", "icon": "react" }
+      {
+        "name": "Python",
+        "icon": "python"
+      },
+      {
+        "name": "TypeScript",
+        "icon": "typescript"
+      },
+      {
+        "name": "React",
+        "icon": "react"
+      }
     ],
     "sections": [
-      { "n": "01", "title": "L’idée", "body": "Explorer le traitement audio par machine learning dans un outil simple à utiliser depuis le navigateur." },
+      {
+        "n": "01",
+        "title": "L’idée",
+        "body": "Explorer le traitement audio par machine learning dans un outil simple à utiliser depuis le navigateur."
+      },
       {
         "n": "02",
         "title": "Ce que j’ai construit",
@@ -108,7 +245,11 @@
           "Interface React en TypeScript"
         ]
       },
-      { "n": "03", "title": "Suite", "body": "Le projet continue d’évoluer, avec de nouveaux modèles et traitements à venir." }
+      {
+        "n": "03",
+        "title": "Suite",
+        "body": "Le projet continue d’évoluer, avec de nouveaux modèles et traitements à venir."
+      }
     ],
     "caption": "Interface d’envoi et de suivi."
   },
@@ -117,23 +258,59 @@
     "name": "WIIN",
     "title": "WIIN",
     "kind": "mission client",
+    "cat": "client",
     "color": "#5e2069",
     "period": "janv. – avr. 2021",
     "cta": "voir mon GitHub",
     "lead": "Plateforme de dématérialisation des processus de collecte d’informations. Intégration front et nouvelles fonctionnalités.",
+    "summary": "Collecte d’informations dématérialisée : intégration front et nouvelles fonctionnalités.",
+    "role": "Intégration front · API",
+    "metric": {
+      "v": "4 mois",
+      "k": "de la maquette à la production"
+    },
+    "tags": [
+      "nuxt.js",
+      "express"
+    ],
     "meta": [
-      { "k": "Rôle", "v": "Développeur web" },
-      { "k": "Client", "v": "WIIN" },
-      { "k": "Période", "v": "janv. – avr. 2021" },
-      { "k": "Durée", "v": "4 mois" }
+      {
+        "k": "Rôle",
+        "v": "Développeur web"
+      },
+      {
+        "k": "Client",
+        "v": "WIIN"
+      },
+      {
+        "k": "Période",
+        "v": "janv. – avr. 2021"
+      },
+      {
+        "k": "Durée",
+        "v": "4 mois"
+      }
     ],
     "stack": [
-      { "name": "Nuxt.js", "icon": "nuxtjs" },
-      { "name": "Express", "icon": "express" },
-      { "name": "JavaScript", "icon": "javascript" }
+      {
+        "name": "Nuxt.js",
+        "icon": "nuxtjs"
+      },
+      {
+        "name": "Express",
+        "icon": "express"
+      },
+      {
+        "name": "JavaScript",
+        "icon": "javascript"
+      }
     ],
     "sections": [
-      { "n": "01", "title": "Contexte", "body": "WIIN remplace les formulaires papier et les tableurs par des processus de collecte d’informations entièrement numériques." },
+      {
+        "n": "01",
+        "title": "Contexte",
+        "body": "WIIN remplace les formulaires papier et les tableurs par des processus de collecte d’informations entièrement numériques."
+      },
       {
         "n": "02",
         "title": "Mon rôle",
@@ -143,7 +320,11 @@
           "Nouvelles routes API sous Express"
         ]
       },
-      { "n": "03", "title": "Résultat", "body": "Des parcours de collecte plus rapides à remplir et des données directement exploitables." }
+      {
+        "n": "03",
+        "title": "Résultat",
+        "body": "Des parcours de collecte plus rapides à remplir et des données directement exploitables."
+      }
     ],
     "caption": "Formulaire de collecte."
   }

@@ -1,18 +1,21 @@
 ---
 import { ClientRouter } from 'astro:transitions'
 import SeoHead from '../components/SeoHead.astro'
+import { OWNER } from '../lib/site'
 
 interface Props {
   title: string
   description: string
+  // left section rail (home, desktop only)
+  rail?: boolean
 }
 
-const { title, description } = Astro.props
+const { title, description, rail = false } = Astro.props
 ---
 
 <html lang="fr">
   <head>
-    <SeoHead title={title} description={description} siteName="Justin Potchona" />
+    <SeoHead title={title} description={description} siteName={OWNER} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -21,7 +24,8 @@ const { title, description } = Astro.props
     />
     <ClientRouter />
   </head>
-  <body>
+  <body class:list={{ 'has-rail': rail }}>
+    <div class="top-bar"></div>
     <slot />
     <script>
       import '../scripts/lifecycle'
@@ -39,6 +43,10 @@ const { title, description } = Astro.props
     --cs-line: #ececec;
     --cs-display: Quicksand, sans-serif;
     --cs-mono: 'JetBrains Mono', monospace;
+    --rail-pad: 0px;
+  }
+  @media (min-width: 900px) {
+    .has-rail { --rail-pad: 48px; }
   }
   html {
     scroll-behavior: smooth;
@@ -57,10 +65,37 @@ const { title, description } = Astro.props
   *, *::before, *::after { box-sizing: border-box; }
   a { color: var(--cs-ink); text-decoration: none; }
   a:hover { color: #000; }
-  button { font: inherit; }
+  button, input, textarea { font: inherit; }
   ::selection { background: var(--cs-accent); }
-  a:focus-visible, button:focus-visible {
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
     outline: 3px solid var(--cs-ink);
     outline-offset: 3px;
+  }
+  input::placeholder, textarea::placeholder { color: #6b6b6b; }
+  [hidden] { display: none !important; }
+
+  .wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: calc(28px + var(--rail-pad));
+    padding-right: 28px;
+  }
+  .hl-link { padding: 6px 12px; font-family: var(--cs-display); font-weight: 700; font-size: 15px; }
+  .hl-link:hover, .hl-link[aria-current='true'] { background: var(--cs-accent); }
+  .kicker-label { font-family: var(--cs-display); font-weight: 700; font-size: 16px; }
+  .section-title {
+    margin: 0;
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: clamp(34px, 4.4vw, 54px);
+    line-height: 1.05;
+  }
+  .tag { padding: 3px 9px; background: #f0f0f0; font-size: 14px; color: var(--cs-body); }
+  .top-bar {
+    position: fixed;
+    inset: 0 0 auto;
+    height: 6px;
+    background: var(--cs-green);
+    z-index: 40;
   }
 </style>

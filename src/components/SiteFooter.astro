@@ -1,0 +1,25 @@
+---
+import { OWNER } from '../lib/site'
+---
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span>© 2026 {OWNER} · Lomé, Togo</span>
+    <a href="#top" class="hl-link">haut de page ↑</a>
+  </div>
+</footer>
+
+<style>
+  .site-footer { border-top: 1px solid var(--cs-line); }
+  .footer-inner {
+    padding-top: 24px;
+    padding-bottom: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: #3a3a3a;
+  }
+</style>

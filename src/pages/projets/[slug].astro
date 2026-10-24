@@ -1,8 +1,12 @@
 ---
 import { Image } from 'astro:assets'
-import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro'
+import SiteLayout from '../../layouts/SiteLayout.astro'
 import ShadowButton from '../../components/ShadowButton.astro'
-import { counter, getCaseStudies, GITHUB_URL, neighbors, sectionId, type CaseStudy } from '../../lib/case-studies'
+import SiteFooter from '../../components/SiteFooter.astro'
+import SiteHeader from '../../components/SiteHeader.astro'
+import { counter, getCaseStudies, neighbors, sectionId, type CaseStudy } from '../../lib/case-studies'
+import { deviconSrc } from '../../lib/devicons'
+import { GITHUB_URL, OWNER } from '../../lib/site'
 import { resolveImage } from '../../lib/images'
 
 export const getStaticPaths = () => {
@@ -26,26 +30,13 @@ const href = (s: CaseStudy) => `/projets/${s.slug}`
 const sections = p.sections.map(s => ({ ...s, id: sectionId(s.n) }))
 ---
 
-<CaseStudyLayout title={`${p.title} — Justin Potchona`} description={p.lead}>
-  <div class="top-bar"></div>
-
-  <header class="site-header" id="top">
-    <div class="wrap header-inner">
-      <a href="/" class="brand">
-        <span class="brand-mark">JP</span>
-        <span class="brand-name">Justin Potchona</span>
-      </a>
-      <nav class="header-nav">
-        <a href="/#works" class="hl-link">‹ tous les projets</a>
-        <ShadowButton href="/#contact" size="sm">me contacter</ShadowButton>
-      </nav>
-    </div>
-  </header>
+<SiteLayout title={`${p.title} — ${OWNER}`} description={p.lead}>
+  <SiteHeader variant="project" />
 
   <main>
-    <section class="wrap intro">
+    <section class="wrap intro" id="top">
       <div class="crumbs">
-        <span class="nowrap"><a href="/#works">projets</a> / {p.slug}</span>
+        <span style="white-space:nowrap"><a href="/#projets">projets</a> / {p.slug}</span>
         <span data-counter>{counter(index, total)}</span>
       </div>
       <div class="kicker" data-anim="kicker">
@@ -95,7 +86,7 @@ const sections = p.sections.map(s => ({ ...s, id: sectionId(s.n) }))
           <span class="aside-title">› stack</span>
           <ul class="cs-stack">
             {p.stack.map(t => (
-              <li><img src={`/img/devicons/${t.icon}.svg`} alt="" width="20" height="20" />{t.name}</li>
+              <li><img src={deviconSrc(t.icon)} alt="" width="20" height="20" />{t.name}</li>
             ))}
           </ul>
         </div>
@@ -149,65 +140,10 @@ const sections = p.sections.map(s => ({ ...s, id: sectionId(s.n) }))
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="wrap footer-inner">
-      <span>© 2026 Justin Potchona · Lomé, Togo</span>
-      <a href="#top" class="hl-link">haut de page ↑</a>
-    </div>
-  </footer>
-</CaseStudyLayout>
+  <SiteFooter />
+</SiteLayout>
 
 <style>
-  .wrap {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-left: 28px;
-    padding-right: 28px;
-  }
-  .nowrap { white-space: nowrap; }
-  .hl-link { padding: 6px 12px; font-family: var(--cs-display); font-weight: 700; font-size: 15px; }
-  .hl-link:hover { background: var(--cs-accent); }
-
-  .top-bar {
-    position: fixed;
-    inset: 0 0 auto;
-    height: 6px;
-    background: var(--cs-green);
-    z-index: 40;
-  }
-
-  .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 30;
-    background: rgba(255, 255, 255, 0.94);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--cs-line);
-  }
-  .header-inner {
-    padding-top: 16px;
-    padding-bottom: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-  .brand { display: flex; align-items: center; gap: 12px; }
-  .brand-mark {
-    width: 44px;
-    height: 44px;
-    display: grid;
-    place-items: center;
-    background: var(--cs-accent);
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 17px;
-  }
-  .brand-name { font-family: var(--cs-display); font-weight: 700; font-size: 17px; }
-  .header-nav { display: flex; align-items: center; gap: 18px; }
-
   .intro {
     padding-top: clamp(40px, 6vw, 72px);
     padding-bottom: clamp(40px, 5vw, 56px);
@@ -415,16 +351,4 @@ const sections = p.sections.map(s => ({ ...s, id: sectionId(s.n) }))
     letter-spacing: 0.06em;
   }
   .adj-title { font-family: var(--cs-display); font-weight: 700; font-size: 24px; }
-
-  .site-footer { border-top: 1px solid var(--cs-line); }
-  .footer-inner {
-    padding-top: 24px;
-    padding-bottom: 24px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 12px;
-    font-size: 14px;
-    color: #3a3a3a;
-  }
 </style>

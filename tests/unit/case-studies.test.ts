@@ -37,3 +37,16 @@ test('counter pads to two digits', () => {
 test('sectionId from section number', () => {
   expect(sectionId('03')).toBe('s03')
 })
+
+test('home card fields: one featured, cat client|perso, metric and tags', () => {
+  expect(studies.filter(s => s.featured).map(s => s.slug)).toEqual(['plateforme-audit'])
+  expect(studies.map(s => s.cat)).toEqual(['client', 'client', 'perso', 'client'])
+  expect(studies[3]).toMatchObject({ featured: false, metric: { v: '4 mois' }, tags: ['nuxt.js', 'express'] })
+  expect(studies.every(s => s.code === undefined)).toBe(true)
+})
+
+test('schema rejects unknown cat and non-https code url', () => {
+  expect(() => caseStudySchema.parse({ ...raw[0], cat: 'other' })).toThrow()
+  expect(() => caseStudySchema.parse({ ...raw[0], code: 'http://x.dev' })).toThrow()
+  expect(caseStudySchema.parse({ ...raw[0], code: 'https://github.com/a/b' }).code).toBe('https://github.com/a/b')
+})

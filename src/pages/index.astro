@@ -1,26 +1,460 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro'
-import Menu from '../components/Menu.astro'
-import FloatingHeader from '../components/FloatingHeader.astro'
-import Landing from '../components/Landing.astro'
-import AboutMe from '../components/AboutMe.astro'
-import Projects from '../components/Projects.astro'
-import Skills from '../components/Skills.astro'
-import Contact from '../components/Contact.astro'
-import Foot from '../components/Foot.astro'
-import { getProjects } from '../lib/collection'
-import { featured } from '../lib/activities'
+import SiteLayout from '../layouts/SiteLayout.astro'
+import SiteHeader from '../components/SiteHeader.astro'
+import SiteFooter from '../components/SiteFooter.astro'
+import ShadowButton from '../components/ShadowButton.astro'
+import ProjectFeatured from '../components/ProjectFeatured.astro'
+import ProjectCard from '../components/ProjectCard.astro'
+import ContactSection from '../components/ContactSection.astro'
+import { Image } from 'astro:assets'
+import { getCaseStudies } from '../lib/case-studies'
+import { deviconSrc } from '../lib/devicons'
+import { resolveImage } from '../lib/images'
+import { getProfile } from '../lib/profile'
+import { applyFilter, filterCounts, FILTERS } from '../lib/project-filter'
+import { HOME_SECTIONS, OWNER } from '../lib/site'
 
-const projects = featured(await getProjects(), 6)
+const projects = getCaseStudies()
+const { featured, grid } = applyFilter(projects, 'all')
+const featuredProject = projects.find(p => p.slug === featured)
+const counts = filterCounts(projects)
+const { facts, skills, experience, interests } = getProfile()
+const pad = (n: number) => String(n).padStart(2, '0')
+const label = (id: string) => HOME_SECTIONS.find(s => s.id === id)?.label
+const description = 'Justin Potchona, développeur backend & machine learning basé à Lomé : API, plateformes web et outils data.'
 ---
 
-<BaseLayout title="Jean-jacques AKAKPO">
-  <Menu />
-  <FloatingHeader />
-  <Landing />
-  <AboutMe />
-  <Projects items={projects} />
-  <Skills />
-  <Contact />
-  <Foot />
-</BaseLayout>
+<SiteLayout title={`${OWNER} — Développeur backend & machine learning`} description={description} rail>
+  <SiteHeader variant="home" />
+
+  <div class="rail" aria-hidden="true">
+    <span class="rail-label" data-rail-label>{label('top')}</span>
+  </div>
+
+  <main>
+    <section id="top" data-section={label('top')} class="wrap hero">
+      <div class="hero-main">
+        <div class="hero-copy">
+          <span class="status"><span class="dot"></span>Disponible pour des missions</span>
+          <h1><span data-anim="hello" class="hello">Hello world!</span></h1>
+          <p class="intro">
+            <strong>{OWNER}</strong>, développeur backend &amp; machine learning basé à Lomé. Depuis 6 ans, je conçois des API,
+            des plateformes web et des outils data pour des équipes en France et en Afrique de l’Ouest.
+          </p>
+          <div class="hero-actions">
+            <ShadowButton href="#projets" size="lg" shadow="var(--cs-ink)">voir mes projets</ShadowButton>
+            <a href="#contact" class="coffee">prendre un café <span aria-hidden="true">›</span></a>
+          </div>
+        </div>
+        <div data-anim="code" class="code-card">
+          <div class="code-window">
+            <div class="code-bar">
+              <div class="dots" aria-hidden="true"><span></span><span></span><span class="on"></span></div>
+              <span class="file">justin.py</span>
+            </div>
+            <pre><code><span class="c"># bienvenue sur mon portfolio</span>
+<span class="k">class</span> Justin(Developer):
+    role     = <span class="s">"backend &amp; machine learning"</span>
+    stack    = [<span class="s">"Python"</span>, <span class="s">"Symfony"</span>, <span class="s">"Go"</span>]
+    based_in = <span class="s">"Lomé, Togo"</span>
+    mission  = <span class="s">"TheCodingMachine"</span>
+
+    <span class="k">def</span> hello(self):
+        <span class="k">return</span> <span class="s">"hello world!"</span></code></pre>
+            <div class="code-run">
+              <span class="k">›</span> python justin.py<span class="out">→ hello world!</span><span data-anim="cursor" class="cursor"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <dl class="facts">
+        {facts.map(f => (
+          <div>
+            <dt>{f.k}</dt>
+            <dd>{f.v}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <section id="projets" data-section={label('projets')} class="wrap projects">
+      <div class="projects-head">
+        <div data-reveal class="section-head">
+          <span class="kicker-label">› mes réalisations</span>
+          <h2 class="section-title">Projets sélectionnés</h2>
+        </div>
+        <div class="filters" role="group" aria-label="Filtrer les projets">
+          {FILTERS.map(f => (
+            <button type="button" data-filter={f.id} aria-pressed={f.id === 'all'}>
+              {f.label}<span class="count">{counts[f.id]}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      {featuredProject && <ProjectFeatured p={featuredProject} />}
+      <div class="grid">
+        {projects.map(p => <ProjectCard p={p} hidden={!grid.includes(p.slug)} />)}
+      </div>
+    </section>
+
+    <section id="competences" data-section={label('competences')} class="skills">
+      <div class="wrap skills-inner">
+        <div data-reveal class="section-head">
+          <span class="kicker-label">› compétences</span>
+          <h2 class="section-title">Ma boîte à outils</h2>
+        </div>
+        <div class="skill-grid">
+          {skills.map(g => (
+            <div data-reveal class="skill-group">
+              <div class="skill-head">
+                <h3><span>{g.cat}</span></h3>
+                <span class="count">{pad(g.items.length)}</span>
+              </div>
+              <ul>
+                {g.items.map(s => (
+                  <li><img src={deviconSrc(s.icon)} alt="" width="22" height="22" />{s.name}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="parcours" data-section={label('parcours')} class="wrap career">
+      <div class="career-head">
+        <span class="kicker-label">› parcours</span>
+        <h2 class="section-title">Expérience</h2>
+        <p>Six ans entre agences, startups et missions freelance.</p>
+      </div>
+      <ol class="timeline">
+        {experience.map(x => (
+          <li data-reveal>
+            <div class="dates">
+              <span class="from">{x.from}</span>
+              <span class="to">{x.to}</span>
+            </div>
+            <div class="job">
+              <div class="job-head">
+                <h3>{x.company}</h3>
+                {x.current && <span class="current">en cours</span>}
+              </div>
+              <span class="job-role">{x.role}</span>
+              <p>{x.desc}</p>
+              <div class="tags">{x.tags.map(t => <span class="tag">{t}</span>)}</div>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="apropos" data-section={label('apropos')} class="about">
+      <div class="wrap about-inner">
+        <div class="about-head">
+          <span class="kicker-label">› à propos de moi</span>
+          <h2 class="section-title">appelle-moi Justin</h2>
+        </div>
+        <div class="about-body">
+          <p class="bio">
+            Je suis développeur logiciel, passionné par mon métier et par les nouvelles technologies. Particulièrement
+            intéressé par les usages du machine learning, je veux poursuivre ma carrière sur des projets de machine learning
+            ou de développement backend. Passionné, motivé et autonome.
+          </p>
+          <div class="favs">
+            <div class="fav-buttons" role="group" aria-label="Centres d’intérêt">
+              {interests.map((i, n) => (
+                <button type="button" data-fav={i.k} aria-pressed={n === 0}>fav. {i.k}</button>
+              ))}
+            </div>
+            {interests.map((i, n) => (
+              <div class="fav-panel" data-fav-panel={i.k} hidden={n !== 0}>
+                {i.photo && (
+                  <div class="fav-photo">
+                    <Image src={resolveImage(i.photo)} alt="" widths={[480, 960]} sizes="(min-width: 1200px) 480px, 100vw" />
+                  </div>
+                )}
+                <div class="fav-card">
+                  <span class="bar"></span>
+                  <div class="fav-text">
+                    <span class="fav-k">fav.<br />{i.k}</span>
+                    <span class="fav-v">{i.v}</span>
+                  </div>
+                  <span class="bar"></span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <ContactSection />
+  </main>
+
+  <SiteFooter />
+</SiteLayout>
+
+<style>
+  .rail {
+    position: fixed;
+    left: 30px;
+    top: 120px;
+    bottom: 40px;
+    width: 4px;
+    background: var(--cs-ink);
+    z-index: 20;
+  }
+  .rail-label {
+    position: absolute;
+    left: 50%;
+    top: 6%;
+    transform: translateX(-50%) rotate(180deg);
+    writing-mode: vertical-rl;
+    padding: 10px 3px;
+    background: var(--cs-accent);
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: 12px;
+    white-space: nowrap;
+    transition: top 0.3s;
+  }
+  @media (max-width: 899px) {
+    .rail { display: none; }
+  }
+
+  .hero {
+    padding-top: clamp(48px, 8vw, 104px);
+    padding-bottom: clamp(56px, 8vw, 96px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(40px, 6vw, 64px);
+    /* entrance slides in from the right */
+    overflow-x: clip;
+  }
+  .hero-main { display: flex; flex-wrap: wrap; align-items: center; gap: 56px 64px; }
+  .hero-copy { flex: 1.25 1 460px; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 26px; }
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: var(--cs-mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cs-body);
+  }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: #1f9d4a; box-shadow: 0 0 0 4px rgba(31, 157, 74, 0.18); }
+  h1 {
+    margin: 0;
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: clamp(56px, 8vw, 112px);
+    line-height: 1;
+    letter-spacing: -0.015em;
+  }
+  .hello { display: inline-block; transform: rotate(-2deg); padding: 4px 18px 10px; background: var(--cs-accent); }
+  .intro { margin: 0; max-width: 52ch; font-size: clamp(17px, 1.6vw, 20px); line-height: 1.65; color: var(--cs-body); text-wrap: pretty; }
+  .intro strong { font-weight: 700; color: var(--cs-ink); }
+  .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 26px; padding-top: 4px; }
+  .coffee {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 4px;
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: 18px;
+    border-bottom: 3px solid var(--cs-ink);
+  }
+  .coffee:hover { background: var(--cs-accent); }
+
+  .code-card { flex: 1 1 360px; min-width: 0; position: relative; margin: 0 12px 12px 0; }
+  .code-card::before { content: ''; position: absolute; inset: 0; transform: translate(12px, 12px); background: var(--cs-accent); }
+  .code-window { position: relative; background: var(--cs-ink); border: 3px solid var(--cs-ink); color: #ededed; }
+  .code-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #2c2c2c;
+  }
+  .dots { display: flex; gap: 7px; }
+  .dots span { width: 11px; height: 11px; border-radius: 50%; background: #3a3a3a; }
+  .dots .on { background: var(--cs-accent); }
+  .file { font-family: var(--cs-mono); font-size: 12px; color: #bdbdbd; }
+  pre {
+    margin: 0;
+    padding: 22px 22px 24px;
+    overflow-x: auto;
+    font-family: var(--cs-mono);
+    font-size: clamp(13px, 1.15vw, 15px);
+    line-height: 1.75;
+  }
+  pre code { font-family: inherit; }
+  .c { color: #8a8a8a; }
+  .k { color: var(--cs-accent); }
+  .s { color: #a8e6b4; }
+  .code-run {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 22px;
+    border-top: 1px solid #2c2c2c;
+    font-family: var(--cs-mono);
+    font-size: 13px;
+    color: #bdbdbd;
+  }
+  .out { color: #ededed; }
+  .cursor { display: inline-block; width: 8px; height: 16px; background: var(--cs-accent); }
+
+  .facts {
+    margin: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+    gap: 20px;
+    padding-top: 28px;
+    border-top: 1px dotted var(--cs-ink);
+  }
+  .facts div { display: flex; flex-direction: column; gap: 4px; }
+  .facts dt, .timeline .from, .timeline .to {
+    font-family: var(--cs-mono);
+    font-size: 13px;
+  }
+  .facts dt { font-size: 12px; font-weight: 500; color: #5a5a5a; text-transform: uppercase; letter-spacing: 0.06em; }
+  .facts dd { margin: 0; font-family: var(--cs-display); font-weight: 700; font-size: 20px; }
+
+  .section-head { display: flex; flex-direction: column; gap: 12px; }
+
+  .projects {
+    padding-top: clamp(56px, 8vw, 104px);
+    padding-bottom: clamp(56px, 8vw, 104px);
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+  .projects-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 40px; }
+  .filters, .fav-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+  .filters button {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 2px solid var(--cs-ink);
+    background: #fff;
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .filters button:hover, .filters button[aria-pressed='true'] { background: var(--cs-accent); }
+  .filters .count { font-family: var(--cs-mono); font-size: 12px; font-weight: 500; }
+  .filters button:focus-visible, .fav-buttons button:focus-visible { outline: 3px solid var(--cs-ink); outline-offset: 3px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 28px 24px; }
+
+  .skills { background: #fafafa; border-top: 1px solid var(--cs-line); border-bottom: 1px solid var(--cs-line); }
+  .skills-inner {
+    padding-top: clamp(56px, 8vw, 104px);
+    padding-bottom: clamp(56px, 8vw, 104px);
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  .skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 20px; }
+  .skill-group { background: #fff; border: 2px solid var(--cs-ink); padding: 22px 24px; display: flex; flex-direction: column; gap: 16px; }
+  .skill-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .skill-head h3 { margin: 0; font-family: var(--cs-display); font-weight: 700; font-size: 21px; }
+  .skill-head h3 span { background: linear-gradient(transparent 55%, var(--cs-accent) 55%); padding: 0 2px; }
+  .skill-head .count { font-family: var(--cs-mono); font-size: 12px; color: #5a5a5a; }
+  .skill-group ul { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 10px; }
+  .skill-group li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px 6px 8px;
+    border: 1px solid #dcdcdc;
+    font-weight: 600;
+    font-size: 15px;
+  }
+  .skill-group img { display: block; object-fit: contain; }
+
+  .career {
+    padding-top: clamp(56px, 8vw, 104px);
+    padding-bottom: clamp(56px, 8vw, 104px);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px 64px;
+  }
+  .career-head { flex: 1 1 260px; display: flex; flex-direction: column; gap: 12px; }
+  .career-head p { margin: 6px 0 0; max-width: 34ch; font-size: 16px; line-height: 1.6; color: #3a3a3a; }
+  .timeline { flex: 2 1 520px; min-width: 0; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
+  .timeline > li {
+    display: grid;
+    grid-template-columns: minmax(0, 130px) minmax(0, 1fr);
+    gap: 8px 28px;
+    padding: 26px 0;
+    border-top: 1px dotted var(--cs-ink);
+  }
+  .dates { display: flex; flex-direction: column; gap: 6px; }
+  .from { font-weight: 700; }
+  .to { color: var(--cs-muted); }
+  .job { display: flex; flex-direction: column; gap: 8px; }
+  .job-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+  .job-head h3 { margin: 0; font-family: var(--cs-display); font-weight: 700; font-size: 22px; }
+  .current { padding: 2px 9px; background: var(--cs-accent); font-family: var(--cs-display); font-weight: 700; font-size: 13px; }
+  .job-role { font-weight: 600; font-size: 16px; color: var(--cs-body); }
+  .job p { margin: 0; max-width: 62ch; font-size: 16px; line-height: 1.6; color: #3a3a3a; text-wrap: pretty; }
+  .job .tags { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 2px; }
+
+  .about { background: var(--cs-ink); color: #fff; overflow-x: clip; }
+  .about-inner {
+    padding-top: clamp(56px, 8vw, 104px);
+    padding-bottom: clamp(56px, 8vw, 104px);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px 64px;
+  }
+  .about-head { flex: 1 1 260px; display: flex; flex-direction: column; gap: 12px; }
+  .about-head .kicker-label { color: var(--cs-accent); }
+  .about-body { flex: 2 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 32px; }
+  .bio { margin: 0; max-width: 60ch; font-size: clamp(18px, 1.7vw, 21px); line-height: 1.7; color: #ededed; text-wrap: pretty; }
+  .favs { display: flex; flex-direction: column; gap: 16px; }
+  .fav-buttons button {
+    all: unset;
+    cursor: pointer;
+    padding: 7px 14px;
+    border: 2px solid var(--cs-accent);
+    color: var(--cs-accent);
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .fav-buttons button:hover, .fav-buttons button[aria-pressed='true'] { background: var(--cs-accent); color: var(--cs-ink); }
+  .fav-buttons button:focus-visible { outline-color: var(--cs-accent); }
+  .fav-panel { display: flex; flex-wrap: wrap; min-height: 300px; }
+  .fav-photo { flex: 1.5 1 320px; min-width: 0; position: relative; min-height: 300px; background: #2a2a2a; filter: grayscale(1); }
+  .fav-photo :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .fav-card {
+    flex: 1 1 260px;
+    min-width: 0;
+    background-color: var(--cs-accent);
+    background-image: radial-gradient(rgba(17, 17, 17, 0.06) 1.4px, transparent 1.6px);
+    background-size: 12px 12px;
+    color: var(--cs-ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 0;
+  }
+  .bar { display: block; width: 72%; height: 8px; border-radius: 4px; background: var(--cs-ink); }
+  .fav-text { padding: 28px 28px 30px; display: flex; flex-direction: column; gap: 12px; }
+  .fav-k { font-family: var(--cs-display); font-weight: 700; font-size: clamp(40px, 4.4vw, 60px); line-height: 0.95; }
+  .fav-v { font-family: var(--cs-display); font-weight: 600; font-size: 17px; letter-spacing: 0.14em; text-transform: uppercase; }
+
+  @media (max-width: 520px) {
+    .timeline > li { grid-template-columns: 1fr; }
+    .dates { flex-direction: row; gap: 8px; }
+    .dates .to::before { content: '→ '; }
+  }
+</style>

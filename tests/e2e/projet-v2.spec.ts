@@ -16,7 +16,7 @@ test('case study page renders header, metas, summary and stack', async ({ page }
   await expect(page.locator('#s02 li')).toHaveCount(4)
   await expect(page.locator('#s01 ul')).toHaveCount(0)
   await expect(page.locator('.cs-visual')).toHaveCSS('background-color', 'rgb(33, 43, 106)')
-  await expect(page.locator('link[rel=canonical]')).toHaveAttribute('href', 'https://jeanjacquesakakpo.me/projets/plateforme-audit')
+  await expect(page.locator('link[rel=canonical]')).toHaveAttribute('href', 'https://nehiyr-ben-elohim.github.io/projets/plateforme-audit')
 })
 
 test('prev/next wrap around the list', async ({ page }) => {

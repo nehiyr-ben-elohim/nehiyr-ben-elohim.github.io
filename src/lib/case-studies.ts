@@ -1,28 +1,30 @@
 import { z } from 'astro/zod'
 import raw from '../data/case-studies.json'
+import { iconSchema } from './devicons'
 
-// files in public/img/devicons/
-export const DEVICONS = [
-  'symfony', 'nuxtjs', 'php', 'postgresql', 'docker',
-  'typescript', 'python', 'react', 'express', 'javascript',
-] as const
-
-export const GITHUB_URL = 'https://github.com/nehiyr-ben-elohim'
 
 export const caseStudySchema = z.object({
   slug: z.string().regex(/^[a-z0-9-]+$/),
   name: z.string(),
   title: z.string(),
   kind: z.string(),
+  cat: z.enum(['client', 'perso']),
+  featured: z.boolean().default(false),
   color: z.string().regex(/^#[0-9a-f]{6}$/i),
   period: z.string(),
   cta: z.string(),
   lead: z.string(),
+  // home card
+  summary: z.string(),
+  role: z.string(),
+  metric: z.object({ v: z.string(), k: z.string() }),
+  tags: z.array(z.string()),
+  code: z.url({ protocol: /^https$/ }).optional(),
   // '/img/...' resolved via resolveImage; placeholder when absent
   shot: z.string().optional(),
   shot2: z.string().optional(),
   meta: z.array(z.object({ k: z.string(), v: z.string() })),
-  stack: z.array(z.object({ name: z.string(), icon: z.enum(DEVICONS) })),
+  stack: z.array(iconSchema),
   sections: z.array(z.object({
     n: z.string(),
     title: z.string(),

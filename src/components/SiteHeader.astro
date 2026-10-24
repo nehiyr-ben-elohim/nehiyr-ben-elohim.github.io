@@ -1,0 +1,123 @@
+---
+import ShadowButton from './ShadowButton.astro'
+import { HOME_SECTIONS, OWNER } from '../lib/site'
+
+interface Props {
+  // home: section nav + mobile menu; project: back link
+  variant: 'home' | 'project'
+}
+
+const { variant } = Astro.props
+const home = variant === 'home'
+const nav = HOME_SECTIONS.filter(s => s.nav)
+---
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href={home ? '#top' : '/'} class="brand">
+      <span class="brand-mark">JP</span>
+      <span class="brand-name">{OWNER}</span>
+    </a>
+    {home ? (
+      <>
+        <nav class="desk-nav" aria-label="Sections">
+          {nav.map(n => <a href={`#${n.id}`} class="hl-link" data-nav={n.id}>{n.label}</a>)}
+          <ShadowButton href="#contact" size="sm">me contacter</ShadowButton>
+        </nav>
+        <button type="button" class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="menu-panel" data-nav-toggle>
+          <span aria-hidden="true">//</span>
+        </button>
+      </>
+    ) : (
+      <nav class="project-nav">
+        <a href="/#projets" class="hl-link">‹ tous les projets</a>
+        <ShadowButton href="/#contact" size="sm">me contacter</ShadowButton>
+      </nav>
+    )}
+  </div>
+  {home && (
+    <nav id="menu-panel" class="menu-panel" aria-label="Menu" data-nav-panel hidden>
+      {nav.map(n => <a href={`#${n.id}`}>{n.label}</a>)}
+      <a href="#contact" class="menu-contact">me contacter</a>
+    </nav>
+  )}
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--cs-line);
+  }
+  .header-inner {
+    padding-top: 16px;
+    padding-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-mark {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    background: var(--cs-accent);
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: 17px;
+  }
+  .brand-name { font-family: var(--cs-display); font-weight: 700; font-size: 17px; }
+  .project-nav { display: flex; align-items: center; gap: 18px; }
+  .desk-nav { display: flex; align-items: center; gap: 6px; }
+  .desk-nav :global(.shadow-btn) { margin-left: 14px; }
+  .menu-toggle {
+    all: unset;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    display: none;
+    place-items: center;
+    background: var(--cs-accent);
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: 20px;
+  }
+  .menu-toggle:focus-visible { outline: 3px solid var(--cs-ink); outline-offset: 3px; }
+  .menu-toggle[aria-expanded='true'] span { font-size: 0; }
+  .menu-toggle[aria-expanded='true'] span::after { content: '✕'; font-size: 20px; }
+  .menu-panel {
+    padding: 4px 28px 22px;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+  }
+  .menu-panel a {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--cs-line);
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: 22px;
+  }
+  .menu-panel .menu-contact {
+    margin-top: 16px;
+    padding: 14px;
+    text-align: center;
+    background: var(--cs-accent);
+    border: 3px solid var(--cs-ink);
+    font-size: 18px;
+  }
+  @media (max-width: 899px) {
+    .desk-nav { display: none; }
+    .menu-toggle { display: grid; }
+  }
+  @media (min-width: 900px) {
+    .menu-panel { display: none !important; }
+  }
+</style>

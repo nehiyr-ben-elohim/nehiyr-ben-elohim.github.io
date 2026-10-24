@@ -28,6 +28,7 @@ export const initContactForm = (): Cleanup => {
       })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       form.reset()
+      form.toggleAttribute('data-sent', true)
       show(sent, true)
     } catch {
       show(error, true)

@@ -1,0 +1,108 @@
+{
+  "facts": [
+    { "k": "Expérience", "v": "6 ans" },
+    { "k": "Spécialité", "v": "Backend & ML" },
+    { "k": "Mission actuelle", "v": "TheCodingMachine" },
+    { "k": "Basé à", "v": "Lomé · remote" }
+  ],
+  "skills": [
+    {
+      "cat": "Langages",
+      "items": [
+        { "name": "Python", "icon": "python" },
+        { "name": "TypeScript", "icon": "typescript" },
+        { "name": "JavaScript", "icon": "javascript" },
+        { "name": "Java", "icon": "java" },
+        { "name": "C# / .NET", "icon": "csharp" },
+        { "name": "Go", "icon": "go-wordmark" },
+        { "name": "PHP", "icon": "php" }
+      ]
+    },
+    {
+      "cat": "Backend",
+      "items": [
+        { "name": "Symfony", "icon": "symfony" },
+        { "name": "Laravel", "icon": "laravel" },
+        { "name": "Django", "icon": "django" },
+        { "name": "Gin", "icon": "go" },
+        { "name": "Express", "icon": "express" }
+      ]
+    },
+    {
+      "cat": "Frontend",
+      "items": [
+        { "name": "Vue.js", "icon": "vuejs" },
+        { "name": "Nuxt", "icon": "nuxtjs" },
+        { "name": "React", "icon": "react" }
+      ]
+    },
+    {
+      "cat": "Mobile",
+      "items": [
+        { "name": "Flutter", "icon": "flutter" },
+        { "name": "React Native", "icon": "react" },
+        { "name": "Android", "icon": "android" }
+      ]
+    },
+    {
+      "cat": "Données",
+      "items": [
+        { "name": "PostgreSQL", "icon": "postgresql" },
+        { "name": "MySQL", "icon": "mysql" },
+        { "name": "SQL Server", "icon": "sqlserver" },
+        { "name": "MongoDB", "icon": "mongodb" },
+        { "name": "Neo4j", "icon": "neo4j" }
+      ]
+    },
+    {
+      "cat": "IA & ML",
+      "items": [
+        { "name": "NLP", "icon": "python" },
+        { "name": "scikit-learn", "icon": "scikitlearn" },
+        { "name": "TensorFlow", "icon": "tensorflow" },
+        { "name": "Pandas", "icon": "pandas" }
+      ]
+    }
+  ],
+  "experience": [
+    {
+      "from": "avr. 2021",
+      "to": "aujourd’hui",
+      "company": "TheCodingMachine",
+      "current": true,
+      "role": "Consultant freelance · Développement full-stack",
+      "desc": "Plateforme d’audit pour l’un des 10 plus grands cabinets au monde. Arrivé dans une équipe de 3, aujourd’hui sur les fonctionnalités et le support production.",
+      "tags": ["symfony", "nuxt.js", "sylius", "phpstan"]
+    },
+    {
+      "from": "janv. 2021",
+      "to": "avr. 2021",
+      "company": "WIIN",
+      "role": "Développeur web",
+      "desc": "Plateforme de dématérialisation des processus de collecte d’informations.",
+      "tags": ["nuxt.js", "express"]
+    },
+    {
+      "from": "juil. 2019",
+      "to": "janv. 2021",
+      "company": "Dreammore",
+      "role": "Développeur mobile & API",
+      "desc": "Applications iOS et Android, API et dashboard, d’abord en natif puis en Flutter.",
+      "tags": ["flutter", "laravel", "java", "swift"]
+    },
+    {
+      "from": "mai 2019",
+      "to": "juil. 2020",
+      "company": "Magmatel SARL",
+      "role": "Développeur Android freelance",
+      "desc": "Application de satisfaction client et gestion des mouvements de conteneurs.",
+      "tags": ["android", "symfony"]
+    }
+  ],
+  "interests": [
+    { "k": "musics", "v": "pop · rock · edm · rap fr" },
+    { "k": "games", "v": "fps · foot · open world" },
+    { "k": "movies", "v": "high-tech · comedy" },
+    { "k": "places", "v": "SFO MIA YMQ" }
+  ]
+}

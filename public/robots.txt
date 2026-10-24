@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jeanjacquesakakpo.me/sitemap-index.xml
+Sitemap: https://nehiyr-ben-elohim.github.io/sitemap-index.xml

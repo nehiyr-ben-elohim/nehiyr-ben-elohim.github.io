@@ -3,7 +3,7 @@ import { test, expect, type Page } from '@playwright/test'
 const FORMSPREE = '**/formspree.io/**'
 
 const fill = async (page: Page) => {
-  await page.goto('/projects')
+  await page.goto('/')
   const form = page.locator('[data-contact-form]')
   await form.evaluate(el => el.scrollIntoView({ block: 'center' }))
   await form.locator('input[name=name]').fill('Ada')
