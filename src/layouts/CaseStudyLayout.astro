@@ -1,0 +1,66 @@
+---
+import { ClientRouter } from 'astro:transitions'
+import SeoHead from '../components/SeoHead.astro'
+
+interface Props {
+  title: string
+  description: string
+}
+
+const { title, description } = Astro.props
+---
+
+<html lang="fr">
+  <head>
+    <SeoHead title={title} description={description} siteName="Justin Potchona" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap"
+    />
+    <ClientRouter />
+  </head>
+  <body>
+    <slot />
+    <script>
+      import '../scripts/lifecycle'
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --cs-ink: #111;
+    --cs-accent: #fff176;
+    --cs-green: #1f5c2e;
+    --cs-muted: #4a4a4a;
+    --cs-body: #2e2e2e;
+    --cs-line: #ececec;
+    --cs-display: Quicksand, sans-serif;
+    --cs-mono: 'JetBrains Mono', monospace;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+  body {
+    margin: 0;
+    background: #fff;
+    color: var(--cs-ink);
+    font-family: 'Public Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  a { color: var(--cs-ink); text-decoration: none; }
+  a:hover { color: #000; }
+  button { font: inherit; }
+  ::selection { background: var(--cs-accent); }
+  a:focus-visible, button:focus-visible {
+    outline: 3px solid var(--cs-ink);
+    outline-offset: 3px;
+  }
+</style>
