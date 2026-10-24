@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jeanjacquesakakpo.me/sitemap-index.xml
