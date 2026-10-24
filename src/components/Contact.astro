@@ -8,7 +8,10 @@ interface Props {
 }
 const { stepIndicator = true, bg } = Astro.props
 const endpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? ''
-if (!endpoint) console.warn('[contact] PUBLIC_FORMSPREE_ENDPOINT is not set: the contact form will not send.')
+// a missing endpoint would silently POST to the page itself
+if (!endpoint && import.meta.env.PROD) {
+  throw new Error('PUBLIC_FORMSPREE_ENDPOINT is not set: the contact form cannot send messages.')
+}
 ---
 
 <section class="row contact-row" id="contact">

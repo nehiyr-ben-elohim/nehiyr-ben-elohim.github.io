@@ -7,7 +7,10 @@ export const initMenu = (): Cleanup => {
 
   const setOpen = (open: boolean) => {
     wrapper?.classList.toggle('menu-opened', open)
-    document.querySelectorAll('.menu-toggler').forEach(t => t.classList.toggle('menu-opened', open))
+    document.querySelectorAll('.menu-toggler').forEach(t => {
+      t.classList.toggle('menu-opened', open)
+      t.setAttribute('aria-expanded', String(open))
+    })
   }
 
   const onClick = (e: MouseEvent) => {
@@ -28,6 +31,7 @@ export const initMenu = (): Cleanup => {
     }
   }
 
-  document.addEventListener('click', onClick)
-  return () => document.removeEventListener('click', onClick)
+  // capture phase: preventDefault before ClientRouter treats href="#" as a navigation
+  document.addEventListener('click', onClick, true)
+  return () => document.removeEventListener('click', onClick, true)
 }

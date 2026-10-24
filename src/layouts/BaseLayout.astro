@@ -20,7 +20,7 @@ const {
 } = Astro.props
 
 // canonical URLs without trailing slash, like the historical ones
-const canonical = new URL(Astro.url.pathname.replace(/(.)\/$/, '$1'), Astro.site)
+const canonical = new URL(Astro.url.pathname.replace(/(index)?\.html$/, '').replace(/(.)\/$/, '$1'), Astro.site)
 const ogImage = image ? new URL((await getImage({ src: image, width: 1200, format: 'jpg' })).src, Astro.site) : undefined
 ---
 

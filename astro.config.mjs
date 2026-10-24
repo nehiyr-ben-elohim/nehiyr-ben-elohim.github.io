@@ -5,7 +5,9 @@ import sitemap from '@astrojs/sitemap'
 export default defineConfig({
   site: 'https://jeanjacquesakakpo.me',
   output: 'static',
-  trailingSlash: 'ignore',
+  // historical URLs have no trailing slash: emit /x.html, served as /x
+  trailingSlash: 'never',
+  build: { format: 'file' },
   integrations: [sitemap()],
   vite: {
     css: {

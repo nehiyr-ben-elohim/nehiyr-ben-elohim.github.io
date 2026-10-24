@@ -101,12 +101,16 @@
   }
 }
 
-.project-item-row {
+// hidden only when JS can reveal it (.loaded)
+:global(html.js) .project-item-row:not(.loaded) {
   .project-item-metas,
   .the-concept,
   .report {
     opacity: 0 !important;
   }
+}
+
+.project-item-row {
   
   &.loaded {
     .project-item-metas,

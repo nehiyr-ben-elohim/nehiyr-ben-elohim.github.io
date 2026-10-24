@@ -34,7 +34,7 @@ Les images référencées (`mediaURL`, `shoots`) doivent exister sous `src/asset
 
 Le formulaire envoie vers [Formspree](https://formspree.io). Créer un formulaire, puis définir
 `PUBLIC_FORMSPREE_ENDPOINT` (ex. `https://formspree.io/f/xxxxxxx`) dans `.env` ou dans les variables
-d'environnement de l'hébergeur. Sans cette variable, le build affiche un avertissement et le formulaire n'envoie rien.
+d'environnement de l'hébergeur. Sans cette variable, le build de production échoue (pour ne jamais publier un formulaire qui n'envoie rien).
 
 ## Déploiement
 

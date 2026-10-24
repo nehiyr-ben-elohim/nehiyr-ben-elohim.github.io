@@ -20,6 +20,7 @@ export const initContactForm = (): Cleanup => {
     show(error, false)
 
     try {
+      if (!form.getAttribute('action')) throw new Error('No form endpoint')
       const res = await fetch(form.action, {
         method: 'POST',
         body: new FormData(form),
