@@ -11,6 +11,8 @@ export const profileSchema = z.object({
     from: z.string(),
     to: z.string(),
     company: z.string(),
+    // file in public/img/companies/; monogram when absent
+    logo: z.string().regex(/^\/img\/companies\/[\w-]+\.(png|svg|webp)$/).optional(),
     current: z.boolean().default(false),
     role: z.string(),
     desc: z.string(),
@@ -23,3 +25,5 @@ export const profileSchema = z.object({
 export type Profile = z.output<typeof profileSchema>
 
 export const getProfile = (): Profile => profileSchema.parse(raw)
+
+export const monogram = (company: string): string => company.trim().charAt(0).toUpperCase()

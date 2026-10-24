@@ -10,7 +10,7 @@ import { Image } from 'astro:assets'
 import { getCaseStudies } from '../lib/case-studies'
 import { deviconSrc } from '../lib/devicons'
 import { resolveImage } from '../lib/images'
-import { getProfile } from '../lib/profile'
+import { getProfile, monogram } from '../lib/profile'
 import { applyFilter, filterCounts, FILTERS } from '../lib/project-filter'
 import { HOME_SECTIONS, OWNER } from '../lib/site'
 
@@ -136,6 +136,9 @@ const description = 'Justin Potchona, développeur backend & machine learning ba
             </div>
             <div class="job">
               <div class="job-head">
+                <span class="company-logo" aria-hidden="true">
+                  {x.logo ? <img src={x.logo} alt="" width="40" height="40" loading="lazy" /> : monogram(x.company)}
+                </span>
                 <h3>{x.company}</h3>
                 {x.current && <span class="current">en cours</span>}
               </div>
@@ -401,6 +404,21 @@ const description = 'Justin Potchona, développeur backend & machine learning ba
   .to { color: var(--cs-muted); }
   .job { display: flex; flex-direction: column; gap: 8px; }
   .job-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+  .company-logo {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: #fff;
+    border: 2px solid var(--cs-ink);
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: 20px;
+  }
+  .company-logo:not(:has(img)) { background: var(--cs-accent); }
+  .company-logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
   .job-head h3 { margin: 0; font-family: var(--cs-display); font-weight: 700; font-size: 22px; }
   .current { padding: 2px 9px; background: var(--cs-accent); font-family: var(--cs-display); font-weight: 700; font-size: 13px; }
   .job-role { font-weight: 600; font-size: 16px; color: var(--cs-body); }

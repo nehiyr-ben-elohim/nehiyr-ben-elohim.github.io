@@ -42,6 +42,17 @@ test('skills, experience', async ({ page }) => {
   await expect(page.locator('.timeline .current')).toHaveCount(1)
 })
 
+test('experience shows company logos, monogram when missing', async ({ page }) => {
+  await page.goto('/')
+  const logos = page.locator('.timeline .company-logo')
+  await expect(logos).toHaveCount(4)
+  await expect(logos.nth(0).locator('img')).toHaveAttribute('src', '/img/companies/thecodingmachine.png')
+  await expect(logos.nth(1).locator('img')).toHaveAttribute('src', '/img/companies/wiin.png')
+  await expect(logos.nth(2)).toHaveText('D')
+  await expect(logos.nth(3)).toHaveText('M')
+  expect(await logos.nth(0).locator('img').evaluate(img => (img as HTMLImageElement).naturalWidth)).toBeGreaterThan(0)
+})
+
 test('interests switcher', async ({ page }) => {
   await page.goto('/')
   await expect(page.locator('[data-fav-panel="musics"]')).toBeVisible()
