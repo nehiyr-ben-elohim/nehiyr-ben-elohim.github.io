@@ -1,0 +1,67 @@
+---
+import { getImage, Image } from 'astro:assets'
+import type { CaseStudy } from '../lib/case-studies'
+import { resolveImage } from '../lib/images'
+
+interface Props {
+  gallery: CaseStudy['gallery']
+  kicker: string
+}
+
+const { gallery, kicker } = Astro.props
+const items = await Promise.all(
+  gallery
+    .filter((g): g is { cap: string; src: string } => !!g.src)
+    .map(async g => ({ ...g, image: resolveImage(g.src), large: (await getImage({ src: resolveImage(g.src), width: 1600 })).src })),
+)
+---
+
+<section id="galerie" data-spy data-section="galerie" class="wrap gallery">
+  <div data-reveal class="head">
+    <span class="kicker-label">{kicker}</span>
+    <h2>En images</h2>
+  </div>
+  <div class="grid">
+    {items.map(g => (
+      <figure data-reveal>
+        <div class="frame">
+          <div class="bar">
+            <div class="dots" aria-hidden="true"><span></span><span></span><span class="on"></span></div>
+            <button type="button" class="zoom" data-zoom={g.large} data-zoom-cap={g.cap} aria-label={`Agrandir : ${g.cap}`}>agrandir ⤢</button>
+          </div>
+          <div class="pic"><Image src={g.image} alt={g.cap} widths={[480, 960]} sizes="(min-width: 1200px) 380px, 100vw" /></div>
+        </div>
+        <figcaption>{g.cap}</figcaption>
+      </figure>
+    ))}
+  </div>
+</section>
+
+<style>
+  .gallery { padding-top: clamp(56px, 8vw, 96px); padding-bottom: clamp(56px, 8vw, 96px); display: flex; flex-direction: column; gap: 28px; }
+  .head { display: flex; flex-direction: column; gap: 12px; }
+  h2 { margin: 0; font-family: var(--cs-display); font-weight: 700; font-size: clamp(32px, 4vw, 48px); line-height: 1.05; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 28px 24px; }
+  figure { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  .frame { background: #fff; border: 2px solid var(--cs-ink); box-shadow: 6px 6px 0 var(--cs-accent); }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 10px; border-bottom: 2px solid var(--cs-ink); background: #f4f4f4; }
+  .dots { display: flex; gap: 5px; }
+  .dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--cs-ink); }
+  .dots span:nth-child(2) { background: #bdbdbd; }
+  .dots .on { background: var(--cs-accent); border: 1px solid var(--cs-ink); }
+  .zoom {
+    all: unset;
+    cursor: pointer;
+    padding: 1px 7px;
+    border: 2px solid var(--cs-ink);
+    background: #fff;
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: 11px;
+  }
+  .zoom:hover { background: var(--cs-accent); }
+  .zoom:focus-visible { outline: 3px solid var(--cs-ink); outline-offset: 2px; }
+  .pic { aspect-ratio: 16 / 10; overflow: hidden; }
+  .pic :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+  figcaption { font-size: 14px; color: #3a3a3a; }
+</style>

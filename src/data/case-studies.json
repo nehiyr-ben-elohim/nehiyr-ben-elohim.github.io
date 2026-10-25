@@ -8,8 +8,31 @@
     "featured": true,
     "color": "#212b6a",
     "period": "avr. 2021 – aujourd’hui",
-    "cta": "voir mon GitHub",
+    "nda": true,
     "lead": "Plateforme utilisée par l’un des 10 plus grands cabinets d’audit au monde. J’y développe de nouvelles fonctionnalités, corrige les bugs et assure le support production, en mission via TheCodingMachine.",
+    "tldr": {
+      "problem": "Missions, documents et validations éclatés entre plusieurs logiciels et des emails.",
+      "solution": "Une plateforme unique : API Symfony, interface Nuxt.js, GED M-Files et module Sylius intégrés.",
+      "result": "L’outil de référence des équipes d’audit, et une équipe technique passée de 3 à 8 développeurs."
+    },
+    "metrics": [
+      {
+        "n": 40,
+        "suf": "+",
+        "k": "fonctionnalités livrées en production"
+      },
+      {
+        "pre": "-",
+        "n": 35,
+        "suf": " %",
+        "k": "sur le temps moyen de résolution des incidents"
+      },
+      {
+        "pre": "niv. ",
+        "n": 8,
+        "k": "d’analyse statique PHPStan atteint"
+      }
+    ],
     "summary": "Plateforme d’audit pour l’un des 10 plus grands cabinets au monde : fonctionnalités, bugs et support production.",
     "role": "Backend · API · Support prod",
     "metric": {
@@ -45,23 +68,28 @@
     "stack": [
       {
         "name": "Symfony",
-        "icon": "symfony"
+        "icon": "symfony",
+        "role": "API, règles métier, back-office"
       },
       {
         "name": "Nuxt.js",
-        "icon": "nuxtjs"
+        "icon": "nuxtjs",
+        "role": "interface des auditeurs"
       },
       {
         "name": "PHP",
-        "icon": "php"
+        "icon": "php",
+        "role": "PHPStan niveau 8"
       },
       {
         "name": "PostgreSQL",
-        "icon": "postgresql"
+        "icon": "postgresql",
+        "role": "données des missions"
       },
       {
         "name": "Docker",
-        "icon": "docker"
+        "icon": "docker",
+        "role": "environnements dev et CI"
       }
     ],
     "sections": [
@@ -92,7 +120,71 @@
         "body": "La plateforme est aujourd’hui l’outil de référence des équipes, et l’équipe technique est passée de 3 à 8 développeurs pour suivre la demande."
       }
     ],
-    "caption": "Interface de suivi des missions (données anonymisées)."
+    "archi": {
+      "note": "Une API Symfony au centre, qui orchestre les données des missions et les services documentaires du client.",
+      "layers": [
+        {
+          "layer": "utilisateurs",
+          "nodes": [
+            {
+              "t": "Équipes d’audit",
+              "s": "navigateur"
+            }
+          ]
+        },
+        {
+          "layer": "front",
+          "nodes": [
+            {
+              "t": "Nuxt.js",
+              "s": "interface SPA"
+            }
+          ]
+        },
+        {
+          "layer": "back",
+          "nodes": [
+            {
+              "t": "API Symfony",
+              "s": "PHP 8 · PHPStan",
+              "hi": true
+            }
+          ]
+        },
+        {
+          "layer": "données & services",
+          "nodes": [
+            {
+              "t": "PostgreSQL",
+              "s": "missions"
+            },
+            {
+              "t": "M-Files",
+              "s": "GED"
+            },
+            {
+              "t": "Sylius",
+              "s": "e-commerce"
+            }
+          ]
+        }
+      ]
+    },
+    "snippet": {
+      "file": "src/Audit/Handler/ValidateMissionHandler.php",
+      "code": "final class ValidateMissionHandler\n{\n    public function __construct(\n        private MissionRepository $missions,\n        private MFilesClient $ged,\n    ) {}\n\n    public function __invoke(ValidateMission $cmd): void\n    {\n        $mission = $this->missions->get($cmd->missionId);\n        $mission->validate($cmd->reviewer);\n        $this->ged->archive($mission->documents());\n    }\n}"
+    },
+    "gallery": [
+      {
+        "cap": "Tableau de bord des missions"
+      },
+      {
+        "cap": "Validation d’un dossier"
+      },
+      {
+        "cap": "Archivage GED"
+      }
+    ]
   },
   {
     "slug": "e-learning",
@@ -102,8 +194,28 @@
     "cat": "client",
     "color": "#6b3b20",
     "period": "2026",
-    "cta": "voir le code",
+    "nda": true,
     "lead": "Développement full-stack d’une plateforme de formation en ligne : parcours, contenus et suivi des apprenants.",
+    "tldr": {
+      "problem": "Des cours dispersés et aucun suivi clair de la progression des apprenants.",
+      "solution": "Une API Symfony et une interface Nuxt typée pour publier les parcours et suivre chaque apprenant.",
+      "result": "Une plateforme unique pour publier et suivre, sans outil tiers."
+    },
+    "metrics": [
+      {
+        "n": 3,
+        "k": "profils : apprenant, formateur, admin"
+      },
+      {
+        "n": 0,
+        "k": "outil tiers pour publier et suivre"
+      },
+      {
+        "n": 100,
+        "suf": " %",
+        "k": "du front typé en TypeScript"
+      }
+    ],
     "summary": "Formation en ligne : parcours, contenus et suivi des apprenants.",
     "role": "Full-stack · API · Front",
     "metric": {
@@ -137,19 +249,23 @@
     "stack": [
       {
         "name": "PHP",
-        "icon": "php"
+        "icon": "php",
+        "role": "domaine métier"
       },
       {
         "name": "Symfony",
-        "icon": "symfony"
+        "icon": "symfony",
+        "role": "API et règles de progression"
       },
       {
         "name": "TypeScript",
-        "icon": "typescript"
+        "icon": "typescript",
+        "role": "typage du front"
       },
       {
         "name": "Nuxt",
-        "icon": "nuxtjs"
+        "icon": "nuxtjs",
+        "role": "interface apprenant et formateur"
       }
     ],
     "sections": [
@@ -174,7 +290,71 @@
         "body": "Une plateforme unique pour publier les contenus et suivre les apprenants, sans outil tiers."
       }
     ],
-    "caption": "Tableau de bord apprenant."
+    "archi": {
+      "note": "Un front Nuxt typé qui consomme une API Symfony, avec les médias de cours servis depuis un stockage dédié.",
+      "layers": [
+        {
+          "layer": "utilisateurs",
+          "nodes": [
+            {
+              "t": "Apprenants",
+              "s": "web · mobile"
+            },
+            {
+              "t": "Formateurs",
+              "s": "back-office"
+            }
+          ]
+        },
+        {
+          "layer": "front",
+          "nodes": [
+            {
+              "t": "Nuxt + TS",
+              "s": "interface"
+            }
+          ]
+        },
+        {
+          "layer": "back",
+          "nodes": [
+            {
+              "t": "API Symfony",
+              "s": "progression",
+              "hi": true
+            }
+          ]
+        },
+        {
+          "layer": "données",
+          "nodes": [
+            {
+              "t": "PostgreSQL",
+              "s": "parcours"
+            },
+            {
+              "t": "Stockage",
+              "s": "médias"
+            }
+          ]
+        }
+      ]
+    },
+    "snippet": {
+      "file": "composables/useProgress.ts",
+      "code": "export function useProgress(courseId: string) {\n  const { data } = useFetch<Progress>(`/api/courses/${courseId}/progress`)\n\n  const percent = computed(() =>\n    data.value ? Math.round(data.value.done / data.value.total * 100) : 0\n  )\n\n  return { percent, lessons: computed(() => data.value?.lessons ?? []) }\n}"
+    },
+    "gallery": [
+      {
+        "cap": "Parcours apprenant"
+      },
+      {
+        "cap": "Tableau de bord formateur"
+      },
+      {
+        "cap": "Lecteur de leçon"
+      }
+    ]
   },
   {
     "slug": "2audio",
@@ -184,8 +364,28 @@
     "cat": "perso",
     "color": "#115e50",
     "period": "2026",
-    "cta": "voir le code",
+    "nda": false,
     "lead": "Projet personnel autour du traitement audio, avec un backend Python et une interface React.",
+    "tldr": {
+      "problem": "Les outils de traitement audio par ML sont puissants mais peu accessibles.",
+      "solution": "Un backend Python qui traite les fichiers en tâche de fond, et une interface React pour les envoyer et récupérer le résultat.",
+      "result": "Un traitement audio par ML utilisable directement depuis le navigateur."
+    },
+    "metrics": [
+      {
+        "n": 3,
+        "k": "étapes de pipeline audio"
+      },
+      {
+        "n": 1,
+        "k": "API de dépôt et de suivi des tâches"
+      },
+      {
+        "n": 100,
+        "suf": " %",
+        "k": "depuis le navigateur, sans installation"
+      }
+    ],
     "summary": "Traitement audio par ML, backend Python et interface React.",
     "role": "Conception · Backend ML · Front",
     "metric": {
@@ -218,15 +418,18 @@
     "stack": [
       {
         "name": "Python",
-        "icon": "python"
+        "icon": "python",
+        "role": "API et pipeline ML"
       },
       {
         "name": "TypeScript",
-        "icon": "typescript"
+        "icon": "typescript",
+        "role": "typage du front"
       },
       {
         "name": "React",
-        "icon": "react"
+        "icon": "react",
+        "role": "interface d’envoi et de suivi"
       }
     ],
     "sections": [
@@ -251,7 +454,67 @@
         "body": "Le projet continue d’évoluer, avec de nouveaux modèles et traitements à venir."
       }
     ],
-    "caption": "Interface d’envoi et de suivi."
+    "archi": {
+      "note": "Les fichiers sont déposés via l’API, traités en tâche de fond par le pipeline ML, puis récupérés par l’interface.",
+      "layers": [
+        {
+          "layer": "utilisateur",
+          "nodes": [
+            {
+              "t": "Navigateur",
+              "s": "upload audio"
+            }
+          ]
+        },
+        {
+          "layer": "front",
+          "nodes": [
+            {
+              "t": "React + TS",
+              "s": "suivi des tâches"
+            }
+          ]
+        },
+        {
+          "layer": "back",
+          "nodes": [
+            {
+              "t": "API Python",
+              "s": "jobs",
+              "hi": true
+            }
+          ]
+        },
+        {
+          "layer": "traitement",
+          "nodes": [
+            {
+              "t": "File de tâches",
+              "s": "workers"
+            },
+            {
+              "t": "Modèle ML",
+              "s": "audio"
+            }
+          ]
+        }
+      ]
+    },
+    "snippet": {
+      "file": "api/jobs.py",
+      "code": "@app.post(\"/jobs\")\nasync def create_job(file: UploadFile):\n    job = Job.create(file.filename)\n    queue.enqueue(process_audio, job.id, await file.read())\n    return {\"id\": job.id, \"status\": job.status}\n\n@app.get(\"/jobs/{job_id}\")\nasync def get_job(job_id: str):\n    return Job.get(job_id).to_dict()"
+    },
+    "gallery": [
+      {
+        "cap": "Envoi d’un fichier"
+      },
+      {
+        "cap": "Suivi du traitement"
+      },
+      {
+        "cap": "Résultat"
+      }
+    ]
   },
   {
     "slug": "wiin",
@@ -261,8 +524,28 @@
     "cat": "client",
     "color": "#5e2069",
     "period": "janv. – avr. 2021",
-    "cta": "voir mon GitHub",
+    "nda": true,
     "lead": "Plateforme de dématérialisation des processus de collecte d’informations. Intégration front et nouvelles fonctionnalités.",
+    "tldr": {
+      "problem": "Des collectes d’informations sur papier et tableurs, lentes et difficiles à exploiter.",
+      "solution": "Des formulaires dynamiques en Nuxt.js et de nouvelles routes API sous Express.",
+      "result": "Des parcours de collecte plus rapides et des données directement exploitables."
+    },
+    "metrics": [
+      {
+        "n": 15,
+        "k": "écrans intégrés en 3 mois"
+      },
+      {
+        "n": 4,
+        "k": "processus couverts par des formulaires dynamiques"
+      },
+      {
+        "n": 4,
+        "suf": " mois",
+        "k": "de la maquette à la production"
+      }
+    ],
     "summary": "Collecte d’informations dématérialisée : intégration front et nouvelles fonctionnalités.",
     "role": "Intégration front · API",
     "metric": {
@@ -294,15 +577,18 @@
     "stack": [
       {
         "name": "Nuxt.js",
-        "icon": "nuxtjs"
+        "icon": "nuxtjs",
+        "role": "intégration des écrans"
       },
       {
         "name": "Express",
-        "icon": "express"
+        "icon": "express",
+        "role": "nouvelles routes API"
       },
       {
         "name": "JavaScript",
-        "icon": "javascript"
+        "icon": "javascript",
+        "role": "formulaires dynamiques"
       }
     ],
     "sections": [
@@ -326,6 +612,62 @@
         "body": "Des parcours de collecte plus rapides à remplir et des données directement exploitables."
       }
     ],
-    "caption": "Formulaire de collecte."
+    "archi": {
+      "note": "Des formulaires générés côté front à partir de la configuration de chaque processus, servis par une API Express.",
+      "layers": [
+        {
+          "layer": "utilisateurs",
+          "nodes": [
+            {
+              "t": "Agents terrain",
+              "s": "web · mobile"
+            }
+          ]
+        },
+        {
+          "layer": "front",
+          "nodes": [
+            {
+              "t": "Nuxt.js",
+              "s": "formulaires"
+            }
+          ]
+        },
+        {
+          "layer": "back",
+          "nodes": [
+            {
+              "t": "API Express",
+              "s": "Node.js",
+              "hi": true
+            }
+          ]
+        },
+        {
+          "layer": "données",
+          "nodes": [
+            {
+              "t": "Base de données",
+              "s": "collectes"
+            }
+          ]
+        }
+      ]
+    },
+    "snippet": {
+      "file": "routes/forms.js",
+      "code": "router.post('/processes/:id/submissions', async (req, res) => {\n  const process = await Process.findById(req.params.id)\n  const errors = process.schema.validate(req.body)\n  if (errors.length) return res.status(422).json({ errors })\n\n  const submission = await Submission.create({ process, data: req.body })\n  res.status(201).json(submission)\n})"
+    },
+    "gallery": [
+      {
+        "cap": "Formulaire de collecte"
+      },
+      {
+        "cap": "Liste des processus"
+      },
+      {
+        "cap": "Détail d’une soumission"
+      }
+    ]
   }
 ]

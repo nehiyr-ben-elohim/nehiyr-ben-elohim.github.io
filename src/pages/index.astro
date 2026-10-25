@@ -11,6 +11,7 @@ import Bands from '../components/Bands.astro'
 import QuickContact from '../components/QuickContact.astro'
 import ExperienceSection from '../components/ExperienceSection.astro'
 import SkillsSection from '../components/SkillsSection.astro'
+import Rail from '../components/Rail.astro'
 import { Image } from 'astro:assets'
 import { getCaseStudies } from '../lib/case-studies'
 import { resolveImage } from '../lib/images'
@@ -30,9 +31,7 @@ const description = 'Justin Potchona, développeur backend & machine learning ba
 <SiteLayout title={`${OWNER} — Développeur backend & machine learning`} description={description} rail>
   <SiteHeader variant="home" />
 
-  <div class="rail" aria-hidden="true">
-    <span class="rail-label" data-rail-label>{label('top')}</span>
-  </div>
+  <Rail label={label('top')} />
 
   <main>
     <section id="top" data-section={label('top')} class="wrap hero">
@@ -148,32 +147,6 @@ const description = 'Justin Potchona, développeur backend & machine learning ba
 </SiteLayout>
 
 <style>
-  .rail {
-    position: fixed;
-    left: 30px;
-    top: 120px;
-    bottom: 40px;
-    width: 4px;
-    background: var(--cs-ink);
-    z-index: 20;
-  }
-  .rail-label {
-    position: absolute;
-    left: 50%;
-    top: 6%;
-    transform: translateX(-50%) rotate(180deg);
-    writing-mode: vertical-rl;
-    padding: 10px 3px;
-    background: var(--cs-accent);
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 12px;
-    white-space: nowrap;
-    transition: top 0.3s;
-  }
-  @media (max-width: 899px) {
-    .rail { display: none; }
-  }
 
   .hero {
     padding-top: clamp(48px, 8vw, 104px);

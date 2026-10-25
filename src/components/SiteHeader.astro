@@ -29,8 +29,10 @@ const nav = HOME_SECTIONS.filter(s => s.nav)
         </button>
       </>
     ) : (
-      <nav class="project-nav">
-        <a href="/#projets" class="hl-link">‹ tous les projets</a>
+      <nav class="project-nav" aria-label="Sections">
+        <span class="project-links">
+          {nav.map(n => <a href={`/#${n.id}`} class="hl-link" aria-current={n.id === 'projets' ? 'true' : undefined}>{n.label}</a>)}
+        </span>
         <ShadowButton href="/#contact" size="sm">me contacter</ShadowButton>
       </nav>
     )}
@@ -74,7 +76,8 @@ const nav = HOME_SECTIONS.filter(s => s.nav)
     font-size: 17px;
   }
   .brand-name { font-family: var(--cs-display); font-weight: 700; font-size: 17px; }
-  .project-nav { display: flex; align-items: center; gap: 18px; }
+  .project-nav { display: flex; align-items: center; gap: 12px; }
+  .project-links { display: flex; align-items: center; gap: 6px; }
   .desk-nav { display: flex; align-items: center; gap: 6px; }
   .desk-nav :global(.shadow-btn) { margin-left: 14px; }
   .menu-toggle {
@@ -114,7 +117,7 @@ const nav = HOME_SECTIONS.filter(s => s.nav)
     font-size: 18px;
   }
   @media (max-width: 899px) {
-    .desk-nav { display: none; }
+    .desk-nav, .project-links { display: none; }
     .menu-toggle { display: grid; }
   }
   @media (min-width: 900px) {

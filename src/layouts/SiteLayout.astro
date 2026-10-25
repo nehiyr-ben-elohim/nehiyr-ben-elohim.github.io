@@ -6,11 +6,13 @@ import { OWNER } from '../lib/site'
 interface Props {
   title: string
   description: string
-  // left section rail (home, desktop only)
+  // left section rail (desktop only)
   rail?: boolean
+  // reading progress in the top bar
+  progress?: boolean
 }
 
-const { title, description, rail = false } = Astro.props
+const { title, description, rail = false, progress = false } = Astro.props
 ---
 
 <html lang="fr">
@@ -32,7 +34,7 @@ const { title, description, rail = false } = Astro.props
     <ClientRouter />
   </head>
   <body class:list={{ 'has-rail': rail }}>
-    <div class="top-bar"></div>
+    <div class="top-bar" aria-hidden="true">{progress && <div class="progress" data-progress></div>}</div>
     <slot />
     <script>
       import '../scripts/lifecycle'
@@ -105,4 +107,5 @@ const { title, description, rail = false } = Astro.props
     background: var(--cs-green);
     z-index: 40;
   }
+  .progress { height: 100%; width: 0; background: var(--cs-accent); border-right: 2px solid var(--cs-ink); }
 </style>

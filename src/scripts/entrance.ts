@@ -36,13 +36,11 @@ export const initEntrance = (): Cleanup => {
     const entrance = ENTRANCES[el.dataset.anim ?? '']
     if (entrance) el.animate(...entrance)
   })
-  document.querySelectorAll('[data-fact]').forEach((el, i) =>
-    el.animate([{ opacity: 0, transform: 'translateY(30px) rotate(-8deg)' }, { opacity: 1 }], { duration: 650, easing: EASE, delay: 500 + i * 90, fill: 'backwards' }),
-  )
+  // fact cards: tilt in and count up once visible
   const frames: number[] = []
-  document.querySelectorAll<HTMLElement>('[data-count]').forEach(el => {
+  const countUp = (el: HTMLElement, delay: number) => {
     const to = Number(el.dataset.count)
-    const t0 = performance.now() + 600
+    const t0 = performance.now() + delay
     const step = (now: number) => {
       const p = Math.min(1, Math.max(0, (now - t0) / 1200))
       el.textContent = String(Math.round(to * (1 - Math.pow(1 - p, 3))))
@@ -50,7 +48,22 @@ export const initEntrance = (): Cleanup => {
     }
     el.textContent = '0'
     frames.push(requestAnimationFrame(step))
-  })
+  }
+  const factObserver = new IntersectionObserver(
+    entries => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue
+        const el = entry.target as HTMLElement
+        factObserver.unobserve(el)
+        const siblings = [...(el.parentElement?.children ?? [])]
+        const delay = 200 + (Math.max(0, siblings.indexOf(el)) % 4) * 90
+        el.animate([{ opacity: 0, transform: 'translateY(30px) rotate(-8deg)' }, { opacity: 1 }], { duration: 650, easing: EASE, delay, fill: 'backwards' })
+        el.querySelectorAll<HTMLElement>('[data-count]').forEach(c => countUp(c, delay))
+      }
+    },
+    { threshold: 0.2 },
+  )
+  document.querySelectorAll('[data-fact]').forEach(el => factObserver.observe(el))
 
   // marquee: tracks hold repeated content, so one copy's width loops seamlessly
   const loops = [
@@ -94,6 +107,7 @@ export const initEntrance = (): Cleanup => {
 
   return () => {
     observer.disconnect()
+    factObserver.disconnect()
     frames.forEach(f => cancelAnimationFrame(f))
     bands?.removeEventListener('mouseenter', slow)
     bands?.removeEventListener('mouseleave', normal)

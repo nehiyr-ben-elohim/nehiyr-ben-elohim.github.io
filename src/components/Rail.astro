@@ -1,0 +1,41 @@
+---
+interface Props {
+  label: string
+}
+
+// moved along by scripts/home.ts (initActiveSection) from [data-section] labels
+const { label } = Astro.props
+---
+
+<div class="rail" aria-hidden="true">
+  <span class="rail-label" data-rail-label>{label}</span>
+</div>
+
+<style>
+  .rail {
+    position: fixed;
+    left: 30px;
+    top: 120px;
+    bottom: 40px;
+    width: 4px;
+    background: var(--cs-ink);
+    z-index: 20;
+  }
+  .rail-label {
+    position: absolute;
+    left: 50%;
+    top: 6%;
+    transform: translateX(-50%) rotate(180deg);
+    writing-mode: vertical-rl;
+    padding: 10px 3px;
+    background: var(--cs-accent);
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: 12px;
+    white-space: nowrap;
+    transition: top 0.3s;
+  }
+  @media (max-width: 899px) {
+    .rail { display: none; }
+  }
+</style>

@@ -9,7 +9,7 @@ test('resolveImage throws with the faulty path', () => {
 
 test('every image path in the data resolves', () => {
   const paths = [
-    ...getCaseStudies().flatMap(s => [s.shot, s.shot2]),
+    ...getCaseStudies().flatMap(s => [s.shot, ...s.gallery.map(g => g.src)]),
     ...getProfile().interests.map(i => i.photo),
   ].filter((p): p is string => !!p)
   for (const p of paths) expect(() => resolveImage(p), p).not.toThrow()
