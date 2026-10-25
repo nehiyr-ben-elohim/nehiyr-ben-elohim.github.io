@@ -97,7 +97,56 @@ const initInterests = (): Cleanup => {
   return () => buttons.forEach(b => b.removeEventListener('click', onClick))
 }
 
+const initExperience = (): Cleanup => {
+  const toggles = [...document.querySelectorAll<HTMLElement>('[data-exp-toggle]')]
+  const all = document.querySelector<HTMLElement>('[data-exp-all]')
+  if (!toggles.length) return () => {}
+
+  const isOpen = (t: HTMLElement) => t.getAttribute('aria-expanded') === 'true'
+  const set = (t: HTMLElement, open: boolean) => {
+    const body = document.getElementById(t.getAttribute('aria-controls') ?? '')
+    t.setAttribute('aria-expanded', String(open))
+    const label = t.querySelector('.toggle-label')
+    if (label) label.textContent = open ? 'réduire' : 'détails'
+    if (!body || body.hidden === !open) return
+    body.hidden = !open
+    if (open && !prefersReducedMotion()) {
+      body.animate([{ opacity: 0, transform: 'translateY(-8px)' }, { opacity: 1, transform: 'none' }], { duration: 350, easing: 'cubic-bezier(.2,.8,.2,1)' })
+    }
+  }
+  const syncAll = () => {
+    if (all) all.textContent = toggles.every(isOpen) ? 'tout réduire ↑' : 'tout déplier ↓'
+  }
+  const onToggle = (e: Event) => {
+    const t = e.currentTarget as HTMLElement
+    set(t, !isOpen(t))
+    syncAll()
+  }
+  const onAll = () => {
+    const open = !toggles.every(isOpen)
+    toggles.forEach(t => set(t, open))
+    syncAll()
+  }
+
+  syncAll()
+  toggles.forEach(t => t.addEventListener('click', onToggle))
+  all?.addEventListener('click', onAll)
+  return () => {
+    toggles.forEach(t => t.removeEventListener('click', onToggle))
+    all?.removeEventListener('click', onAll)
+  }
+}
+
+const initSkillsMore = (): Cleanup => {
+  const button = document.querySelector<HTMLElement>('[data-skills-more]')
+  const section = document.querySelector<HTMLElement>('[data-skills]')
+  if (!button || !section) return () => {}
+  const onClick = () => section.setAttribute('data-all', '')
+  button.addEventListener('click', onClick)
+  return () => button.removeEventListener('click', onClick)
+}
+
 export const initHome = (): Cleanup => {
-  const cleanups = [initActiveSection(), initMenu(), initFilters(), initInterests()]
+  const cleanups = [initActiveSection(), initMenu(), initFilters(), initInterests(), initExperience(), initSkillsMore()]
   return () => cleanups.forEach(c => c())
 }

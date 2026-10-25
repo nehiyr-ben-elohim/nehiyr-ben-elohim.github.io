@@ -1,5 +1,5 @@
 ---
-import { EMAIL, GITHUB_URL, LINKEDIN_URL } from '../lib/site'
+import { EMAIL, GITHUB_URL, kicker, LINKEDIN_URL } from '../lib/site'
 
 const endpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? ''
 // a missing endpoint would silently POST to the page itself
@@ -10,7 +10,7 @@ if (!endpoint && import.meta.env.PROD) {
 
 <section id="contact" data-section="me contacter" class="wrap contact">
   <div class="intro">
-    <span class="kicker-label">› un rendez-vous ?</span>
+    <span class="kicker-label">{kicker('contact', 'un rendez-vous ?')}</span>
     <h2 class="section-title">On se donne rendez-vous&nbsp;?</h2>
     <p class="pitch">Nous pouvons parler de ton projet « amazing » autour d’un café.</p>
     <a href={`mailto:${EMAIL}`} class="email">{EMAIL}</a>

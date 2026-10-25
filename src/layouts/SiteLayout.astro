@@ -22,6 +22,13 @@ const { title, description, rail = false } = Astro.props
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap"
     />
+    <noscript>
+      <style>
+        [data-js-only] { display: none !important; }
+        [data-exp-body][hidden] { display: flex !important; }
+        [data-skills] .skill-group.extra { display: flex !important; }
+      </style>
+    </noscript>
     <ClientRouter />
   </head>
   <body class:list={{ 'has-rail': rail }}>

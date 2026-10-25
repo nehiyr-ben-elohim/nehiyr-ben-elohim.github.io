@@ -6,21 +6,24 @@ import ShadowButton from '../components/ShadowButton.astro'
 import ProjectFeatured from '../components/ProjectFeatured.astro'
 import ProjectCard from '../components/ProjectCard.astro'
 import ContactSection from '../components/ContactSection.astro'
+import HeroFacts from '../components/HeroFacts.astro'
+import Bands from '../components/Bands.astro'
+import QuickContact from '../components/QuickContact.astro'
+import ExperienceSection from '../components/ExperienceSection.astro'
+import SkillsSection from '../components/SkillsSection.astro'
 import { Image } from 'astro:assets'
 import { getCaseStudies } from '../lib/case-studies'
-import { deviconSrc } from '../lib/devicons'
 import { resolveImage } from '../lib/images'
-import { getProfile, monogram } from '../lib/profile'
+import { getProfile } from '../lib/profile'
 import { applyFilter, filterCounts, FILTERS } from '../lib/project-filter'
-import { HOME_SECTIONS, OWNER } from '../lib/site'
+import { HOME_SECTIONS, kicker, OWNER } from '../lib/site'
 
 const projects = getCaseStudies()
 const { featured, grid } = applyFilter(projects, 'all')
 const featuredProject = projects.find(p => p.slug === featured)
 const counts = filterCounts(projects)
-const { facts, skills, experience, interests } = getProfile()
-const pad = (n: number) => String(n).padStart(2, '0')
-const label = (id: string) => HOME_SECTIONS.find(s => s.id === id)?.label
+const { facts, marquee, skills, experience, interests } = getProfile()
+const label = (id: string) => HOME_SECTIONS.find(s => s.id === id)?.label ?? ''
 const description = 'Justin Potchona, développeur backend & machine learning basé à Lomé : API, plateformes web et outils data.'
 ---
 
@@ -67,20 +70,15 @@ const description = 'Justin Potchona, développeur backend & machine learning ba
           </div>
         </div>
       </div>
-      <dl class="facts">
-        {facts.map(f => (
-          <div>
-            <dt>{f.k}</dt>
-            <dd>{f.v}</dd>
-          </div>
-        ))}
-      </dl>
+      <HeroFacts facts={facts} />
     </section>
+
+    <Bands marquee={marquee} />
 
     <section id="projets" data-section={label('projets')} class="wrap projects">
       <div class="projects-head">
         <div data-reveal class="section-head">
-          <span class="kicker-label">› mes réalisations</span>
+          <span class="kicker-label">{kicker('projets', 'mes réalisations')}</span>
           <h2 class="section-title">Projets sélectionnés</h2>
         </div>
         <div class="filters" role="group" aria-label="Filtrer les projets">
@@ -97,64 +95,16 @@ const description = 'Justin Potchona, développeur backend & machine learning ba
       </div>
     </section>
 
-    <section id="competences" data-section={label('competences')} class="skills">
-      <div class="wrap skills-inner">
-        <div data-reveal class="section-head">
-          <span class="kicker-label">› compétences</span>
-          <h2 class="section-title">Ma boîte à outils</h2>
-        </div>
-        <div class="skill-grid">
-          {skills.map(g => (
-            <div data-reveal class="skill-group">
-              <div class="skill-head">
-                <h3><span>{g.cat}</span></h3>
-                <span class="count">{pad(g.items.length)}</span>
-              </div>
-              <ul>
-                {g.items.map(s => (
-                  <li><img src={deviconSrc(s.icon)} alt="" width="22" height="22" />{s.name}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
+    <QuickContact />
 
-    <section id="parcours" data-section={label('parcours')} class="wrap career">
-      <div class="career-head">
-        <span class="kicker-label">› parcours</span>
-        <h2 class="section-title">Expérience</h2>
-        <p>Six ans entre agences, startups et missions freelance.</p>
-      </div>
-      <ol class="timeline">
-        {experience.map(x => (
-          <li data-reveal>
-            <div class="dates">
-              <span class="from">{x.from}</span>
-              <span class="to">{x.to}</span>
-            </div>
-            <div class="job">
-              <div class="job-head">
-                <span class="company-logo" aria-hidden="true">
-                  {x.logo ? <img src={x.logo} alt="" width="40" height="40" loading="lazy" /> : monogram(x.company)}
-                </span>
-                <h3>{x.company}</h3>
-                {x.current && <span class="current">en cours</span>}
-              </div>
-              <span class="job-role">{x.role}</span>
-              <p>{x.desc}</p>
-              <div class="tags">{x.tags.map(t => <span class="tag">{t}</span>)}</div>
-            </div>
-          </li>
-        ))}
-      </ol>
-    </section>
+    <ExperienceSection experience={experience} label={label('parcours')} />
+
+    <SkillsSection skills={skills} label={label('competences')} />
 
     <section id="apropos" data-section={label('apropos')} class="about">
       <div class="wrap about-inner">
         <div class="about-head">
-          <span class="kicker-label">› à propos de moi</span>
+          <span class="kicker-label">{kicker('apropos', 'à propos de moi')}</span>
           <h2 class="section-title">appelle-moi Justin</h2>
         </div>
         <div class="about-body">
@@ -310,22 +260,6 @@ const description = 'Justin Potchona, développeur backend & machine learning ba
   .out { color: #ededed; }
   .cursor { display: inline-block; width: 8px; height: 16px; background: var(--cs-accent); }
 
-  .facts {
-    margin: 0;
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
-    gap: 20px;
-    padding-top: 28px;
-    border-top: 1px dotted var(--cs-ink);
-  }
-  .facts div { display: flex; flex-direction: column; gap: 4px; }
-  .facts dt, .timeline .from, .timeline .to {
-    font-family: var(--cs-mono);
-    font-size: 13px;
-  }
-  .facts dt { font-size: 12px; font-weight: 500; color: #5a5a5a; text-transform: uppercase; letter-spacing: 0.06em; }
-  .facts dd { margin: 0; font-family: var(--cs-display); font-weight: 700; font-size: 20px; }
 
   .section-head { display: flex; flex-direction: column; gap: 12px; }
 
@@ -356,74 +290,7 @@ const description = 'Justin Potchona, développeur backend & machine learning ba
   .filters button:focus-visible, .fav-buttons button:focus-visible { outline: 3px solid var(--cs-ink); outline-offset: 3px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 28px 24px; }
 
-  .skills { background: #fafafa; border-top: 1px solid var(--cs-line); border-bottom: 1px solid var(--cs-line); }
-  .skills-inner {
-    padding-top: clamp(56px, 8vw, 104px);
-    padding-bottom: clamp(56px, 8vw, 104px);
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-  }
-  .skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 20px; }
-  .skill-group { background: #fff; border: 2px solid var(--cs-ink); padding: 22px 24px; display: flex; flex-direction: column; gap: 16px; }
-  .skill-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-  .skill-head h3 { margin: 0; font-family: var(--cs-display); font-weight: 700; font-size: 21px; }
-  .skill-head h3 span { background: linear-gradient(transparent 55%, var(--cs-accent) 55%); padding: 0 2px; }
-  .skill-head .count { font-family: var(--cs-mono); font-size: 12px; color: #5a5a5a; }
-  .skill-group ul { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 10px; }
-  .skill-group li {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 12px 6px 8px;
-    border: 1px solid #dcdcdc;
-    font-weight: 600;
-    font-size: 15px;
-  }
-  .skill-group img { display: block; object-fit: contain; }
 
-  .career {
-    padding-top: clamp(56px, 8vw, 104px);
-    padding-bottom: clamp(56px, 8vw, 104px);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px 64px;
-  }
-  .career-head { flex: 1 1 260px; display: flex; flex-direction: column; gap: 12px; }
-  .career-head p { margin: 6px 0 0; max-width: 34ch; font-size: 16px; line-height: 1.6; color: #3a3a3a; }
-  .timeline { flex: 2 1 520px; min-width: 0; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
-  .timeline > li {
-    display: grid;
-    grid-template-columns: minmax(0, 130px) minmax(0, 1fr);
-    gap: 8px 28px;
-    padding: 26px 0;
-    border-top: 1px dotted var(--cs-ink);
-  }
-  .dates { display: flex; flex-direction: column; gap: 6px; }
-  .from { font-weight: 700; }
-  .to { color: var(--cs-muted); }
-  .job { display: flex; flex-direction: column; gap: 8px; }
-  .job-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
-  .company-logo {
-    flex: 0 0 auto;
-    width: 44px;
-    height: 44px;
-    display: grid;
-    place-items: center;
-    overflow: hidden;
-    background: #fff;
-    border: 2px solid var(--cs-ink);
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 20px;
-  }
-  .company-logo:not(:has(img)) { background: var(--cs-accent); }
-  .company-logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
-  .job-head h3 { margin: 0; font-family: var(--cs-display); font-weight: 700; font-size: 22px; }
-  .current { padding: 2px 9px; background: var(--cs-accent); font-family: var(--cs-display); font-weight: 700; font-size: 13px; }
-  .job-role { font-weight: 600; font-size: 16px; color: var(--cs-body); }
-  .job p { margin: 0; max-width: 62ch; font-size: 16px; line-height: 1.6; color: #3a3a3a; text-wrap: pretty; }
-  .job .tags { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 2px; }
 
   .about { background: var(--cs-ink); color: #fff; overflow-x: clip; }
   .about-inner {
@@ -469,10 +336,4 @@ const description = 'Justin Potchona, développeur backend & machine learning ba
   .fav-text { padding: 28px 28px 30px; display: flex; flex-direction: column; gap: 12px; }
   .fav-k { font-family: var(--cs-display); font-weight: 700; font-size: clamp(40px, 4.4vw, 60px); line-height: 0.95; }
   .fav-v { font-family: var(--cs-display); font-weight: 600; font-size: 17px; letter-spacing: 0.14em; text-transform: uppercase; }
-
-  @media (max-width: 520px) {
-    .timeline > li { grid-template-columns: 1fr; }
-    .dates { flex-direction: row; gap: 8px; }
-    .dates .to::before { content: '→ '; }
-  }
 </style>

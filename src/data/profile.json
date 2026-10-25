@@ -2,21 +2,84 @@
   "facts": [
     {
       "k": "Expérience",
-      "v": "6 ans"
+      "n": 6,
+      "suf": " ans",
+      "href": "#parcours"
+    },
+    {
+      "k": "En production",
+      "n": 40,
+      "suf": "+ features",
+      "href": "#projets"
     },
     {
       "k": "Spécialité",
-      "v": "Backend & ML"
-    },
-    {
-      "k": "Mission actuelle",
-      "v": "TheCodingMachine"
-    },
-    {
-      "k": "Basé à",
-      "v": "Lomé · remote"
+      "v": "Backend & ML",
+      "href": "#competences"
     }
   ],
+  "marquee": {
+    "keywords": [
+      "API REST",
+      "microservices",
+      "machine learning",
+      "CI/CD",
+      "data pipelines",
+      "NLP",
+      "clean architecture",
+      "tests & qualité"
+    ],
+    "tech": [
+      {
+        "name": "Python",
+        "icon": "python"
+      },
+      {
+        "name": "Symfony",
+        "icon": "symfony"
+      },
+      {
+        "name": "Go",
+        "icon": "go-wordmark"
+      },
+      {
+        "name": "Nuxt.js",
+        "icon": "nuxtjs"
+      },
+      {
+        "name": "Laravel",
+        "icon": "laravel"
+      },
+      {
+        "name": "Django",
+        "icon": "django"
+      },
+      {
+        "name": "Flutter",
+        "icon": "flutter"
+      },
+      {
+        "name": "PostgreSQL",
+        "icon": "postgresql"
+      },
+      {
+        "name": "TypeScript",
+        "icon": "typescript"
+      },
+      {
+        "name": "Docker",
+        "icon": "docker"
+      },
+      {
+        "name": "TensorFlow",
+        "icon": "tensorflow"
+      },
+      {
+        "name": "React",
+        "icon": "react"
+      }
+    ]
+  },
   "skills": [
     {
       "cat": "Langages",
@@ -159,51 +222,168 @@
   ],
   "experience": [
     {
+      "company": "TheCodingMachine",
+      "current": true,
+      "logo": "/img/companies/thecodingmachine.png",
+      "url": "https://thecodingmachine.com",
+      "mono": "TCM",
+      "color": "#e2333b",
+      "year": "2021",
+      "months": 55,
       "from": "avr. 2021",
       "to": "aujourd’hui",
-      "company": "TheCodingMachine",
-      "logo": "/img/companies/thecodingmachine.png",
-      "current": true,
-      "role": "Consultant freelance · Développement full-stack",
-      "desc": "Plateforme d’audit pour l’un des 10 plus grands cabinets au monde. Arrivé dans une équipe de 3, aujourd’hui sur les fonctionnalités et le support production.",
+      "dur": "4 ans+",
+      "project": "plateforme-audit",
+      "stages": [
+        {
+          "role": "Consultant freelance",
+          "when": "nov. 2021 – aujourd’hui"
+        },
+        {
+          "role": "Développeur freelance",
+          "when": "avr. – nov. 2021"
+        }
+      ],
+      "chips": [
+        "Freelance",
+        "Remote",
+        "Paris, France"
+      ],
+      "desc": "Plateforme d’audit pour l’un des 10 plus grands cabinets au monde. Arrivé au démarrage du projet dans une équipe de 3, aujourd’hui sur les fonctionnalités et le support production.",
+      "results": [
+        {
+          "v": "40+",
+          "k": "fonctionnalités livrées en production"
+        },
+        {
+          "v": "-35 %",
+          "k": "sur le temps moyen de résolution des incidents"
+        },
+        {
+          "v": "Niv. 8",
+          "k": "d’analyse statique PHPStan atteint"
+        }
+      ],
       "tags": [
         "symfony",
-        "nuxt.js",
         "sylius",
-        "phpstan"
+        "nuxt.js",
+        "phpstan",
+        "m-files"
       ]
     },
     {
-      "from": "janv. 2021",
-      "to": "avr. 2021",
       "company": "WIIN",
       "logo": "/img/companies/wiin.png",
-      "role": "Développeur web",
-      "desc": "Plateforme de dématérialisation des processus de collecte d’informations.",
+      "url": "https://www.wiin.io",
+      "mono": "W",
+      "color": "#2f8fe0",
+      "year": "2021",
+      "months": 4,
+      "from": "janv. 2021",
+      "to": "avr. 2021",
+      "dur": "4 mois",
+      "project": "wiin",
+      "stages": [
+        {
+          "role": "Développeur web",
+          "when": "janv. – avr. 2021"
+        }
+      ],
+      "chips": [
+        "Remote",
+        "Paris, France"
+      ],
+      "desc": "Plateforme de dématérialisation des processus de collecte d’informations : intégration front-end et nouvelles fonctionnalités.",
+      "results": [
+        {
+          "v": "15",
+          "k": "écrans intégrés en 3 mois"
+        },
+        {
+          "v": "4",
+          "k": "processus couverts par des formulaires dynamiques"
+        }
+      ],
       "tags": [
         "nuxt.js",
         "express"
       ]
     },
     {
+      "company": "Dreammore",
+      "url": "https://www.dreammore.co",
+      "mono": "DM",
+      "color": "#d99a12",
+      "year": "2019",
+      "months": 18,
       "from": "juil. 2019",
       "to": "janv. 2021",
-      "company": "Dreammore",
-      "role": "Développeur mobile & API",
-      "desc": "Applications iOS et Android, API et dashboard, d’abord en natif puis en Flutter.",
+      "dur": "1 an 6 mois",
+      "stages": [
+        {
+          "role": "Développeur mobile & API",
+          "when": "juil. 2019 – janv. 2021"
+        }
+      ],
+      "chips": [
+        "Sur site",
+        "Lomé, Togo"
+      ],
+      "desc": "Applications iOS et Android, API et dashboard de l’application principale, d’abord en natif puis en Flutter ; application React Native connectée à WooCommerce.",
+      "results": [
+        {
+          "v": "2",
+          "k": "applications publiées sur iOS et Android"
+        },
+        {
+          "v": "1",
+          "k": "seule base de code après la migration Flutter"
+        },
+        {
+          "v": "10k+",
+          "k": "téléchargements cumulés"
+        }
+      ],
       "tags": [
         "flutter",
         "laravel",
         "java",
-        "swift"
+        "swift",
+        "woocommerce"
       ]
     },
     {
+      "company": "Magmatel SARL",
+      "mono": "MG",
+      "color": "#2f9a4c",
+      "year": "2019",
+      "months": 14,
       "from": "mai 2019",
       "to": "juil. 2020",
-      "company": "Magmatel SARL",
-      "role": "Développeur Android freelance",
-      "desc": "Application de satisfaction client et gestion des mouvements de conteneurs.",
+      "dur": "1 an 2 mois",
+      "stages": [
+        {
+          "role": "Développeur Android freelance",
+          "when": "mai 2019 – juil. 2020"
+        }
+      ],
+      "chips": [
+        "Freelance",
+        "Remote",
+        "Cotonou, Bénin"
+      ],
+      "desc": "Application Android de satisfaction client ; application web et mobile de gestion des mouvements de conteneurs.",
+      "results": [
+        {
+          "v": "1 000+",
+          "k": "mouvements de conteneurs suivis par mois"
+        },
+        {
+          "v": "5",
+          "k": "agences équipées de l’application satisfaction"
+        }
+      ],
       "tags": [
         "android",
         "symfony"

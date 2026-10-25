@@ -1,0 +1,267 @@
+---
+import { existsSync } from 'node:fs'
+import ShadowButton from './ShadowButton.astro'
+import { barWidth, type Profile } from '../lib/profile'
+import { kicker } from '../lib/site'
+
+interface Props {
+  experience: Profile['experience']
+  label: string
+}
+
+const { experience, label } = Astro.props
+const maxMonths = Math.max(...experience.map(x => x.months))
+const since = experience.at(-1)?.year
+// the CV is only linked once the file has been added
+const CV = '/cv/Resume-Justin-Potchona.pdf'
+const hasCv = existsSync(`public${CV}`)
+---
+
+<section id="parcours" data-section={label} class="experience">
+  <div class="wrap inner">
+    <div data-reveal class="aside">
+      <span class="kicker-label">{kicker('parcours', 'parcours')}</span>
+      <h2 class="section-title">Expérience</h2>
+      <p>Six ans entre agences, startups et missions freelance, en France et en Afrique de l’Ouest.</p>
+      <dl class="stats">
+        <div><dt>Entreprises</dt><dd class="exp-count">{String(experience.length).padStart(2, '0')}</dd></div>
+        <div><dt>Depuis</dt><dd>{since}</dd></div>
+      </dl>
+      <button type="button" class="all-toggle" data-exp-all data-js-only>tout déplier ↓</button>
+      {hasCv && (
+        <ShadowButton href={CV} size="md" shadow="#fff" external>télécharger mon CV <span aria-hidden="true">↓</span></ShadowButton>
+      )}
+    </div>
+
+    <ol class="timeline">
+      {experience.map((x, i) => {
+        const bodyId = `exp-body-${i}`
+        const Logo = x.url ? 'a' : 'span'
+        return (
+          <li data-reveal>
+            <span class="year" aria-hidden="true">{x.year}</span>
+            <span class="dot" data-dot aria-hidden="true"></span>
+            <div class="card" data-exp-card>
+              <div class="stripe" style={`background:${x.color}`} aria-hidden="true"></div>
+              <div class="head">
+                <Logo
+                  class="company-logo"
+                  {...(x.url ? { href: x.url, target: '_blank', rel: 'noopener noreferrer', 'aria-label': x.company } : { 'aria-hidden': 'true' })}
+                >
+                  {x.logo ? (
+                    <img src={x.logo} alt="" width="34" height="34" loading="lazy" />
+                  ) : (
+                    <span class:list={['mono', { small: x.mono.length > 2 }]} style={`background:${x.color}`}>{x.mono}</span>
+                  )}
+                </Logo>
+                <div class="who">
+                  <div class="name">
+                    <h3>{x.company}</h3>
+                    {x.current && <span class="current">en cours</span>}
+                  </div>
+                  <span class="when">{x.from} – {x.to} · {x.dur}</span>
+                  <span class="bar" aria-hidden="true"><span data-bar style={`width:${barWidth(x.months, maxMonths)}`}></span></span>
+                </div>
+                <button type="button" class="toggle" aria-expanded={i === 0} aria-controls={bodyId} data-exp-toggle data-js-only>
+                  <span class="toggle-label">{i === 0 ? 'réduire' : 'détails'}</span><span class="chev" aria-hidden="true">⌄</span>
+                </button>
+              </div>
+              <div class="summary">
+                <ol class="stages">
+                  {x.stages.map(st => (
+                    <li><span class="caret" aria-hidden="true">›</span><span class="role">{st.role}</span><span class="stage-when">{st.when}</span></li>
+                  ))}
+                </ol>
+                <div class="chips">{x.chips.map(c => <span>{c}</span>)}</div>
+              </div>
+              <div id={bodyId} class="body" data-exp-body hidden={i !== 0}>
+                <p>{x.desc}</p>
+                <div class="results">
+                  {x.results.map(r => (
+                    <div><span class="result-v">{r.v}</span><span class="result-k">{r.k}</span></div>
+                  ))}
+                </div>
+                <div class="foot">
+                  <div class="tags">{x.tags.map(t => <span class="tag">{t}</span>)}</div>
+                  {x.project && <a href={`/projets/${x.project}`} class="project-link">voir le projet ›</a>}
+                </div>
+              </div>
+            </div>
+          </li>
+        )
+      })}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .experience { background: var(--cs-ink); color: #fff; }
+  .inner {
+    padding-top: clamp(56px, 8vw, 104px);
+    padding-bottom: clamp(56px, 8vw, 104px);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 40px 64px;
+  }
+  .aside { flex: 1 1 260px; top: 110px; display: flex; flex-direction: column; gap: 14px; }
+  @media (min-width: 1000px) {
+    .aside { position: sticky; }
+  }
+  .aside .kicker-label { color: var(--cs-accent); }
+  .aside p { margin: 2px 0 0; max-width: 34ch; font-size: 16px; line-height: 1.6; color: #cfcfcf; }
+  .stats { margin: 8px 0 0; display: flex; gap: 28px; }
+  .stats div { display: flex; flex-direction: column; gap: 2px; }
+  .stats dt { font-family: var(--cs-mono); font-size: 12px; color: #bdbdbd; text-transform: uppercase; letter-spacing: 0.06em; }
+  .stats dd { margin: 0; font-family: var(--cs-display); font-weight: 700; font-size: 26px; }
+  .all-toggle {
+    all: unset;
+    cursor: pointer;
+    align-self: flex-start;
+    padding: 6px 2px;
+    border-bottom: 3px solid var(--cs-accent);
+    color: #fff;
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .all-toggle:hover { background: var(--cs-accent); color: var(--cs-ink); }
+  .all-toggle:focus-visible, .toggle:focus-visible { outline: 3px solid var(--cs-accent); outline-offset: 3px; }
+  .aside :global(.shadow-btn) { align-self: flex-start; margin-top: 10px; }
+  .aside :global(.shadow-btn .face) { padding: 11px 24px; font-size: 16px; }
+
+  .timeline {
+    flex: 2 1 520px;
+    min-width: 0;
+    margin: 0;
+    padding: 30px 0 0 30px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+    position: relative;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 10px;
+    width: 4px;
+    background: var(--cs-accent);
+  }
+  .timeline > li { position: relative; }
+  .year {
+    position: absolute;
+    left: -36px;
+    top: -30px;
+    padding: 2px 9px;
+    background: var(--cs-accent);
+    color: var(--cs-ink);
+    font-family: var(--cs-mono);
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .dot {
+    position: absolute;
+    left: -30px;
+    top: 24px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--cs-accent);
+    border: 4px solid var(--cs-ink);
+  }
+  .card { background: #fff; color: var(--cs-ink); border: 2px solid var(--cs-ink); transition: box-shadow 0.2s; }
+  .card:has([aria-expanded='true']) { box-shadow: 6px 6px 0 var(--cs-accent); }
+  .stripe { height: 6px; }
+  .head { padding: 18px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 18px; }
+  .company-logo {
+    flex: 0 0 auto;
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    background: #fff;
+    border: 2px solid var(--cs-ink);
+    overflow: hidden;
+    transition: transform 0.12s;
+  }
+  a.company-logo:hover { transform: translate(-1px, -1px); }
+  .company-logo img { display: block; width: 34px; height: 34px; object-fit: contain; }
+  .mono {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: 22px;
+    color: #fff;
+  }
+  .mono.small { font-size: 15px; }
+  .who { flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .name { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+  .name h3 { margin: 0; font-family: var(--cs-display); font-weight: 700; font-size: 22px; }
+  .current { padding: 2px 9px; background: var(--cs-accent); font-family: var(--cs-display); font-weight: 700; font-size: 13px; }
+  .when { font-family: var(--cs-mono); font-size: 13px; color: #3a3a3a; }
+  .bar { display: block; max-width: 240px; height: 8px; margin-top: 4px; border: 2px solid var(--cs-ink); background: #fff; }
+  .bar span { display: block; height: 100%; background: var(--cs-accent); transform-origin: left; }
+  .toggle {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    border: 2px solid var(--cs-ink);
+    background: #fff;
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .toggle:hover, .toggle[aria-expanded='true'] { background: var(--cs-accent); }
+  .toggle:focus-visible { outline-color: var(--cs-ink); }
+  .chev { display: inline-block; transition: transform 0.2s; }
+  .toggle[aria-expanded='true'] .chev { transform: rotate(180deg); }
+  .summary { padding: 0 20px 16px; display: flex; flex-direction: column; gap: 12px; }
+  .stages { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .stages li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+  .caret { font-family: var(--cs-display); font-weight: 700; font-size: 13px; }
+  .role { font-weight: 700; font-size: 16px; }
+  .stage-when { font-family: var(--cs-mono); font-size: 12px; color: var(--cs-muted); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips span { padding: 3px 10px; background: var(--cs-accent); font-family: var(--cs-display); font-weight: 700; font-size: 13px; }
+  .body { padding: 18px 20px 20px; border-top: 1px dotted var(--cs-ink); display: flex; flex-direction: column; gap: 16px; }
+  .body p { margin: 0; max-width: 64ch; font-size: 16px; line-height: 1.65; color: var(--cs-body); text-wrap: pretty; }
+  .results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+    gap: 1px;
+    background: var(--cs-ink);
+    border: 2px solid var(--cs-ink);
+  }
+  .results div { background: #fff; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+  .result-v {
+    align-self: flex-start;
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1;
+    background: linear-gradient(transparent 58%, var(--cs-accent) 58%);
+    padding: 0 3px;
+  }
+  .result-k { font-size: 14px; line-height: 1.4; color: #3a3a3a; }
+  .foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .project-link {
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: underline;
+    text-decoration-color: var(--cs-accent);
+    text-decoration-thickness: 4px;
+    text-underline-offset: 3px;
+  }
+  .project-link:hover { background: var(--cs-accent); }
+</style>

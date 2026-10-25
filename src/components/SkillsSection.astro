@@ -1,0 +1,98 @@
+---
+import { deviconSrc } from '../lib/devicons'
+import type { Profile } from '../lib/profile'
+import { kicker } from '../lib/site'
+
+interface Props {
+  skills: Profile['skills']
+  label: string
+}
+
+const { skills, label } = Astro.props
+// mobile shows the first groups only, until "voir toutes"
+const MOBILE_GROUPS = 3
+---
+
+<section id="competences" data-section={label} class="wrap skills" data-skills>
+  <div data-reveal class="head">
+    <span class="kicker-label">{kicker('competences', 'compétences')}</span>
+    <h2 class="section-title">Ma boîte à outils</h2>
+    <p>Les technologies que j’utilise au quotidien, classées par domaine.</p>
+  </div>
+  <div class="list">
+    <div class="rows">
+      {skills.map((g, i) => (
+        <div data-reveal class:list={['skill-group', { extra: i >= MOBILE_GROUPS }]}>
+          <div class="cat">
+            <h3><span>{g.cat}</span></h3>
+            <span class="count">{String(g.items.length).padStart(2, '0')}</span>
+          </div>
+          <ul>
+            {g.items.map(s => (
+              <li><img src={deviconSrc(s.icon)} alt="" width="22" height="22" loading="lazy" />{s.name}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+    <button type="button" class="more" data-skills-more data-js-only>voir toutes les compétences ↓</button>
+  </div>
+</section>
+
+<style>
+  .skills {
+    padding-top: clamp(56px, 8vw, 104px);
+    padding-bottom: clamp(56px, 8vw, 104px);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 32px 64px;
+  }
+  .head { flex: 1 1 260px; display: flex; flex-direction: column; gap: 12px; }
+  .head p { margin: 4px 0 0; max-width: 34ch; font-size: 16px; line-height: 1.6; color: #3a3a3a; }
+  .list { flex: 2 1 520px; min-width: 0; display: flex; flex-direction: column; }
+  .rows { border-top: 3px solid var(--cs-ink); }
+  .skill-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 20px;
+    padding: 16px 0;
+    border-bottom: 1px dotted var(--cs-ink);
+  }
+  .cat { flex: 0 0 150px; display: flex; align-items: baseline; gap: 8px; }
+  .cat h3 { margin: 0; font-family: var(--cs-display); font-weight: 700; font-size: 18px; }
+  .cat h3 span { background: linear-gradient(transparent 55%, var(--cs-accent) 55%); padding: 0 2px; }
+  .count { font-family: var(--cs-mono); font-size: 11px; color: #5a5a5a; }
+  ul { flex: 1 1 300px; min-width: 0; margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+  li {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 4px 10px 4px 6px;
+    border: 1px solid #dcdcdc;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  li img { display: block; object-fit: contain; }
+  .more {
+    all: unset;
+    cursor: pointer;
+    align-self: flex-start;
+    margin-top: 16px;
+    padding: 6px 2px;
+    border-bottom: 3px solid var(--cs-ink);
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .more:hover { background: var(--cs-accent); }
+  .more:focus-visible { outline: 3px solid var(--cs-ink); outline-offset: 3px; }
+  @media (max-width: 899px) {
+    .skills:not([data-all]) .extra { display: none; }
+    .skills[data-all] .more { display: none; }
+  }
+  @media (min-width: 900px) {
+    .more { display: none; }
+  }
+</style>
