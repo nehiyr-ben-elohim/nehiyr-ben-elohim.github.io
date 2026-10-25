@@ -18,6 +18,41 @@
       "href": "#competences"
     }
   ],
+  "audiences": [
+    {
+      "id": "client",
+      "label": "j’ai un projet",
+      "promise": "J’aide les équipes produit à construire des backends fiables et des fonctionnalités ML qui passent en production.",
+      "bar": "Un projet en tête ?",
+      "request": "mission freelance"
+    },
+    {
+      "id": "rec",
+      "label": "je recrute",
+      "promise": "Un développeur backend & ML autonome, habitué au remote et au support production.",
+      "bar": "Justin, backend & ML · dispo",
+      "request": "CDI"
+    }
+  ],
+  "trust": [
+    {
+      "name": "TheCodingMachine",
+      "logo": "/img/companies/thecodingmachine.png"
+    },
+    {
+      "name": "WIIN",
+      "logo": "/img/companies/wiin.png"
+    },
+    {
+      "name": "Dreammore"
+    },
+    {
+      "name": "Magmatel"
+    },
+    {
+      "name": "Black Planteur"
+    }
+  ],
   "marquee": {
     "keywords": [
       "API REST",
@@ -312,7 +347,7 @@
     },
     {
       "company": "Dreammore",
-      "url": "https://www.dreammore.co",
+      "url": "https://www.facebook.com/Dreammoreapp/",
       "mono": "DM",
       "color": "#d99a12",
       "year": "2019",
@@ -390,6 +425,105 @@
       ]
     }
   ],
+  "method": {
+    "steps": [
+      {
+        "title": "Appel découverte",
+        "tag": "30 min, gratuit",
+        "text": "On parle de ton produit, de ton équipe et de ce que tu attends."
+      },
+      {
+        "title": "Cadrage",
+        "tag": "devis sous 48 h",
+        "text": "Périmètre, estimation et planning, écrits noir sur blanc."
+      },
+      {
+        "title": "Sprints",
+        "tag": "livraison toutes les 1 à 2 semaines",
+        "text": "Démo à chaque fin de sprint, avancement toujours visible."
+      },
+      {
+        "title": "Mise en prod & suivi",
+        "tag": "documentation incluse",
+        "text": "Déploiement, support et passation propre à ton équipe."
+      }
+    ],
+    "formats": [
+      {
+        "title": "Régie / TJM",
+        "text": "Je rejoins ton équipe quelques jours par semaine ou à plein temps.",
+        "fit": "idéal pour une équipe existante"
+      },
+      {
+        "title": "Forfait",
+        "text": "Un périmètre défini, un prix fixe, une date de livraison.",
+        "fit": "idéal pour un MVP ou une API"
+      },
+      {
+        "title": "Renfort ponctuel",
+        "text": "Audit de code, montée de version, mise en place de CI ou de tests.",
+        "fit": "idéal pour débloquer un sujet"
+      }
+    ]
+  },
+  "notes": [
+    {
+      "tag": "symfony",
+      "read": "6 min",
+      "title": "PHPStan niveau 8 sur une base de code legacy",
+      "text": "Comment monter progressivement le niveau d’analyse sans bloquer l’équipe.",
+      "soon": true
+    },
+    {
+      "tag": "python",
+      "read": "8 min",
+      "title": "Un pipeline audio en Python, de l’upload au résultat",
+      "text": "File de tâches, workers et suivi d’état pour 2Aud.io.",
+      "soon": true
+    },
+    {
+      "tag": "ml",
+      "read": "7 min",
+      "title": "Du notebook à la prod : servir un modèle NLP",
+      "text": "Les étapes pour passer d’un prototype à une API fiable.",
+      "soon": true
+    }
+  ],
+  "about": {
+    "bio": [
+      "Je suis développeur backend et machine learning, basé à Lomé. Je conçois des API et des plateformes web solides, du modèle de données jusqu’à la mise en production.",
+      "Depuis 2021, je travaille en remote avec des équipes en France. Je cherche aujourd’hui des missions où le backend et la donnée sont au cœur du produit."
+    ],
+    "now": "je construis un traducteur des langues occidentales vers les langues locales africaines",
+    "details": [
+      {
+        "k": "Langues",
+        "v": "Français · Anglais"
+      },
+      {
+        "k": "Fuseau",
+        "v": "Lomé, GMT+0 · 1 h avec Paris"
+      },
+      {
+        "k": "Dispo",
+        "v": "Missions dès maintenant"
+      }
+    ],
+    "principles": [
+      {
+        "title": "Du code testé et typé",
+        "text": "Analyse statique, tests et revue de code avant chaque mise en production."
+      },
+      {
+        "title": "Une communication claire",
+        "text": "Points réguliers, avancement visible et réponses rapides, même à distance."
+      },
+      {
+        "title": "De la spec à la prod",
+        "text": "Je prends une fonctionnalité de bout en bout, support production compris."
+      }
+    ]
+  },
   "interests": [
     {
       "k": "musics",

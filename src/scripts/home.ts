@@ -1,4 +1,6 @@
 import { applyFilter, type FilterId } from '../lib/project-filter'
+import { railTop } from '../lib/rail'
+import { runCommand } from '../lib/terminal'
 import { prefersReducedMotion } from './motion'
 import type { Cleanup } from './types'
 
@@ -22,7 +24,7 @@ const initActiveSection = (): Cleanup => {
     links.forEach(l => l.setAttribute('aria-current', String(l.dataset.nav === active.id)))
     if (label) {
       label.textContent = active.dataset.section ?? ''
-      label.style.top = `${6 + index * 15}%`
+      label.style.top = railTop(index, sections.length)
     }
   }
   const onScroll = () => {
@@ -146,7 +148,115 @@ const initSkillsMore = (): Cleanup => {
   return () => button.removeEventListener('click', onClick)
 }
 
+// "j'ai un projet" / "je recrute": CSS shows .for-client / .for-rec from [data-audience]
+const initAudience = (): Cleanup => {
+  const root = document.querySelector<HTMLElement>('[data-audience]')
+  const buttons = [...document.querySelectorAll<HTMLElement>('[data-aud]')]
+  if (!root || !buttons.length) return () => {}
+
+  const onClick = (e: Event) => {
+    const button = e.currentTarget as HTMLElement
+    buttons.forEach(b => b.setAttribute('aria-checked', String(b === button)))
+    root.dataset.audience = button.dataset.aud
+    // preselect the request type unless the visitor already chose one
+    const form = document.querySelector('[data-contact-form]')
+    if (form && !form.hasAttribute('data-type-picked')) {
+      const request = button.dataset.request ?? ''
+      form.querySelectorAll('[data-request]').forEach(b => b.setAttribute('aria-checked', String(b.getAttribute('data-request') === request)))
+      const input = form.querySelector<HTMLInputElement>('[data-request-type]')
+      if (input) input.value = request
+    }
+  }
+
+  buttons.forEach(b => b.addEventListener('click', onClick))
+  return () => buttons.forEach(b => b.removeEventListener('click', onClick))
+}
+
+const initTerminal = (): Cleanup => {
+  const input = document.querySelector<HTMLInputElement>('[data-term]')
+  const log = document.querySelector<HTMLElement>('[data-term-log]')
+  if (!input || !log) return () => {}
+
+  const onKey = (e: KeyboardEvent) => {
+    if (e.key !== 'Enter' || !input.value.trim()) return
+    const raw = input.value
+    input.value = ''
+    const res = runCommand(raw, { hasCv: input.hasAttribute('data-has-cv') })
+    if (res.clear) {
+      log.replaceChildren()
+      return
+    }
+    const entry = document.createElement('div')
+    const cmd = document.createElement('span')
+    cmd.className = 'term-cmd'
+    cmd.textContent = `› ${raw.trim()}`
+    const out = document.createElement('span')
+    out.className = 'term-out'
+    out.textContent = res.out
+    entry.append(cmd, out)
+    log.append(entry)
+    while (log.children.length > 6) log.firstElementChild?.remove()
+    log.scrollTop = log.scrollHeight
+    if (res.scrollTo) window.setTimeout(() => document.getElementById(res.scrollTo!)?.scrollIntoView(), 350)
+    if (res.open) window.open(res.open, '_blank', 'noopener')
+  }
+
+  input.addEventListener('keydown', onKey)
+  return () => input.removeEventListener('keydown', onKey)
+}
+
+const initCopyEmail = (): Cleanup => {
+  const buttons = [...document.querySelectorAll<HTMLElement>('[data-copy-email]')]
+  let timer = 0
+  const onClick = async (e: Event) => {
+    const button = e.currentTarget as HTMLElement
+    try {
+      await navigator.clipboard.writeText(button.dataset.copyEmail ?? '')
+    } catch {
+      // clipboard refused: the mailto link stays available
+    }
+    button.textContent = 'copié !'
+    button.setAttribute('data-copied', '')
+    window.clearTimeout(timer)
+    timer = window.setTimeout(() => {
+      button.textContent = 'copier l’email'
+      button.removeAttribute('data-copied')
+    }, 2000)
+  }
+  buttons.forEach(b => b.addEventListener('click', onClick))
+  return () => {
+    window.clearTimeout(timer)
+    buttons.forEach(b => b.removeEventListener('click', onClick))
+  }
+}
+
+// mobile call-to-action bar: once past the hero, never over the open menu
+const initMobileBar = (): Cleanup => {
+  const bar = document.querySelector<HTMLElement>('[data-mobile-bar]')
+  if (!bar) return () => {}
+  let frame = 0
+  const update = () => {
+    frame = 0
+    const menuOpen = document.querySelector<HTMLElement>('[data-nav-panel]')?.hidden === false
+    bar.hidden = !(window.scrollY > window.innerHeight * 0.8) || menuOpen
+  }
+  const schedule = () => {
+    if (!frame) frame = requestAnimationFrame(update)
+  }
+  update()
+  window.addEventListener('scroll', schedule, { passive: true })
+  document.addEventListener('click', schedule)
+  return () => {
+    window.removeEventListener('scroll', schedule)
+    document.removeEventListener('click', schedule)
+    cancelAnimationFrame(frame)
+  }
+}
+
 export const initHome = (): Cleanup => {
-  const cleanups = [initActiveSection(), initMenu(), initFilters(), initInterests(), initExperience(), initSkillsMore()]
+  const cleanups = [
+    initActiveSection(), initMenu(), initFilters(), initInterests(), initExperience(), initSkillsMore(),
+    initAudience(), initTerminal(), initCopyEmail(), initMobileBar(),
+  ]
   return () => cleanups.forEach(c => c())
 }

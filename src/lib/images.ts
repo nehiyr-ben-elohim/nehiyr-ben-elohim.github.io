@@ -11,3 +11,7 @@ export const resolveImage = (publicPath: string): ImageMetadata => {
   if (!image) throw new Error(`Image introuvable: ${publicPath}`)
   return image
 }
+
+// optional assets (portrait…): first candidate present in src/assets, else undefined
+export const findImage = (publicPaths: string[]): ImageMetadata | undefined =>
+  publicPaths.map(p => images[`/src/assets${p}`]).find(Boolean)

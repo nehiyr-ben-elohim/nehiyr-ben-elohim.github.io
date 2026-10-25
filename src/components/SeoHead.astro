@@ -7,9 +7,13 @@ interface Props {
   description: string
   siteName: string
   image?: ImageMetadata
+  // social cards can carry a shorter title / pitch than the page
+  ogTitle?: string
+  ogDescription?: string
+  jsonLd?: Record<string, unknown>
 }
 
-const { title, description, siteName, image } = Astro.props
+const { title, description, siteName, image, ogTitle = title, ogDescription = description, jsonLd } = Astro.props
 
 // canonical URLs without trailing slash, like the historical ones
 const canonical = new URL(Astro.url.pathname.replace(/(index)?\.html$/, '').replace(/(.)\/$/, '$1'), Astro.site)
@@ -23,8 +27,9 @@ const ogImage = image ? new URL((await getImage({ src: image, width: 1200, forma
 <link rel="canonical" href={canonical} />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content={siteName} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
+<meta property="og:title" content={ogTitle} />
+<meta property="og:description" content={ogDescription} />
 <meta property="og:url" content={canonical} />
 {ogImage && <meta property="og:image" content={ogImage} />}
 <meta name="twitter:card" content="summary_large_image" />
+{jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, "\\u003c")} />}

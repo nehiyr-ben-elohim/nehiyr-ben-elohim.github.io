@@ -187,6 +187,183 @@
     ]
   },
   {
+    "slug": "traducteur-vocal",
+    "name": "Traducteur vocal",
+    "title": "Traducteur vocal",
+    "kind": "projet perso · nom à venir",
+    "cat": "perso",
+    "color": "#9b2f1f",
+    "period": "2026",
+    "nda": false,
+    "lead": "Un traducteur vocal des langues occidentales vers les langues locales africaines : on parle en français ou en anglais, l’application répond à voix haute dans la langue locale.",
+    "tldr": {
+      "problem": "Les langues locales africaines sont peu couvertes par les outils vocaux, alors que beaucoup de locuteurs les parlent plus qu’ils ne les écrivent.",
+      "solution": "Une chaîne vocale complète en Python : reconnaissance vocale (ASR), traduction par LLM, puis synthèse vocale (TTS) dans la langue cible.",
+      "result": "Rendre l’information accessible à l’oral, dans la langue de chacun."
+    },
+    "metrics": [
+      {
+        "n": 3,
+        "k": "étapes : ASR, traduction, TTS"
+      },
+      {
+        "n": 2,
+        "suf": "+",
+        "k": "langues sources : français, anglais"
+      },
+      {
+        "n": 100,
+        "suf": " %",
+        "k": "de la voix à la voix, sans écrire"
+      }
+    ],
+    "summary": "Traduction vocale des langues occidentales vers les langues locales africaines : reconnaissance vocale, traduction, synthèse vocale.",
+    "role": "Conception · Backend IA · Front",
+    "metric": {
+      "v": "ASR → TTS",
+      "k": "de la voix à la voix"
+    },
+    "tags": [
+      "python",
+      "react",
+      "asr",
+      "tts",
+      "llm"
+    ],
+    "meta": [
+      {
+        "k": "Rôle",
+        "v": "Conception & développement"
+      },
+      {
+        "k": "Type",
+        "v": "Projet personnel"
+      },
+      {
+        "k": "Période",
+        "v": "2026"
+      },
+      {
+        "k": "Statut",
+        "v": "En cours · nom à venir"
+      }
+    ],
+    "stack": [
+      {
+        "name": "Python",
+        "icon": "python",
+        "role": "API et pipeline vocal"
+      },
+      {
+        "name": "ASR",
+        "role": "reconnaissance vocale"
+      },
+      {
+        "name": "TTS",
+        "role": "synthèse vocale en langue locale"
+      },
+      {
+        "name": "LLM",
+        "role": "traduction"
+      },
+      {
+        "name": "React",
+        "icon": "react",
+        "role": "interface d’enregistrement et d’écoute"
+      }
+    ],
+    "sections": [
+      {
+        "n": "01",
+        "title": "L’idée",
+        "body": "Des millions de personnes parlent au quotidien des langues locales africaines, souvent plus à l’oral qu’à l’écrit. Le projet traduit la voix, du français ou de l’anglais vers ces langues, et la restitue à voix haute."
+      },
+      {
+        "n": "02",
+        "title": "Ce que je construis",
+        "body": "Une chaîne vocale de bout en bout en Python, avec une interface React pour enregistrer, traduire et écouter.",
+        "list": [
+          "Reconnaissance vocale (ASR) des langues sources",
+          "Traduction par LLM avec glossaires locaux",
+          "Synthèse vocale (TTS) dans la langue cible",
+          "Interface React d’enregistrement et de lecture"
+        ]
+      },
+      {
+        "n": "03",
+        "title": "Défis",
+        "body": "Peu de données audio annotées, des langues tonales et des variantes régionales : la qualité passe par la collecte de données locales et les retours de locuteurs natifs."
+      },
+      {
+        "n": "04",
+        "title": "Suite",
+        "body": "Le projet est en cours ; le nom n’est pas encore choisi et de nouvelles langues cibles sont prévues."
+      }
+    ],
+    "archi": {
+      "note": "L’audio passe par trois étapes : transcription (ASR), traduction (LLM), puis synthèse vocale (TTS) dans la langue cible.",
+      "layers": [
+        {
+          "layer": "utilisateur",
+          "nodes": [
+            {
+              "t": "Micro",
+              "s": "voix source"
+            }
+          ]
+        },
+        {
+          "layer": "ASR",
+          "nodes": [
+            {
+              "t": "Reconnaissance",
+              "s": "audio → texte",
+              "hi": true
+            }
+          ]
+        },
+        {
+          "layer": "traduction",
+          "nodes": [
+            {
+              "t": "LLM",
+              "s": "texte → texte"
+            },
+            {
+              "t": "Glossaires",
+              "s": "langues locales"
+            }
+          ]
+        },
+        {
+          "layer": "TTS",
+          "nodes": [
+            {
+              "t": "Synthèse",
+              "s": "texte → voix",
+              "hi": true
+            }
+          ]
+        }
+      ]
+    },
+    "snippet": {
+      "file": "speech/pipeline.py",
+      "code": "async def speak_translate(audio: bytes, target: str) -> bytes:\n    text = await asr.transcribe(audio)\n    translated = await translator.run(text, target=target)\n    return await tts.synthesize(translated, voice=VOICES[target])"
+    },
+    "gallery": [
+      {
+        "cap": "Enregistrement de la voix"
+      },
+      {
+        "cap": "Choix de la langue cible"
+      },
+      {
+        "cap": "Lecture de la traduction"
+      }
+    ]
+  },
+  {
     "slug": "e-learning",
     "name": "Plateforme e-learning",
     "title": "Plateforme e-learning",

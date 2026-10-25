@@ -1,0 +1,78 @@
+---
+import type { Profile } from '../lib/profile'
+import { kicker } from '../lib/site'
+
+interface Props {
+  method: Profile['method']
+  label: string
+}
+
+const { method, label } = Astro.props
+---
+
+<section id="methode" data-section={label} class="method">
+  <div class="wrap inner">
+    <div data-reveal class="head">
+      <div class="head-title">
+        <span class="kicker-label">{kicker('methode', 'travailler ensemble')}</span>
+        <h2 class="section-title">Du premier appel à la prod</h2>
+      </div>
+      <p>Un cadre simple, pour savoir à quoi t’attendre à chaque étape.</p>
+    </div>
+    <ol class="steps">
+      {method.steps.map((s, i) => (
+        <li data-reveal class="step">
+          <span class="step-n">{String(i + 1).padStart(2, '0')}</span>
+          <span class="step-t">{s.title}</span>
+          <span class="step-tag">{s.tag}</span>
+          <span class="step-text">{s.text}</span>
+        </li>
+      ))}
+    </ol>
+    <div class="formats-block">
+      <span class="kicker-label">› formats possibles</span>
+      <div class="formats">
+        {method.formats.map(f => (
+          <div data-reveal class="format">
+            <span class="format-t">{f.title}</span>
+            <span class="format-text">{f.text}</span>
+            <span class="format-fit">→ {f.fit}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .method {
+    background-color: #fffbe3;
+    background-image: radial-gradient(rgba(17, 17, 17, 0.07) 1.3px, transparent 1.5px);
+    background-size: 14px 14px;
+    border-top: 3px solid var(--cs-ink);
+    border-bottom: 3px solid var(--cs-ink);
+  }
+  .inner { padding-top: clamp(56px, 8vw, 104px); padding-bottom: clamp(56px, 8vw, 104px); display: flex; flex-direction: column; gap: 40px; }
+  .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 40px; }
+  .head-title { display: flex; flex-direction: column; gap: 12px; }
+  .head p { margin: 0; max-width: 44ch; font-size: 17px; line-height: 1.6; color: var(--cs-body); }
+  .steps { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 20px; }
+  .step {
+    padding: 20px 20px 22px;
+    background: #fff;
+    border: 2px solid var(--cs-ink);
+    box-shadow: 5px 5px 0 var(--cs-ink);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .step-n { align-self: flex-start; padding: 2px 9px; background: var(--cs-ink); color: var(--cs-accent); font-family: var(--cs-mono); font-size: 12px; font-weight: 700; }
+  .step-t { font-family: var(--cs-display); font-weight: 700; font-size: 21px; line-height: 1.2; }
+  .step-tag { align-self: flex-start; padding: 2px 8px; background: var(--cs-accent); font-family: var(--cs-display); font-weight: 700; font-size: 13px; }
+  .step-text, .format-text { font-size: 15px; line-height: 1.55; color: var(--cs-body); }
+  .formats-block { display: flex; flex-direction: column; gap: 14px; }
+  .formats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1px; background: var(--cs-ink); border: 2px solid var(--cs-ink); }
+  .format { background: #fff; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; }
+  .format-t { font-family: var(--cs-display); font-weight: 700; font-size: 20px; }
+  .format-fit { font-family: var(--cs-mono); font-size: 12px; color: #3a3a3a; }
+</style>

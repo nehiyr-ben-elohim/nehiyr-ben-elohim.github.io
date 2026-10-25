@@ -1,13 +1,13 @@
 import { test, expect } from '@playwright/test'
 
-const SLUGS = ['plateforme-audit', 'e-learning', '2audio', 'wiin']
+const SLUGS = ['plateforme-audit', 'traducteur-vocal', 'e-learning', '2audio', 'wiin']
 
 test('case study page renders header, metas, summary and stack', async ({ page }) => {
   const res = await page.goto('/projets/plateforme-audit')
   expect(res?.status()).toBe(200)
   await expect(page).toHaveTitle('Plateforme d’audit — Justin Potchona')
   await expect(page.locator('h1')).toHaveText('Plateforme d’audit')
-  await expect(page.locator('[data-counter]')).toHaveText('01 / 04')
+  await expect(page.locator('[data-counter]')).toHaveText('01 / 05')
   await expect(page.locator('.cs-meta dt')).toHaveCount(4)
   await expect(page.locator('.cs-summary a')).toHaveCount(5)
   await expect(page.locator('.cs-summary a').first()).toHaveAttribute('href', '#s01')
@@ -24,9 +24,9 @@ test('case study page renders header, metas, summary and stack', async ({ page }
 test('prev/next wrap around the list', async ({ page }) => {
   await page.goto('/projets/plateforme-audit')
   await expect(page.locator('[data-prev]')).toHaveAttribute('href', '/projets/wiin')
-  await expect(page.locator('[data-next]')).toHaveAttribute('href', '/projets/e-learning')
+  await expect(page.locator('[data-next]')).toHaveAttribute('href', '/projets/traducteur-vocal')
   await page.goto('/projets/wiin')
-  await expect(page.locator('[data-counter]')).toHaveText('04 / 04')
+  await expect(page.locator('[data-counter]')).toHaveText('05 / 05')
   await expect(page.locator('[data-next]')).toHaveAttribute('href', '/projets/plateforme-audit')
 })
 
@@ -80,14 +80,14 @@ test('no gallery, testimonial or zoom without real content', async ({ page }) =>
 test('pager cards show the neighbour kind', async ({ page }) => {
   await page.goto('/projets/plateforme-audit')
   await expect(page.locator('[data-prev] .pager-kind')).toHaveText('mission client')
-  await expect(page.locator('[data-next] .pager-kind')).toHaveText('full-stack')
+  await expect(page.locator('[data-next] .pager-kind')).toHaveText('projet perso · nom à venir')
 })
 
 test('arrow keys move between case studies', async ({ page }) => {
   await page.goto('/projets/plateforme-audit')
-  await expect(page.locator('.crumbs')).toContainText('01 / 04 · ← → pour naviguer')
+  await expect(page.locator('.crumbs')).toContainText('01 / 05 · ← → pour naviguer')
   await page.keyboard.press('ArrowRight')
-  await expect(page).toHaveURL(/\/projets\/e-learning$/)
+  await expect(page).toHaveURL(/\/projets\/traducteur-vocal$/)
   await page.keyboard.press('ArrowLeft')
   await expect(page).toHaveURL(/\/projets\/plateforme-audit$/)
   await page.keyboard.press('Alt+ArrowRight')
@@ -128,4 +128,11 @@ test.describe('no JS', () => {
     await expect(page.locator('#s04 h2')).toBeVisible()
     await expect(page.locator('.cs-meta dd').first()).toBeVisible()
   })
+})
+
+test('stack items without a devicon show an abbreviation', async ({ page }) => {
+  await page.goto('/projets/traducteur-vocal')
+  await expect(page.locator('.cs-stack .stack-abbr')).toHaveText(['ASR', 'TTS', 'LLM'])
+  await expect(page.locator('[data-nda]')).toHaveCount(0)
+  await expect(page.locator('#avis')).toHaveCount(0)
 })

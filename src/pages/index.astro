@@ -1,4 +1,5 @@
 ---
+import { existsSync } from 'node:fs'
 import SiteLayout from '../layouts/SiteLayout.astro'
 import SiteHeader from '../components/SiteHeader.astro'
 import SiteFooter from '../components/SiteFooter.astro'
@@ -11,50 +12,91 @@ import Bands from '../components/Bands.astro'
 import QuickContact from '../components/QuickContact.astro'
 import ExperienceSection from '../components/ExperienceSection.astro'
 import SkillsSection from '../components/SkillsSection.astro'
+import MethodSection from '../components/MethodSection.astro'
+import NotesSection from '../components/NotesSection.astro'
+import AboutSection from '../components/AboutSection.astro'
+import MobileBar from '../components/MobileBar.astro'
 import Rail from '../components/Rail.astro'
-import { Image } from 'astro:assets'
 import { getCaseStudies } from '../lib/case-studies'
-import { resolveImage } from '../lib/images'
+import { findImage } from '../lib/images'
 import { getProfile } from '../lib/profile'
 import { applyFilter, filterCounts, FILTERS } from '../lib/project-filter'
-import { HOME_SECTIONS, kicker, OWNER } from '../lib/site'
+import { CV_PATH } from '../lib/terminal'
+import { BOOKING_URL, EMAIL, GITHUB_URL, HOME_SECTIONS, kicker, LINKEDIN_URL, OWNER } from '../lib/site'
 
 const projects = getCaseStudies()
 const { featured, grid } = applyFilter(projects, 'all')
 const featuredProject = projects.find(p => p.slug === featured)
 const counts = filterCounts(projects)
-const { facts, marquee, skills, experience, interests } = getProfile()
+const { facts, audiences, trust, marquee, skills, experience, method, notes, about, interests } = getProfile()
 const label = (id: string) => HOME_SECTIONS.find(s => s.id === id)?.label ?? ''
-const description = 'Justin Potchona, développeur backend & machine learning basé à Lomé : API, plateformes web et outils data.'
+const cv = existsSync(`public${CV_PATH}`) ? CV_PATH : undefined
+const portrait = findImage(['/img/justin-portrait.png', '/img/justin-portrait.jpg'])
+const description = 'Justin Potchona, développeur backend et machine learning basé à Lomé. API, plateformes web et outils data pour des équipes en France et en Afrique de l’Ouest.'
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: OWNER,
+  jobTitle: 'Développeur backend & machine learning',
+  address: { '@type': 'PostalAddress', addressLocality: 'Lomé', addressCountry: 'TG' },
+  email: `mailto:${EMAIL}`,
+  sameAs: [LINKEDIN_URL, GITHUB_URL],
+}
 ---
 
-<SiteLayout title={`${OWNER} — Développeur backend & machine learning`} description={description} rail>
+<SiteLayout
+  title={`${OWNER} · Développeur backend & machine learning`}
+  description={description}
+  ogTitle={`${OWNER} · Backend & ML`}
+  ogDescription="Des backends fiables et des fonctionnalités ML qui passent en production."
+  image={portrait}
+  jsonLd={jsonLd}
+  rail
+>
+  <div data-audience="client">
   <SiteHeader variant="home" />
 
   <Rail label={label('top')} />
 
   <main>
-    <section id="top" data-section={label('top')} class="wrap hero">
-      <div class="hero-main">
-        <div class="hero-copy">
-          <span class="status"><span class="dot"></span>Disponible pour des missions</span>
-          <h1><span data-anim="hello" class="hello">Hello world!</span></h1>
-          <p class="intro">
-            <strong>{OWNER}</strong>, développeur backend &amp; machine learning basé à Lomé. Depuis 6 ans, je conçois des API,
-            des plateformes web et des outils data pour des équipes en France et en Afrique de l’Ouest.
-          </p>
-          <div class="hero-actions">
-            <ShadowButton href="#projets" size="lg" shadow="var(--cs-ink)">voir mes projets</ShadowButton>
-            <a href="#contact" class="coffee">prendre un café <span aria-hidden="true">›</span></a>
-          </div>
-        </div>
-        <div data-anim="code" class="code-card">
-          <div class="code-window">
-            <div class="code-bar">
-              <div class="dots" aria-hidden="true"><span></span><span></span><span class="on"></span></div>
-              <span class="file">justin.py</span>
+    <div class="hero-bg">
+      <section id="top" data-section={label('top')} class="wrap hero">
+        <div class="hero-main">
+          <div class="hero-copy">
+            <div class="hero-meta">
+              <div role="radiogroup" aria-label="Je suis" class="audience" data-audience-toggle data-js-only>
+                {audiences.map((a, i) => (
+                  <button type="button" role="radio" aria-checked={i === 0} data-aud={a.id} data-request={a.request}>{a.label}</button>
+                ))}
+              </div>
+              <span class="status"><span class="dot"></span>Disponible pour des missions</span>
             </div>
-            <pre><code><span class="c"># bienvenue sur mon portfolio</span>
+            <h1><span data-anim="hello" class="hello">Hello world!</span></h1>
+            {audiences.map(a => <p class:list={['promise', `for-${a.id}`]}>{a.promise}</p>)}
+            <p class="intro">
+              <strong>{OWNER}</strong>, développeur backend &amp; machine learning basé à Lomé. Depuis 6 ans, je conçois des API,
+              des plateformes web et des outils data pour des équipes en France et en Afrique de l’Ouest.
+            </p>
+            <div class="hero-actions for-client">
+              {BOOKING_URL ? (
+                <ShadowButton href={BOOKING_URL} size="lg" shadow="var(--cs-ink)" external>réserver un appel</ShadowButton>
+              ) : (
+                <ShadowButton href="#contact" size="lg" shadow="var(--cs-ink)">me contacter</ShadowButton>
+              )}
+              <a href="#projets" class="coffee">voir mes projets <span aria-hidden="true">›</span></a>
+            </div>
+            <div class="hero-actions for-rec">
+              {cv && <ShadowButton href={cv} size="lg" shadow="var(--cs-ink)" external>télécharger mon CV ↓</ShadowButton>}
+              <a href="#parcours" class="coffee">voir mon parcours <span aria-hidden="true">›</span></a>
+            </div>
+          </div>
+          <div data-anim="code" class="code-card">
+            <div class="code-window">
+              <div class="code-bar">
+                <div class="dots" aria-hidden="true"><span></span><span></span><span class="on"></span></div>
+                <span class="file">justin.py</span>
+              </div>
+              <pre><code><span class="c"># bienvenue sur mon portfolio</span>
 <span class="k">class</span> Justin(Developer):
     role     = <span class="s">"backend &amp; machine learning"</span>
     stack    = [<span class="s">"Python"</span>, <span class="s">"Symfony"</span>, <span class="s">"Go"</span>]
@@ -63,14 +105,26 @@ const description = 'Justin Potchona, développeur backend & machine learning ba
 
     <span class="k">def</span> hello(self):
         <span class="k">return</span> <span class="s">"hello world!"</span></code></pre>
-            <div class="code-run">
-              <span class="k">›</span> python justin.py<span class="out">→ hello world!</span><span data-anim="cursor" class="cursor"></span>
+              <div class="term-log" data-term-log aria-live="polite">
+                <div><span class="term-cmd">› python justin.py</span><span class="term-out">hello world!  (tape help pour explorer le site)</span></div>
+              </div>
+              <label class="term-input" data-js-only>
+                <span class="k" aria-hidden="true">›</span>
+                <input data-term data-has-cv={cv ? '' : undefined} aria-label="Terminal : tape help" placeholder="tape help puis Entrée" autocomplete="off" spellcheck="false" />
+                <span data-anim="cursor" class="cursor" aria-hidden="true"></span>
+              </label>
             </div>
           </div>
         </div>
-      </div>
-      <HeroFacts facts={facts} />
-    </section>
+        <HeroFacts facts={facts} />
+        <div data-reveal class="trust">
+          <span class="trust-k">ils m’ont fait confiance</span>
+          {trust.map(t => (
+            <span class="chip">{t.logo && <img src={t.logo} alt="" width="20" height="20" />}{t.name}</span>
+          ))}
+        </div>
+      </section>
+    </div>
 
     <Bands marquee={marquee} />
 
@@ -100,54 +154,45 @@ const description = 'Justin Potchona, développeur backend & machine learning ba
 
     <SkillsSection skills={skills} label={label('competences')} />
 
-    <section id="apropos" data-section={label('apropos')} class="about">
-      <div class="wrap about-inner">
-        <div class="about-head">
-          <span class="kicker-label">{kicker('apropos', 'à propos de moi')}</span>
-          <h2 class="section-title">appelle-moi Justin</h2>
-        </div>
-        <div class="about-body">
-          <p class="bio">
-            Je suis développeur logiciel, passionné par mon métier et par les nouvelles technologies. Particulièrement
-            intéressé par les usages du machine learning, je veux poursuivre ma carrière sur des projets de machine learning
-            ou de développement backend. Passionné, motivé et autonome.
-          </p>
-          <div class="favs">
-            <div class="fav-buttons" role="group" aria-label="Centres d’intérêt">
-              {interests.map((i, n) => (
-                <button type="button" data-fav={i.k} aria-pressed={n === 0}>fav. {i.k}</button>
-              ))}
-            </div>
-            {interests.map((i, n) => (
-              <div class="fav-panel" data-fav-panel={i.k} hidden={n !== 0}>
-                {i.photo && (
-                  <div class="fav-photo">
-                    <Image src={resolveImage(i.photo)} alt="" widths={[480, 960]} sizes="(min-width: 1200px) 480px, 100vw" />
-                  </div>
-                )}
-                <div class="fav-card">
-                  <span class="bar"></span>
-                  <div class="fav-text">
-                    <span class="fav-k">fav.<br />{i.k}</span>
-                    <span class="fav-v">{i.v}</span>
-                  </div>
-                  <span class="bar"></span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
+    <MethodSection method={method} label={label('methode')} />
+
+    <NotesSection notes={notes} label={label('notes')} />
+
+    <AboutSection about={about} interests={interests} label={label('apropos')} />
 
     <ContactSection />
   </main>
 
-  <SiteFooter />
+  <SiteFooter big />
+  <MobileBar audiences={audiences} cv={cv} />
+  </div>
 </SiteLayout>
 
 <style>
 
+  .hero-bg {
+    background-color: #fffbe3;
+    background-image: radial-gradient(rgba(17, 17, 17, 0.08) 1.3px, transparent 1.5px);
+    background-size: 14px 14px;
+    border-bottom: 3px solid var(--cs-ink);
+  }
+  .hero-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 18px; }
+  .audience { display: flex; border: 2px solid var(--cs-ink); background: #fff; }
+  .audience button {
+    all: unset;
+    cursor: pointer;
+    padding: 7px 14px;
+    background: #fff;
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .audience button:hover, .audience button[aria-checked='true'] { background: var(--cs-accent); }
+  .promise { margin: 0; max-width: 24ch; font-family: var(--cs-display); font-weight: 700; font-size: clamp(24px, 2.6vw, 34px); line-height: 1.2; text-wrap: balance; }
+  .trust { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; padding-top: 24px; border-top: 1px dotted var(--cs-ink); }
+  .trust-k { font-family: var(--cs-mono); font-size: 12px; color: #3a3a3a; text-transform: uppercase; letter-spacing: 0.06em; margin-right: 8px; }
+  .chip { display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: #fff; border: 2px solid var(--cs-ink); font-family: var(--cs-display); font-weight: 700; font-size: 17px; }
+  .chip img { display: block; filter: grayscale(1); }
   .hero {
     padding-top: clamp(48px, 8vw, 104px);
     padding-bottom: clamp(56px, 8vw, 96px);
@@ -220,17 +265,24 @@ const description = 'Justin Potchona, développeur backend & machine learning ba
   .c { color: #8a8a8a; }
   .k { color: var(--cs-accent); }
   .s { color: #a8e6b4; }
-  .code-run {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 22px;
+  .term-log {
+    max-height: 150px;
+    overflow-y: auto;
+    padding: 10px 22px 0;
     border-top: 1px solid #2c2c2c;
     font-family: var(--cs-mono);
     font-size: 13px;
-    color: #bdbdbd;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
-  .out { color: #ededed; }
+  .term-log > :global(div) { display: flex; flex-direction: column; }
+  .term-log :global(.term-cmd) { color: #bdbdbd; }
+  .term-log :global(.term-out) { color: #ededed; white-space: pre-wrap; }
+  .term-input { display: flex; align-items: center; gap: 10px; padding: 10px 22px 14px; font-family: var(--cs-mono); font-size: 13px; color: #bdbdbd; cursor: text; }
+  .term-input input { flex: 1; min-width: 0; background: transparent; border: 0; outline: 0; color: #fff; font-family: var(--cs-mono); font-size: 13px; caret-color: var(--cs-accent); }
+  .term-input:focus-within { outline: 2px solid var(--cs-accent); outline-offset: -2px; }
   .cursor { display: inline-block; width: 8px; height: 16px; background: var(--cs-accent); }
 
 
@@ -244,7 +296,7 @@ const description = 'Justin Potchona, développeur backend & machine learning ba
     gap: 36px;
   }
   .projects-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 40px; }
-  .filters, .fav-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; }
   .filters button {
     all: unset;
     cursor: pointer;
@@ -260,53 +312,14 @@ const description = 'Justin Potchona, développeur backend & machine learning ba
   }
   .filters button:hover, .filters button[aria-pressed='true'] { background: var(--cs-accent); }
   .filters .count { font-family: var(--cs-mono); font-size: 12px; font-weight: 500; }
-  .filters button:focus-visible, .fav-buttons button:focus-visible { outline: 3px solid var(--cs-ink); outline-offset: 3px; }
+  .filters button:focus-visible, .audience button:focus-visible { outline: 3px solid var(--cs-ink); outline-offset: 3px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 28px 24px; }
 
 
 
-  .about { background: var(--cs-ink); color: #fff; overflow-x: clip; }
-  .about-inner {
-    padding-top: clamp(56px, 8vw, 104px);
-    padding-bottom: clamp(56px, 8vw, 104px);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px 64px;
-  }
-  .about-head { flex: 1 1 260px; display: flex; flex-direction: column; gap: 12px; }
-  .about-head .kicker-label { color: var(--cs-accent); }
-  .about-body { flex: 2 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 32px; }
-  .bio { margin: 0; max-width: 60ch; font-size: clamp(18px, 1.7vw, 21px); line-height: 1.7; color: #ededed; text-wrap: pretty; }
-  .favs { display: flex; flex-direction: column; gap: 16px; }
-  .fav-buttons button {
-    all: unset;
-    cursor: pointer;
-    padding: 7px 14px;
-    border: 2px solid var(--cs-accent);
-    color: var(--cs-accent);
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 15px;
-  }
-  .fav-buttons button:hover, .fav-buttons button[aria-pressed='true'] { background: var(--cs-accent); color: var(--cs-ink); }
-  .fav-buttons button:focus-visible { outline-color: var(--cs-accent); }
-  .fav-panel { display: flex; flex-wrap: wrap; min-height: 300px; }
-  .fav-photo { flex: 1.5 1 320px; min-width: 0; position: relative; min-height: 300px; background: #2a2a2a; filter: grayscale(1); }
-  .fav-photo :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .fav-card {
-    flex: 1 1 260px;
-    min-width: 0;
-    background-color: var(--cs-accent);
-    background-image: radial-gradient(rgba(17, 17, 17, 0.06) 1.4px, transparent 1.6px);
-    background-size: 12px 12px;
-    color: var(--cs-ink);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 40px 0;
-  }
-  .bar { display: block; width: 72%; height: 8px; border-radius: 4px; background: var(--cs-ink); }
-  .fav-text { padding: 28px 28px 30px; display: flex; flex-direction: column; gap: 12px; }
-  .fav-k { font-family: var(--cs-display); font-weight: 700; font-size: clamp(40px, 4.4vw, 60px); line-height: 0.95; }
-  .fav-v { font-family: var(--cs-display); font-weight: 600; font-size: 17px; letter-spacing: 0.14em; text-transform: uppercase; }
+</style>
+
+<style is:global>
+  [data-audience='client'] .for-rec,
+  [data-audience='rec'] .for-client { display: none !important; }
 </style>

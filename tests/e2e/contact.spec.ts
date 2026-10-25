@@ -8,7 +8,7 @@ const fill = async (page: Page) => {
   await form.evaluate(el => el.scrollIntoView({ block: 'center' }))
   await form.locator('input[name=name]').fill('Ada')
   await form.locator('input[name=email]').fill('ada@example.com')
-  await form.locator('textarea[name=message]').fill('Bonjour')
+  await form.locator('textarea[name=message]').fill('Bonjour, un projet d’API à discuter')
   return form
 }
 
@@ -47,4 +47,29 @@ test('form posts to Formspree with JSON accept header', async ({ page }) => {
   await form.locator('button[type=submit]').click()
   await expect(form.locator('.message-sent')).toBeVisible()
   expect(accept).toContain('application/json')
+})
+
+test('client-side validation blocks the request and explains each field', async ({ page }) => {
+  let posted = false
+  await page.route(FORMSPREE, r => { posted = true; return r.fulfill({ status: 200, json: { ok: true } }) })
+  await page.goto('/')
+  const form = page.locator('[data-contact-form]')
+  await form.evaluate(el => el.scrollIntoView({ block: 'center' }))
+  await form.locator('textarea[name=message]').fill('trop court')
+  await form.locator('button[type=submit]').click()
+  await expect(form.locator('[data-error]:visible')).toHaveText(['Indique ton prénom.', 'Cette adresse email n’est pas valide.', 'Écris quelques mots sur ton projet (20 caractères minimum).'])
+  expect(posted).toBe(false)
+  await form.locator('input[name=name]').fill('Ada')
+  await expect(form.locator('[data-error="name"]')).toBeHidden()
+})
+
+test('success card greets by name, can send another message', async ({ page }) => {
+  let body = ''
+  await page.route(FORMSPREE, r => { body = r.request().postData() ?? ''; return r.fulfill({ status: 200, json: { ok: true } }) })
+  const form = await fill(page)
+  await form.locator('button[type=submit]').click()
+  await expect(form.locator('.message-sent')).toContainText('Message envoyé, merci Ada !')
+  expect(body).toContain('mission freelance')
+  await form.locator('[data-contact-reset]').click()
+  await expect(form.locator('input[name=name]')).toBeVisible()
 })

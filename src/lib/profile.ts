@@ -11,6 +11,9 @@ const fact = z
 
 export const profileSchema = z.object({
   facts: z.array(fact).min(1),
+  audiences: z.array(z.object({ id: z.enum(['client', 'rec']), label: z.string(), promise: z.string(), bar: z.string(), request: z.string() })).length(2),
+  // logo: file in public/img/companies/
+  trust: z.array(z.object({ name: z.string(), logo: z.string().regex(/^\/img\/companies\/[\w-]+\.(png|svg|webp|jpg)$/).optional() })),
   marquee: z.object({ keywords: z.array(z.string()).min(1), tech: z.array(iconSchema).min(1) }),
   skills: z.array(z.object({ cat: z.string(), items: z.array(iconSchema).min(1) })),
   experience: z.array(z.object({
@@ -34,6 +37,17 @@ export const profileSchema = z.object({
     results: z.array(pair),
     tags: z.array(z.string()),
   })),
+  method: z.object({
+    steps: z.array(z.object({ title: z.string(), tag: z.string(), text: z.string() })).min(1),
+    formats: z.array(z.object({ title: z.string(), text: z.string(), fit: z.string() })),
+  }),
+  notes: z.array(z.object({ tag: z.string(), read: z.string(), title: z.string(), text: z.string(), soon: z.boolean().default(false), href: z.string().optional() })),
+  about: z.object({
+    bio: z.array(z.string()).min(1),
+    now: z.string().optional(),
+    details: z.array(pair),
+    principles: z.array(z.object({ title: z.string(), text: z.string() })),
+  }),
   // photo: '/img/...' resolved via resolveImage; text-only card when absent
   interests: z.array(pair.extend({ photo: z.string().optional() })).min(1),
 })

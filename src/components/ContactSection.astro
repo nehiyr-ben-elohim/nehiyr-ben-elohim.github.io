@@ -1,118 +1,193 @@
 ---
-import { EMAIL, GITHUB_URL, kicker, LINKEDIN_URL } from '../lib/site'
+import { BOOKING_URL, EMAIL, kicker, LINKEDIN_URL } from '../lib/site'
+import { MIN_MESSAGE } from '../lib/contact-validation'
 
 const endpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? ''
-// a missing endpoint would silently POST to the page itself
-if (!endpoint && import.meta.env.PROD) {
-  throw new Error('PUBLIC_FORMSPREE_ENDPOINT is not set: the contact form cannot send messages.')
-}
+// no endpoint in production: the form would POST to the page itself, so point to email instead
+const showForm = !!endpoint || !import.meta.env.PROD
+const REQUEST_TYPES = ['mission freelance', 'CDI', 'collaboration', 'autre']
+const DELAYS = ['Dès que possible', 'Sous 1 mois', 'Dans 1 à 3 mois', 'Pas encore défini']
+const BUDGETS = ['Moins de 3 000 €', '3 000 – 10 000 €', 'Plus de 10 000 €', 'TJM à discuter']
+const linkedinHandle = new URL(LINKEDIN_URL).pathname.split('/').filter(Boolean).pop()
 ---
 
 <section id="contact" data-section="me contacter" class="wrap contact">
-  <div class="intro">
-    <span class="kicker-label">{kicker('contact', 'un rendez-vous ?')}</span>
-    <h2 class="section-title">On se donne rendez-vous&nbsp;?</h2>
-    <p class="pitch">Nous pouvons parler de ton projet « amazing » autour d’un café.</p>
-    <a href={`mailto:${EMAIL}`} class="email">{EMAIL}</a>
-    <div class="socials">
-      <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="social">
-        <img src="/img/devicons/linkedin.svg" alt="" width="24" height="24" class="mono" />
-      </a>
-      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="social">
-        <img src="/img/devicons/github.svg" alt="" width="24" height="24" />
-      </a>
+  <div class="head">
+    <div data-reveal class="head-title">
+      <span class="kicker-label">{kicker('contact', 'un rendez-vous ?')}</span>
+      <h2 class="section-title">On se donne rendez-vous&nbsp;?</h2>
+      <p class="pitch">Nous pouvons parler de ton projet « amazing » autour d’un café.</p>
+    </div>
+    <div class="badges">
+      <span class="badge"><span class="live" aria-hidden="true"></span>réponse sous 48 h</span>
+      <span class="badge">Lomé · GMT+0</span>
+      <span class="badge on">dispo dès maintenant</span>
     </div>
   </div>
 
-  <form data-reveal action={endpoint} method="POST" class="contact-form" data-contact-form>
-    <div class="fields">
-      <label>
-        <span>Comment je peux t’appeler ?</span>
-        <input required name="name" autocomplete="given-name" placeholder="Ton prénom" />
-      </label>
-      <label>
-        <span>Ton adresse email</span>
-        <input required type="email" name="email" autocomplete="email" placeholder="prenom@entreprise.com" />
-      </label>
-      <label>
-        <span>Alors, dis-moi</span>
-        <textarea required name="message" rows="6" placeholder="Ton projet, tes délais, ton budget…"></textarea>
-      </label>
-      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="honeypot" aria-hidden="true" />
-      <p class="message-error" role="alert" hidden>Oups, le message s’est perdu en route. Réessaie dans un instant.</p>
-      <button type="submit" class="submit">
-        <span class="face">hello</span>
-      </button>
+  <div class="cards">
+    <div data-reveal class="card">
+      <span class="card-k">écrire un email</span>
+      <a href={`mailto:${EMAIL}`} class="card-v email">{EMAIL}</a>
+      <button type="button" class="copy" data-copy-email={EMAIL} data-js-only>copier l’email</button>
     </div>
-    <div class="message-sent" role="status" hidden>
-      <span class="sent-title">Message envoyé, merci !</span>
-      <span>Je te réponds sous 48 h.</span>
-    </div>
-  </form>
+    {BOOKING_URL && (
+      <a data-reveal href={BOOKING_URL} target="_blank" rel="noopener noreferrer" class="card booking">
+        <span class="card-k">réserver un appel</span>
+        <span class="card-v">30 min en visio</span>
+        <span class="card-cta">choisir un créneau ↗</span>
+      </a>
+    )}
+    <a data-reveal href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" class="card">
+      <span class="card-k">sur linkedin</span>
+      <span class="card-v"><img src="/img/devicons/linkedin.svg" alt="" width="24" height="24" />{linkedinHandle}</span>
+      <span class="card-cta">voir mon profil ↗</span>
+    </a>
+  </div>
+
+  {showForm ? (
+    <form data-reveal action={endpoint} method="POST" class="contact-form" data-contact-form novalidate>
+      <div class="fields">
+        <fieldset class="types">
+          <legend>C’est pour…</legend>
+          <input type="hidden" name="type" value={REQUEST_TYPES[0]} data-request-type />
+          <div role="radiogroup" aria-label="C’est pour…" class="type-list">
+            {REQUEST_TYPES.map((t, i) => (
+              <button type="button" role="radio" aria-checked={i === 0} data-request={t}>{t}</button>
+            ))}
+          </div>
+        </fieldset>
+        <div class="grid">
+          <label>
+            <span>Comment je peux t’appeler ?</span>
+            <input name="name" autocomplete="given-name" placeholder="Ton prénom" aria-describedby="err-name" />
+            <span id="err-name" class="error" data-error="name" role="alert" hidden>Indique ton prénom.</span>
+          </label>
+          <label>
+            <span>Ton adresse email</span>
+            <input type="email" name="email" autocomplete="email" placeholder="prenom@entreprise.com" aria-describedby="err-email" />
+            <span id="err-email" class="error" data-error="email" role="alert" hidden>Cette adresse email n’est pas valide.</span>
+          </label>
+          <label>
+            <span>Délai <span class="optional">(facultatif)</span></span>
+            <select name="delai">
+              <option value="">Choisir</option>
+              {DELAYS.map(d => <option>{d}</option>)}
+            </select>
+          </label>
+          <label>
+            <span>Budget <span class="optional">(facultatif)</span></span>
+            <select name="budget">
+              <option value="">Choisir</option>
+              {BUDGETS.map(b => <option>{b}</option>)}
+            </select>
+          </label>
+        </div>
+        <label>
+          <span>Alors, dis-moi</span>
+          <textarea name="message" rows="5" placeholder="Ton projet, ton contexte, ce que tu attends…" aria-describedby="err-message"></textarea>
+          <span id="err-message" class="error" data-error="message" role="alert" hidden>Écris quelques mots sur ton projet ({MIN_MESSAGE} caractères minimum).</span>
+        </label>
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="honeypot" aria-hidden="true" />
+        <p class="message-error" role="alert" hidden>Oups, le message s’est perdu en route. Réessaie dans un instant.</p>
+        <div class="submit-row">
+          <span class="privacy">Tes informations servent uniquement à te répondre.</span>
+          <button type="submit" class="submit"><span class="face" data-submit-label>hello</span></button>
+        </div>
+      </div>
+      <div class="message-sent" role="status" hidden>
+        <div class="sent-card">
+          <span class="sent-title">Message envoyé, merci <span data-sent-name></span> !</span>
+          <span>Je te réponds sous 48 h.</span>
+          <button type="button" class="reset" data-contact-reset>envoyer un autre message</button>
+        </div>
+      </div>
+    </form>
+  ) : (
+    <p class="no-form">Le formulaire arrive bientôt : en attendant, écris-moi à <a href={`mailto:${EMAIL}`}>{EMAIL}</a>.</p>
+  )}
 </section>
 
 <style>
-  .contact {
-    padding-top: clamp(56px, 8vw, 112px);
-    padding-bottom: clamp(56px, 8vw, 112px);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 48px 72px;
-  }
-  .intro { flex: 1 1 320px; display: flex; flex-direction: column; gap: 16px; }
-  .intro .section-title { line-height: 1.08; text-wrap: balance; }
+  .contact { padding-top: clamp(56px, 8vw, 112px); padding-bottom: clamp(56px, 8vw, 112px); display: flex; flex-direction: column; gap: 40px; }
+  .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 40px; }
+  .head-title { display: flex; flex-direction: column; gap: 12px; }
+  .head-title .section-title { line-height: 1.08; text-wrap: balance; }
   .pitch { margin: 0; font-style: italic; font-size: 18px; line-height: 1.6; color: var(--cs-body); }
-  .email {
+  .badges { display: flex; flex-wrap: wrap; gap: 8px; }
+  .badge { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border: 2px solid var(--cs-ink); font-family: var(--cs-display); font-weight: 700; font-size: 14px; }
+  .badge.on { background: var(--cs-accent); }
+  .live { width: 9px; height: 9px; border-radius: 50%; background: #1f9d4a; box-shadow: 0 0 0 4px rgba(31, 157, 74, 0.18); }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 18px; }
+  .card {
+    padding: 20px;
+    background: #fff;
+    border: 2px solid var(--cs-ink);
+    box-shadow: 6px 6px 0 var(--cs-accent);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform 0.2s;
+  }
+  a.card:hover { transform: translate(-2px, -2px); }
+  .card.booking { background: var(--cs-accent); box-shadow: 6px 6px 0 var(--cs-ink); }
+  .card-k { font-family: var(--cs-mono); font-size: 12px; color: var(--cs-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .card-v { display: flex; align-items: center; gap: 10px; font-family: var(--cs-display); font-weight: 700; font-size: 20px; }
+  .card-v img { display: block; }
+  .email { word-break: break-all; }
+  .email:hover { background: var(--cs-accent); }
+  .card-cta { margin-top: auto; font-family: var(--cs-display); font-weight: 700; font-size: 14px; }
+  .copy, .reset {
+    all: unset;
+    cursor: pointer;
     align-self: flex-start;
-    margin-top: 8px;
     font-family: var(--cs-display);
     font-weight: 700;
-    font-size: clamp(20px, 2.2vw, 26px);
-    background: linear-gradient(transparent 60%, var(--cs-accent) 60%);
-    padding: 0 2px;
-    overflow-wrap: anywhere;
   }
-  .socials { display: flex; gap: 10px; padding-top: 6px; }
-  .social { width: 48px; height: 48px; display: grid; place-items: center; background: var(--cs-accent); }
-  .social:hover { background: var(--cs-ink); }
-  .social:hover img { filter: invert(1); }
-  .mono { filter: grayscale(1) brightness(0); }
-  .social:hover .mono { filter: grayscale(1) brightness(0) invert(1); }
+  .copy { margin-top: auto; padding: 6px 12px; border: 2px solid var(--cs-ink); background: #fff; font-size: 14px; }
+  .copy:hover, .copy[data-copied] { background: var(--cs-accent); }
+  .copy:focus-visible, .reset:focus-visible, .type-list button:focus-visible, .submit:focus-visible { outline: 3px solid var(--cs-ink); outline-offset: 3px; }
 
-  .contact-form { flex: 1.3 1 420px; min-width: 0; display: flex; flex-direction: column; }
-  .fields { display: flex; flex-direction: column; gap: 18px; }
+  .contact-form { display: flex; flex-direction: column; }
+  .fields { display: flex; flex-direction: column; gap: 20px; padding: clamp(20px, 3vw, 32px); border: 3px solid var(--cs-ink); background: #fff; }
   .contact-form[data-sent] .fields { display: none; }
+  .types { margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 10px; }
+  .types legend, label > span:first-child { font-family: var(--cs-display); font-weight: 700; font-size: 15px; }
+  .types legend { padding: 0; margin-bottom: 10px; }
+  .type-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .type-list button {
+    all: unset;
+    cursor: pointer;
+    padding: 8px 14px;
+    border: 2px solid var(--cs-ink);
+    background: #fff;
+    font-family: var(--cs-display);
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .type-list button:hover, .type-list button[aria-checked='true'] { background: var(--cs-accent); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 18px; }
   label { display: flex; flex-direction: column; gap: 8px; }
-  label span { font-family: var(--cs-display); font-weight: 700; font-size: 15px; }
-  input, textarea {
+  .optional { font-weight: 500; color: #5a5a5a; }
+  input, textarea, select {
     border: 2px solid var(--cs-ink);
     background: #fff;
     font-size: 16px;
     color: var(--cs-ink);
     border-radius: 0;
   }
-  input { height: 52px; padding: 0 16px; }
+  input, select { height: 52px; padding: 0 16px; }
   textarea { padding: 14px 16px; line-height: 1.5; resize: vertical; }
+  [aria-invalid='true'] { border-color: #b3261e; }
+  .error { font-size: 14px; font-weight: 600; color: #b3261e; }
   .honeypot { position: absolute; left: -9999px; }
   .message-error { margin: 0; padding: 12px 16px; border: 2px solid #b3261e; color: #b3261e; font-weight: 600; }
-  .submit {
-    all: unset;
-    cursor: pointer;
-    align-self: flex-end;
-    position: relative;
-    display: inline-block;
-    margin: 6px 8px 8px 0;
-    transition: transform 0.12s ease-out;
-  }
-  .submit::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    transform: translate(8px, 8px);
-    background: var(--cs-accent);
-  }
+  .submit-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; }
+  .privacy { font-size: 14px; color: var(--cs-muted); }
+  .submit { all: unset; cursor: pointer; position: relative; display: inline-block; margin: 0 8px 8px 0; transition: transform 0.12s ease-out; }
+  .submit::before { content: ''; position: absolute; inset: 0; transform: translate(8px, 8px); background: var(--cs-ink); }
   .submit:hover { transform: translate(-1px, -1px); }
-  .submit:focus-visible { outline: 3px solid var(--cs-ink); outline-offset: 3px; }
   .submit:disabled { cursor: progress; opacity: 0.7; }
   .submit .face {
     position: relative;
@@ -124,15 +199,11 @@ if (!endpoint && import.meta.env.PROD) {
     font-weight: 700;
     font-size: 18px;
   }
-  .message-sent {
-    align-self: center;
-    width: 100%;
-    padding: 32px;
-    background: var(--cs-accent);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .message-sent:not([hidden]) { display: flex; }
-  .sent-title { font-family: var(--cs-display); font-weight: 700; font-size: 28px; }
+  .message-sent { align-self: center; width: min(100%, 560px); position: relative; margin: 10px 12px 12px 0; transform: rotate(-1.5deg); }
+  .message-sent::before { content: ''; position: absolute; inset: 0; transform: translate(12px, 12px); background: var(--cs-ink); }
+  .sent-card { position: relative; padding: 32px; background: var(--cs-accent); border: 3px solid var(--cs-ink); display: flex; flex-direction: column; gap: 10px; font-size: 16px; }
+  .sent-title { font-family: var(--cs-display); font-weight: 700; font-size: 32px; line-height: 1.1; }
+  .reset { margin-top: 6px; padding: 6px 2px; border-bottom: 3px solid var(--cs-ink); font-size: 15px; }
+  .no-form { margin: 0; padding: 20px; border: 3px solid var(--cs-ink); font-size: 17px; }
+  .no-form a { font-weight: 700; background: linear-gradient(transparent 60%, var(--cs-accent) 60%); }
 </style>

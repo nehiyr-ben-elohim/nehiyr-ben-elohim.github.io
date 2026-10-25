@@ -29,7 +29,8 @@ export const caseStudySchema = z.object({
   // '/img/...' resolved via resolveImage; placeholder when absent
   shot: z.string().optional(),
   meta: z.array(z.object({ k: z.string(), v: z.string() })),
-  stack: z.array(iconSchema.extend({ role: text })),
+  // icon optional: concepts like ASR or LLM have no devicon
+  stack: z.array(iconSchema.extend({ icon: iconSchema.shape.icon.optional(), role: text })),
   sections: z.array(z.object({
     n: z.string(),
     title: z.string(),

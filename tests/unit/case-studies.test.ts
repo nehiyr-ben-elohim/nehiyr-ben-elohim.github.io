@@ -5,9 +5,9 @@ import { caseStudySchema, neighbors, counter, sectionId, chapters, toc, hasGalle
 const studies = raw.map(s => caseStudySchema.parse(s))
 
 test('every case study in data parses, slugs are unique', () => {
-  expect(studies).toHaveLength(4)
-  expect(new Set(studies.map(s => s.slug)).size).toBe(4)
-  expect(studies.map(s => s.slug)).toEqual(['plateforme-audit', 'e-learning', '2audio', 'wiin'])
+  expect(studies).toHaveLength(5)
+  expect(new Set(studies.map(s => s.slug)).size).toBe(5)
+  expect(studies.map(s => s.slug)).toEqual(['plateforme-audit', 'traducteur-vocal', 'e-learning', '2audio', 'wiin'])
 })
 
 test('schema: list defaults to [], shot optional', () => {
@@ -36,7 +36,7 @@ test('no fabricated content shipped: no quote, no gallery image, no unverified u
     expect(s.url).toBeUndefined()
     expect(s.code).toBeUndefined()
   }
-  expect(studies.map(s => s.nda)).toEqual([true, true, false, true])
+  expect(studies.map(s => s.nda)).toEqual([true, false, true, false, true])
 })
 
 test('chapters: numbered in order, gallery and testimonial only when present', () => {
@@ -56,7 +56,7 @@ test('chapters: numbered in order, gallery and testimonial only when present', (
 
 test('toc: case study sections then architecture; gallery/testimonial only when present', () => {
   expect(toc(studies[0]).map(t => `${t.n} ${t.id}`)).toEqual(['01 s01', '02 s02', '03 s03', '04 s04', 'A archi'])
-  const full = caseStudySchema.parse({ ...raw[1], quote: { text: 'Top', who: 'A B', role: 'Lead', ini: 'AB' } })
+  const full = caseStudySchema.parse({ ...raw[2], quote: { text: 'Top', who: 'A B', role: 'Lead', ini: 'AB' } })
   expect(toc(full).map(t => t.id)).toEqual(['s01', 's02', 's03', 'archi', 'avis'])
 })
 
@@ -83,8 +83,8 @@ test('sectionId from section number', () => {
 
 test('home card fields: one featured, cat client|perso, metric and tags', () => {
   expect(studies.filter(s => s.featured).map(s => s.slug)).toEqual(['plateforme-audit'])
-  expect(studies.map(s => s.cat)).toEqual(['client', 'client', 'perso', 'client'])
-  expect(studies[3]).toMatchObject({ featured: false, metric: { v: '4 mois' }, tags: ['nuxt.js', 'express'] })
+  expect(studies.map(s => s.cat)).toEqual(['client', 'perso', 'client', 'perso', 'client'])
+  expect(studies[4]).toMatchObject({ featured: false, metric: { v: '4 mois' }, tags: ['nuxt.js', 'express'] })
   expect(studies.every(s => s.code === undefined)).toBe(true)
 })
 

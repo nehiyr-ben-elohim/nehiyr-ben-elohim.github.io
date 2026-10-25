@@ -140,7 +140,7 @@ const pager = [
           <ul class="cs-stack">
             {p.stack.map(t => (
               <li>
-                <span class="stack-icon"><img src={deviconSrc(t.icon)} alt="" width="20" height="20" /></span>
+                <span class="stack-icon">{t.icon ? <img src={deviconSrc(t.icon)} alt="" width="20" height="20" /> : <span class="stack-abbr" aria-hidden="true">{t.name.slice(0, 3)}</span>}</span>
                 <span class="stack-text"><span class="stack-name">{t.name}</span><span class="stack-role">{t.role}</span></span>
               </li>
             ))}
@@ -443,6 +443,7 @@ const pager = [
   .cs-stack li { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px dotted var(--cs-ink); }
   .stack-icon { flex: 0 0 auto; width: 30px; height: 30px; display: grid; place-items: center; border: 1px solid #dcdcdc; }
   .stack-icon img { display: block; object-fit: contain; }
+  .stack-abbr { font-family: var(--cs-mono); font-size: 10px; font-weight: 700; }
   .stack-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
   .stack-name { font-weight: 700; font-size: 15px; }
   .stack-role { font-size: 13px; color: var(--cs-muted); }

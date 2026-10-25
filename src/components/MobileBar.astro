@@ -1,0 +1,48 @@
+---
+import type { Profile } from '../lib/profile'
+import { BOOKING_URL } from '../lib/site'
+
+interface Props {
+  audiences: Profile['audiences']
+  cv?: string
+}
+
+// shown by scripts/home.ts once the visitor is past the hero (mobile only)
+const { audiences, cv } = Astro.props
+const ctas: Record<string, { href: string; label: string; external: boolean }> = {
+  client: BOOKING_URL ? { href: BOOKING_URL, label: 'réserver un appel', external: true } : { href: '#contact', label: 'me contacter', external: false },
+  rec: cv ? { href: cv, label: 'CV ↓', external: true } : { href: '#parcours', label: 'mon parcours', external: false },
+}
+---
+
+<div class="mobile-bar" data-mobile-bar hidden>
+  {audiences.map(a => {
+    const cta = ctas[a.id]
+    return (
+      <div class:list={['bar-row', `for-${a.id}`]}>
+        <span class="bar-text">{a.bar}</span>
+        <a href={cta.href} {...(cta.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{cta.label}</a>
+      </div>
+    )
+  })}
+</div>
+
+<style>
+  .mobile-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 35;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+    background: var(--cs-accent);
+    border-top: 3px solid var(--cs-ink);
+  }
+  .bar-row { display: flex; align-items: center; gap: 10px; }
+  .bar-text { flex: 1; min-width: 0; font-family: var(--cs-display); font-weight: 700; font-size: 15px; line-height: 1.2; }
+  a { flex: 0 0 auto; padding: 11px 16px; background: var(--cs-ink); color: var(--cs-accent); font-family: var(--cs-display); font-weight: 700; font-size: 15px; }
+  a:hover { color: #fff; }
+  @media (min-width: 900px) {
+    .mobile-bar { display: none !important; }
+  }
+</style>
