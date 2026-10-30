@@ -4,10 +4,9 @@ import SiteLayout from '../../layouts/SiteLayout.astro'
 import ShadowButton from '../../components/ShadowButton.astro'
 import SiteFooter from '../../components/SiteFooter.astro'
 import SiteHeader from '../../components/SiteHeader.astro'
-import Rail from '../../components/Rail.astro'
 import CaseStudyArchi from '../../components/CaseStudyArchi.astro'
 import CaseStudyGallery from '../../components/CaseStudyGallery.astro'
-import { chapters, counter, getCaseStudies, hasGallery, neighbors, sectionId, toc, type CaseStudy } from '../../lib/case-studies'
+import { counter, getCaseStudies, hasGallery, neighbors, sectionId, toc, type CaseStudy } from '../../lib/case-studies'
 import { deviconSrc } from '../../lib/devicons'
 import { OWNER } from '../../lib/site'
 import { resolveImage } from '../../lib/images'
@@ -31,164 +30,141 @@ interface Props {
 const { p, index, total, prev, next } = Astro.props
 const href = (s: CaseStudy) => `/projets/${s.slug}`
 const sections = p.sections.map(s => ({ ...s, id: sectionId(s.n) }))
-const kickers = Object.fromEntries(chapters(p).map(c => [c.id, `› ${c.n} — ${c.label}`]))
 const tocEntries = toc(p)
-const TILTS = ['-1.5deg', '1.2deg', '-1deg']
 const TLDR = [['Problème', p.tldr.problem], ['Solution', p.tldr.solution], ['Résultat', p.tldr.result]]
 // frame bar: real URL only, "confidentiel" under NDA, nothing otherwise
 const shotUrl = p.url ? new URL(p.url).host : p.nda ? 'confidentiel' : undefined
 const shotLarge = p.shot ? (await getImage({ src: resolveImage(p.shot), width: 1600 })).src : undefined
 const pager = [
-  { s: prev, label: '‹ projet précédent', arrow: '←', attr: { 'data-prev': '' } },
-  { s: next, label: 'projet suivant ›', arrow: '→', attr: { 'data-next': '' } },
+  { s: prev, label: 'Projet précédent', arrow: '←', attr: { 'data-prev': '' } },
+  { s: next, label: 'Projet suivant', arrow: '→', attr: { 'data-next': '' } },
 ]
 ---
 
-<SiteLayout title={`${p.title} — ${OWNER}`} description={p.lead} rail progress>
+<SiteLayout title={`${p.title} — ${OWNER}`} description={p.lead} progress>
   <SiteHeader variant="project" />
-  <Rail label="projet" />
 
   <main>
-    <section class="wrap intro" id="top" data-section="projet">
-      <div class="crumbs">
-        <span class="nowrap"><a href="/#projets">projets</a> / {p.slug}</span>
-        <span><span data-counter>{counter(index, total)}</span><span class="kbd-hint"> · ← → pour naviguer</span></span>
-      </div>
-      <div class="kicker" data-anim="kicker">
-        <span class="kind">{p.kind}</span>
-        <span class="period">{p.period}</span>
-      </div>
-      <h1 data-anim="title">{p.title}</h1>
-      <p class="lead" data-anim="lead">{p.lead}</p>
-      <div class="actions">
-        {p.code && (
-          <ShadowButton href={p.code} shadow="var(--cs-ink)" external>
-            <img src="/img/devicons/github.svg" alt="" width="20" height="20" />voir le code
-          </ShadowButton>
-        )}
-        {p.nda && (
-          <span class="nda" data-nda title="Projet client sous accord de confidentialité">
-            <span class="lock" aria-hidden="true"></span>code client confidentiel · NDA
-          </span>
-        )}
-        <a href="#etude" class="read-link">lire l’étude de cas <span aria-hidden="true">↓</span></a>
+    <section class="intro" id="top" data-section="projet">
+      <div class="container intro-inner">
+        <p class="crumbs">
+          <span class="nowrap"><a href="/#projets">projets</a> / {p.slug}</span>
+          <span><span data-counter>{counter(index, total)}</span><span class="kbd-hint"> · ← → pour naviguer</span></span>
+        </p>
+        <h1 data-anim="title">{p.title}</h1>
+        <p class="lead" data-anim="lead">{p.lead}</p>
+        <p class="meta" data-anim="kicker"><span class="kind">{p.kind.replace(/ · /g, ', ')}</span><time>{p.period}</time></p>
+        <div class="actions">
+          {p.code && (
+            <ShadowButton href={p.code} external>
+              <img src="/img/devicons/github.svg" alt="" width="20" height="20" />voir le code
+            </ShadowButton>
+          )}
+          {p.nda && <p class="nda" data-nda title="Projet client sous accord de confidentialité">code client confidentiel · NDA</p>}
+          <a href="#etude" class="text-link">lire l’étude de cas</a>
+        </div>
       </div>
     </section>
 
-    <section class="wrap brief">
-      <div data-reveal class="tldr">
-        <div class="tldr-head">
-          <span>› en bref</span>
-          <span class="tldr-time">30 secondes de lecture</span>
+    <section class="cs-visual on-night" style={`background:${p.color}`} aria-label="Résultats">
+      <div class="container visual-inner">
+        <dl class="metrics">
+          {p.metrics.map(m => (
+            <div data-fact>
+              <dt>{m.k}</dt>
+              <dd><span>{m.pre}<span data-count={m.n}>{m.n}</span>{m.suf}</span></dd>
+            </div>
+          ))}
+        </dl>
+        {p.shot && (
+          <figure class="shot" data-anim="shot">
+            <Image src={resolveImage(p.shot)} alt={`Capture d’écran — ${p.name}`} widths={[640, 900, 1800]} sizes="(min-width: 980px) 900px, 100vw" />
+            {shotLarge && (
+              <button type="button" class="zoom" data-zoom={shotLarge} data-zoom-cap={p.name} aria-label="Agrandir la capture">agrandir</button>
+            )}
+          </figure>
+        )}
+        {shotUrl && <p class="shot-caption">{p.shot ? 'Capture' : 'Pas de capture publique'} : <span data-shot-url>{shotUrl}</span></p>}
+      </div>
+    </section>
+
+    <section class="brief" aria-label="En bref">
+      <div class="container brief-inner">
+        <div data-reveal class="tldr">
+          <h2 class="brief-title">En bref</h2>
+          <dl>
+            {TLDR.map(([k, v]) => (
+              <div><dt>{k}</dt><dd>{v}</dd></div>
+            ))}
+          </dl>
         </div>
-        <dl>
-          {TLDR.map(([k, v]) => (
-            <div><dt>{k}</dt><dd>{v}</dd></div>
+        <dl class="cs-meta">
+          {p.meta.map(m => (
+            <div data-reveal>
+              <dt>{m.k}</dt>
+              <dd>{m.v}</dd>
+            </div>
           ))}
         </dl>
       </div>
-      <dl class="metrics">
-        {p.metrics.map((m, i) => (
-          <div data-fact style={`--tilt:${TILTS[i % TILTS.length]}`}>
-            <dd><span class="hl">{m.pre}<span data-count={m.n}>{m.n}</span>{m.suf}</span></dd>
-            <dt>{m.k}</dt>
-          </div>
-        ))}
-      </dl>
     </section>
 
-    <section class="wrap">
-      <div class="cs-visual" style={`background:${p.color}`}>
-        <div class="shot" data-anim="shot">
-          <div class="frame-bar">
-            <div class="dots" aria-hidden="true"><span></span><span></span><span class="on"></span></div>
-            {shotUrl ? <span class="url" data-shot-url>{shotUrl}</span> : <span class="url-spacer"></span>}
-            {shotLarge && (
-              <button type="button" class="zoom" data-zoom={shotLarge} data-zoom-cap={p.name} aria-label="Agrandir la capture">agrandir ⤢</button>
-            )}
-          </div>
-          <div class="shot-pic">
-            {p.shot ? (
-              <Image src={resolveImage(p.shot)} alt={`Capture d’écran — ${p.name}`} widths={[640, 900, 1800]} sizes="(min-width: 980px) 900px, 100vw" />
-            ) : (
-              <div class="shot-placeholder" aria-hidden="true">{p.name}</div>
-            )}
-          </div>
-        </div>
-        <span class="visual-label">{p.name}</span>
-      </div>
-      <dl class="cs-meta">
-        {p.meta.map(m => (
-          <div data-reveal>
-            <dt>{m.k}</dt>
-            <dd>{m.v}</dd>
-          </div>
-        ))}
-      </dl>
-    </section>
-
-    <section id="etude" class="wrap study" data-section="étude de cas">
-      <aside class="study-aside">
-        <div class="aside-block">
-          <span class="aside-title">› sommaire</span>
+    <section id="etude" class="study" data-section="étude de cas">
+      <div class="container study-inner">
+        <aside class="study-aside">
           <nav class="cs-summary" aria-label="Sommaire">
+            <h2 class="aside-title">Sommaire</h2>
             {tocEntries.map(t => <a href={`#${t.id}`}><span class="toc-n">{t.n}</span>{t.title}</a>)}
           </nav>
-        </div>
-        <div class="aside-block">
-          <span class="aside-title">› stack &amp; rôle</span>
-          <ul class="cs-stack">
-            {p.stack.map(t => (
-              <li>
-                <span class="stack-icon">{t.icon ? <img src={deviconSrc(t.icon)} alt="" width="20" height="20" /> : <span class="stack-abbr" aria-hidden="true">{t.name.slice(0, 3)}</span>}</span>
-                <span class="stack-text"><span class="stack-name">{t.name}</span><span class="stack-role">{t.role}</span></span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </aside>
-      <article class="study-body">
-        <span class="kicker-label study-kicker">{kickers.etude}</span>
-        {sections.map(s => (
-          <div data-reveal data-spy id={s.id} class="study-section">
-            <span class="section-n">{s.n}</span>
-            <h2><span class="hl">{s.title}</span></h2>
-            <p>{s.body}</p>
-            {s.list.length > 0 && (
-              <ul>
-                {s.list.map(li => <li><span class="bullet" aria-hidden="true">›</span><span>{li}</span></li>)}
-              </ul>
-            )}
+          <div class="aside-block">
+            <h2 class="aside-title">Stack et rôle</h2>
+            <ul class="cs-stack">
+              {p.stack.map(t => (
+                <li>
+                  <span class="stack-icon">{t.icon ? <img src={deviconSrc(t.icon)} alt="" width="20" height="20" /> : <span class="stack-abbr" aria-hidden="true">{t.name.slice(0, 3)}</span>}</span>
+                  <span class="stack-text"><span class="stack-name">{t.name}</span><span class="stack-role">{t.role}</span></span>
+                </li>
+              ))}
+            </ul>
           </div>
-        ))}
-      </article>
+        </aside>
+        <article class="study-body">
+          {sections.map(s => (
+            <div data-reveal data-spy id={s.id} class="study-section">
+              <h2>{s.title}</h2>
+              <p>{s.body}</p>
+              {s.list.length > 0 && (
+                <ul>
+                  {s.list.map(li => <li>{li}</li>)}
+                </ul>
+              )}
+            </div>
+          ))}
+        </article>
+      </div>
     </section>
 
-    <CaseStudyArchi archi={p.archi} snippet={p.snippet} kicker={kickers.archi} />
+    <CaseStudyArchi archi={p.archi} snippet={p.snippet} />
 
-    {hasGallery(p) && <CaseStudyGallery gallery={p.gallery} kicker={kickers.galerie} />}
+    {hasGallery(p) && <CaseStudyGallery gallery={p.gallery} />}
 
     {p.quote && (
       <section id="avis" data-spy data-section="témoignage" class="quote">
-        <div data-reveal class="quote-inner">
-          <span class="kicker-label">{kickers.avis}</span>
+        <figure data-reveal class="container quote-inner">
           <blockquote>« {p.quote.text} »</blockquote>
-          <div class="quote-who">
-            <span class="ini" aria-hidden="true">{p.quote.ini}</span>
-            <span class="who-text"><span class="who">{p.quote.who}</span><span class="who-role">{p.quote.role}</span></span>
-          </div>
-        </div>
+          <figcaption class="quote-who">
+            <span class="who">{p.quote.who}</span>
+            <span class="who-role">{p.quote.role}</span>
+          </figcaption>
+        </figure>
       </section>
     )}
 
-    <section id="suite" class="next-up" data-section="la suite">
-      <div class="wrap next-inner">
+    <section id="suite" class="next-up on-night" data-section="la suite">
+      <div class="container next-inner">
         <div class="next-cta">
-          <div class="next-copy">
-            <span class="kicker-label next-kicker">{kickers.suite}</span>
-            <span class="next-title">On en parle autour d’un café.</span>
-          </div>
-          <ShadowButton href="/#contact" size="lg" shadow="#fff">me contacter</ShadowButton>
+          <h2 class="next-title">Un projet similaire ? On en parle autour d’un café.</h2>
+          <ShadowButton href="/#contact" size="lg">me contacter</ShadowButton>
         </div>
         <nav data-reveal aria-label="Autres projets" class="pager">
           {pager.map(n => (
@@ -213,7 +189,7 @@ const pager = [
       <div class="zoom-frame"><img alt="" /></div>
       <div class="zoom-foot">
         <span data-zoom-cap></span>
-        <button type="button" data-zoom-close>fermer · esc</button>
+        <button type="button" data-zoom-close>fermer</button>
       </div>
     </dialog>
   )}
@@ -221,316 +197,119 @@ const pager = [
 
 <style>
   .nowrap { white-space: nowrap; }
-  .intro {
-    padding-top: clamp(40px, 6vw, 72px);
-    padding-bottom: clamp(32px, 4vw, 44px);
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-  .crumbs {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 10px;
-    font-family: var(--cs-mono);
-    font-size: 13px;
-    color: var(--cs-muted);
-  }
-  .crumbs a { text-decoration: underline; }
-  @media (hover: none) {
-    .kbd-hint { display: none; }
-  }
-  .kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-  .kind { padding: 3px 10px; background: var(--cs-accent); font-family: var(--cs-display); font-weight: 700; font-size: 14px; }
-  .period { font-family: var(--cs-mono); font-size: 13px; color: #3a3a3a; }
-  h1 {
-    margin: 0;
-    max-width: 18ch;
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: clamp(44px, 6.4vw, 84px);
-    line-height: 1;
-    letter-spacing: -0.01em;
-    text-wrap: balance;
-  }
-  .lead {
-    margin: 0;
-    max-width: 60ch;
-    font-size: clamp(18px, 1.8vw, 21px);
-    line-height: 1.65;
-    color: var(--cs-body);
-    text-wrap: pretty;
-  }
-  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 22px; padding-top: 4px; }
-  .actions img { display: block; }
-  .nda {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 18px;
-    border: 2px dashed var(--cs-ink);
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 15px;
-  }
-  .lock {
-    width: 12px;
-    height: 12px;
-    border: 2px solid var(--cs-ink);
-    border-radius: 2px;
-    position: relative;
-    top: 2px;
-    box-shadow: inset 0 -5px 0 var(--cs-ink);
-  }
-  .read-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 4px;
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 17px;
-    border-bottom: 3px solid var(--cs-ink);
-  }
-  .read-link:hover { background: var(--cs-accent); }
+  .intro-inner { min-height: 52dvh; display: flex; flex-direction: column; justify-content: flex-end; gap: var(--space-lg); padding-block: var(--space-2xl) var(--space-3xl); }
+  .crumbs { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-xs) var(--space-lg); font-size: var(--text-sm); color: var(--color-muted); }
+  .crumbs a { color: var(--color-ink); }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-xs) var(--space-md); font-size: var(--text-sm); color: var(--color-muted); }
+  .kind { padding: 0 var(--space-xs); background: var(--color-accent); color: var(--color-ink); }
+  h1 { max-width: 16ch; font-size: var(--text-display); text-wrap: balance; }
+  .intro .lead { max-width: 56ch; color: var(--color-ink-2); }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-md) var(--space-xl); }
+  .nda { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--space-md); border: 2px dashed var(--color-ink); font-size: var(--text-sm); }
 
-  .brief { padding-bottom: clamp(36px, 5vw, 56px); display: flex; flex-direction: column; gap: 28px; }
-  .tldr { border: 3px solid var(--cs-ink); background: #fff; }
-  .tldr-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 18px;
-    background: var(--cs-accent);
-    border-bottom: 3px solid var(--cs-ink);
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 16px;
-  }
-  .tldr-time { font-family: var(--cs-mono); font-weight: 500; font-size: 12px; }
-  .tldr dl { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
-  .tldr dl div {
-    padding: 18px 20px;
-    border-right: 1px dotted var(--cs-ink);
-    border-bottom: 1px dotted var(--cs-ink);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .tldr dt { font-family: var(--cs-mono); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--cs-muted); }
-  .tldr dd { margin: 0; font-size: 16px; line-height: 1.6; color: #1e1e1e; text-wrap: pretty; }
-  .metrics { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 22px 20px; padding: 0 8px 8px 0; }
-  .metrics div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 12px;
-    min-height: 118px;
-    padding: 16px 18px;
-    background: #fff;
-    border: 2px solid var(--cs-ink);
-    box-shadow: 5px 5px 0 var(--cs-accent);
-    transform: rotate(var(--tilt));
-  }
-  .metrics dd { margin: 0; font-family: var(--cs-display); font-weight: 700; font-size: 36px; line-height: 1; }
-  .metrics dt { font-size: 15px; line-height: 1.4; color: var(--cs-body); }
-  .hl { background: linear-gradient(transparent 58%, var(--cs-accent) 58%); padding: 0 3px; }
-  .metrics .hl { background: linear-gradient(transparent 58%, var(--cs-accent) 58%); }
+  .visual-inner { display: flex; flex-direction: column; gap: var(--space-xl); padding-block: var(--space-3xl) var(--space-xl); }
+  .metrics { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .metrics div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: var(--space-sm); padding: 0 var(--space-lg); border-left: var(--rule-hair) solid currentColor; }
+  .metrics div:first-child { padding-left: 0; border-left: 0; }
+  .metrics dd { margin: 0; font: var(--display-weight) clamp(3.5rem, 5vw + 1rem, 6.5rem)/1 var(--font-display); letter-spacing: var(--tracking-display); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .metrics dt { max-width: 28ch; font-size: var(--text-lg); }
+  .shot { position: relative; margin: 0; }
+  .shot :global(img) { width: 100%; height: auto; }
+  .zoom { position: absolute; right: var(--space-md); bottom: var(--space-md); min-height: 44px; padding: 0 var(--space-md); border: 2px solid var(--color-ink); background: var(--color-paper); color: var(--color-ink); cursor: pointer; }
+  .zoom:hover { background: var(--color-accent); }
+  .zoom:active { background: var(--color-paper-3); }
+  .shot-caption { padding-top: var(--space-md); border-top: var(--rule-hair) solid currentColor; font-size: var(--text-sm); }
 
-  .cs-visual {
-    position: relative;
+  .brief-inner { padding-block: var(--section-gap-s); display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: var(--space-2xl) var(--gap-columns); align-items: start; }
+  .tldr { display: flex; flex-direction: column; gap: var(--space-lg); }
+  .brief-title { font-size: var(--text-section); }
+  .aside-title { font-size: var(--text-title); }
+  .tldr dl { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 2px solid var(--color-ink); }
+  .tldr dl div { display: flex; flex-direction: column; gap: var(--space-xs); padding: var(--space-md) var(--space-lg) 0; border-left: var(--rule-hair) solid var(--color-rule); }
+  .tldr dl div:first-child { padding-left: 0; border-left: 0; }
+  .tldr dt { font-weight: 700; }
+  .tldr dd { margin: 0; color: var(--color-ink-2); font-size: var(--text-lg); line-height: 1.5; }
+  .cs-meta { margin: 0; border-top: 2px solid var(--color-ink); }
+  .cs-meta div { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: var(--space-md); padding-block: var(--space-sm); border-bottom: var(--rule-hair) solid var(--color-rule); }
+  .cs-meta dt { font-size: var(--text-sm); color: var(--color-muted); }
+  .cs-meta dd { margin: 0; font-weight: 700; }
+
+  .study { border-top: var(--rule-hair) solid var(--color-ink); }
+  .study-inner { padding-block: var(--section-gap); display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--space-2xl) var(--gap-columns); align-items: start; }
+  .study-aside { position: sticky; top: var(--space-3xl); display: flex; flex-direction: column; gap: var(--space-xl); }
+  .cs-summary { display: flex; flex-direction: column; }
+  .cs-summary .aside-title { margin-bottom: var(--space-sm); }
+  .cs-summary a {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: clamp(20px, 4vw, 56px) clamp(20px, 4vw, 56px) clamp(48px, 6vw, 72px);
+    align-items: baseline;
+    gap: var(--space-sm);
+    min-height: 44px;
+    padding: var(--space-xs) var(--space-sm);
+    border-left: 2px solid var(--color-rule);
+    text-decoration: none;
+    transition: background-color var(--dur-short) var(--ease-out);
   }
-  .shot { width: min(100%, 900px); background: #fff; border: 2px solid var(--cs-ink); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35); }
-  .frame-bar { display: flex; align-items: center; gap: 12px; padding: 9px 12px; border-bottom: 2px solid var(--cs-ink); background: #f4f4f4; }
-  .dots { display: flex; gap: 6px; }
-  .dots span { width: 10px; height: 10px; border-radius: 50%; background: var(--cs-ink); }
-  .dots span:nth-child(2) { background: #bdbdbd; }
-  .dots .on { background: var(--cs-accent); border: 1px solid var(--cs-ink); }
-  .url {
-    flex: 1;
-    min-width: 0;
-    padding: 3px 10px;
-    background: #fff;
-    border: 1px solid #cfcfcf;
-    font-family: var(--cs-mono);
-    font-size: 12px;
-    color: var(--cs-muted);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .url-spacer { flex: 1; }
-  .zoom {
-    all: unset;
-    cursor: pointer;
-    padding: 2px 8px;
-    border: 2px solid var(--cs-ink);
-    background: #fff;
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 12px;
-  }
-  .zoom:hover { background: var(--cs-accent); }
-  .zoom:focus-visible { outline: 3px solid var(--cs-ink); outline-offset: 2px; }
-  .shot-pic { position: relative; aspect-ratio: 16 / 9; overflow: hidden; }
-  .shot-pic :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .shot-placeholder {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    place-items: center;
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: clamp(24px, 4vw, 48px);
-    color: #d6d6d6;
-    background: repeating-linear-gradient(135deg, #fafafa 0 14px, #f3f3f3 14px 28px);
-  }
-  .visual-label {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    padding: 6px 14px;
-    background: var(--cs-ink);
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 15px;
-    color: #fff;
-  }
-  .cs-meta {
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
-    gap: 20px;
-    padding: 26px 0;
-    border-bottom: 1px dotted var(--cs-ink);
-  }
-  .cs-meta div { display: flex; flex-direction: column; gap: 4px; }
-  .cs-meta dt {
-    font-family: var(--cs-mono);
-    font-size: 12px;
-    font-weight: 500;
-    color: #5a5a5a;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-  .cs-meta dd { margin: 0; font-family: var(--cs-display); font-weight: 700; font-size: 18px; line-height: 1.3; }
+  .cs-summary a:hover { background: var(--color-paper-3); }
+  .cs-summary a[aria-current='true'] { border-left-color: var(--color-ink); background: var(--color-accent); }
+  .toc-n { font-size: var(--text-sm); color: var(--color-muted); font-variant-numeric: tabular-nums; }
+  .aside-block { display: flex; flex-direction: column; gap: var(--space-sm); }
+  .cs-stack { margin: 0; padding: 0; list-style: none; border-top: var(--rule-hair) solid var(--color-ink); }
+  .cs-stack li { display: flex; align-items: center; gap: var(--space-sm); padding-block: var(--space-sm); border-bottom: var(--rule-hair) solid var(--color-rule); }
+  .stack-icon { flex-shrink: 0; width: 32px; height: 32px; display: grid; place-items: center; }
+  .stack-abbr { font-size: var(--text-sm); font-weight: 700; }
+  .stack-text { display: flex; flex-direction: column; }
+  .stack-name { font-weight: 700; }
+  .stack-role { font-size: var(--text-sm); color: var(--color-muted); }
+  .study-body { display: flex; flex-direction: column; gap: var(--space-3xl); }
+  .study-section { display: flex; flex-direction: column; gap: var(--space-md); scroll-margin-top: var(--space-3xl); }
+  .study-section h2 { font-size: var(--text-section); text-wrap: balance; }
+  .study-section p { color: var(--color-ink-2); font-size: var(--text-lg); line-height: 1.6; }
+  .study-section ul { margin: 0; padding: 0 0 0 var(--space-lg); display: flex; flex-direction: column; gap: var(--space-xs); }
+  .study-section li { max-width: 65ch; }
+  .study-section li::marker { color: var(--color-muted); }
 
-  .study {
-    padding-top: clamp(48px, 7vw, 88px);
-    padding-bottom: clamp(48px, 7vw, 88px);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px 72px;
-    align-items: flex-start;
-  }
-  .study-aside { flex: 1 1 260px; top: 100px; display: flex; flex-direction: column; gap: 26px; }
-  @media (min-width: 1000px) {
-    .study-aside { position: sticky; }
-  }
-  .aside-block { display: flex; flex-direction: column; gap: 10px; }
-  .aside-title { font-family: var(--cs-display); font-weight: 700; font-size: 16px; }
-  .cs-summary { display: flex; flex-direction: column; border-left: 4px solid var(--cs-ink); }
-  .cs-summary a { display: flex; gap: 10px; align-items: baseline; padding: 7px 14px; font-family: var(--cs-display); font-weight: 700; font-size: 15px; }
-  .cs-summary a:hover, .cs-summary a[aria-current='true'] { background: var(--cs-accent); }
-  .toc-n { font-family: var(--cs-mono); font-size: 11px; color: var(--cs-muted); }
-  .cs-stack { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; border-top: 1px dotted var(--cs-ink); }
-  .cs-stack li { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px dotted var(--cs-ink); }
-  .stack-icon { flex: 0 0 auto; width: 30px; height: 30px; display: grid; place-items: center; border: 1px solid #dcdcdc; }
-  .stack-icon img { display: block; object-fit: contain; }
-  .stack-abbr { font-family: var(--cs-mono); font-size: 10px; font-weight: 700; }
-  .stack-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-  .stack-name { font-weight: 700; font-size: 15px; }
-  .stack-role { font-size: 13px; color: var(--cs-muted); }
+  .quote { background: var(--color-paper-2); }
+  .quote-inner { margin-block: 0; padding-block: var(--section-gap); display: flex; flex-direction: column; gap: var(--space-lg); }
+  blockquote { margin: 0; max-width: 30ch; font: var(--display-weight) var(--text-section)/1.15 var(--font-display); }
+  .quote-who { display: flex; flex-direction: column; }
+  .who { font-weight: 700; }
+  .who-role { font-size: var(--text-sm); color: var(--color-muted); }
 
-  .study-body { flex: 2.4 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 52px; }
-  .study-kicker { margin-bottom: -36px; }
-  .study-section { display: flex; flex-direction: column; gap: 14px; max-width: 68ch; }
-  .section-n { font-family: var(--cs-mono); font-size: 13px; font-weight: 700; color: var(--cs-muted); }
-  .study-section h2 {
-    margin: 0;
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: clamp(26px, 2.8vw, 34px);
-    line-height: 1.15;
-  }
-  .study-section h2 .hl { background: linear-gradient(transparent 60%, var(--cs-accent) 60%); padding: 0 2px; }
-  .study-section p { margin: 0; font-size: 18px; line-height: 1.75; color: var(--cs-body); text-wrap: pretty; }
-  .study-section ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
-  .study-section li { display: flex; gap: 12px; align-items: baseline; font-size: 17px; line-height: 1.6; }
-  .bullet { flex: 0 0 auto; font-family: var(--cs-display); font-weight: 700; }
-
-  .quote {
-    background-color: var(--cs-accent);
-    background-image: radial-gradient(rgba(17, 17, 17, 0.07) 1.4px, transparent 1.6px);
-    background-size: 12px 12px;
-    border-top: 3px solid var(--cs-ink);
-    border-bottom: 3px solid var(--cs-ink);
-  }
-  .quote-inner { max-width: 1000px; margin: 0 auto; padding: clamp(48px, 7vw, 88px) 28px; display: flex; flex-direction: column; gap: 22px; }
-  blockquote { margin: 0; font-family: var(--cs-display); font-weight: 700; font-size: clamp(24px, 3vw, 36px); line-height: 1.3; text-wrap: pretty; }
-  .quote-who { display: flex; align-items: center; gap: 14px; }
-  .ini { width: 48px; height: 48px; display: grid; place-items: center; background: var(--cs-ink); color: var(--cs-accent); font-family: var(--cs-display); font-weight: 700; font-size: 16px; }
-  .who-text { display: flex; flex-direction: column; gap: 2px; }
-  .who { font-weight: 700; font-size: 16px; }
-  .who-role { font-size: 14px; color: var(--cs-body); }
-
-  .next-up { background: var(--cs-ink); color: #fff; }
-  .next-inner {
-    padding-top: clamp(48px, 7vw, 88px);
-    padding-bottom: clamp(48px, 7vw, 88px);
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-  }
-  .next-cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px 40px; }
-  .next-copy { display: flex; flex-direction: column; gap: 8px; }
-  .next-kicker { color: var(--cs-accent); }
-  .next-title { font-family: var(--cs-display); font-weight: 700; font-size: clamp(28px, 3.4vw, 42px); line-height: 1.1; }
-  .pager { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 20px; }
+  .next-inner { padding-block: var(--section-gap-s); display: flex; flex-direction: column; gap: var(--space-2xl); }
+  .next-cta { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--space-lg) var(--space-2xl); }
+  .next-title { max-width: 22ch; font-size: var(--text-section); text-wrap: balance; }
+  .pager { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap-columns); }
   .pager a {
     display: flex;
-    background: #fff;
-    color: var(--cs-ink);
-    border: 2px solid #fff;
-    transition: transform 0.2s, box-shadow 0.2s;
+    align-items: stretch;
+    border: var(--rule-hair) solid var(--color-night-rule);
+    text-decoration: none;
+    transition: border-color var(--dur-short) var(--ease-out);
   }
-  .pager a:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0 var(--cs-accent); color: var(--cs-ink); }
-  .pager-arrow { flex: 0 0 110px; display: grid; place-items: center; font-family: var(--cs-display); font-weight: 700; font-size: 28px; color: #fff; }
-  .pager-text { flex: 1; min-width: 0; padding: 18px 20px; display: flex; flex-direction: column; gap: 6px; }
-  .pager-label { font-family: var(--cs-mono); font-size: 12px; color: var(--cs-muted); text-transform: uppercase; letter-spacing: 0.06em; }
-  .pager-title { font-family: var(--cs-display); font-weight: 700; font-size: 22px; line-height: 1.15; }
-  .pager-kind { align-self: flex-start; padding: 2px 8px; background: var(--cs-accent); font-family: var(--cs-display); font-weight: 700; font-size: 12px; }
-  @media (max-width: 520px) {
-    .pager-arrow { flex-basis: 64px; }
-  }
+  .pager a:hover { border-color: var(--color-accent); }
+  .pager a:active { border-color: var(--color-on-night-muted); }
+  .pager-arrow { flex-shrink: 0; width: 72px; display: grid; place-items: center; font: var(--display-weight) var(--text-xl)/1 var(--font-display); color: var(--color-on-night); }
+  .pager-text { min-width: 0; display: flex; flex-direction: column; gap: var(--space-2xs); padding: var(--space-md) var(--space-lg); }
+  .pager-label { font-size: var(--text-sm); color: var(--color-on-night-muted); }
+  .pager-title { font: var(--display-weight) var(--text-title)/1.2 var(--font-display); }
+  .pager-kind { font-size: var(--text-sm); color: var(--color-on-night-2); }
 
-  .zoom-dialog {
-    width: min(100% - 56px, 1200px);
-    max-width: none;
-    padding: 0;
-    border: 0;
-    background: transparent;
+  .zoom-dialog { width: min(1200px, 100% - 2 * var(--gutter)); padding: 0; border: 2px solid var(--color-ink); background: var(--color-paper); }
+  .zoom-dialog::backdrop { background: color-mix(in oklab, var(--color-ink) 80%, transparent); }
+  .zoom-frame img { width: 100%; height: auto; }
+  .zoom-foot { display: flex; justify-content: space-between; align-items: center; gap: var(--space-md); padding: var(--space-sm) var(--space-md); font-size: var(--text-sm); }
+  .zoom-foot button { min-height: 44px; padding: 0 var(--space-md); border: 2px solid var(--color-ink); background: var(--color-paper); color: var(--color-ink); cursor: pointer; }
+  .zoom-foot button:hover { background: var(--color-accent); }
+  .zoom-foot button:active { background: var(--color-paper-3); }
+
+  @media (max-width: 60rem) {
+    .intro-inner { min-height: 0; }
+    .metrics, .tldr dl, .pager { grid-template-columns: minmax(0, 1fr); gap: var(--space-lg); }
+    .metrics div, .metrics div:first-child, .tldr dl div, .tldr dl div:first-child { padding: 0; border-left: 0; }
+    .brief-inner, .study-inner { grid-template-columns: minmax(0, 1fr); }
+    .study-aside { position: static; }
   }
-  .zoom-dialog::backdrop { background: rgba(17, 17, 17, 0.9); }
-  .zoom-frame { background: #fff; border: 3px solid var(--cs-ink); box-shadow: 12px 12px 0 var(--cs-accent); }
-  .zoom-frame img { display: block; width: 100%; max-height: 80vh; object-fit: contain; }
-  .zoom-foot { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 16px; color: #fff; font-size: 15px; }
-  .zoom-foot button {
-    all: unset;
-    cursor: pointer;
-    padding: 6px 14px;
-    background: var(--cs-accent);
-    color: var(--cs-ink);
-    border: 2px solid var(--cs-ink);
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 14px;
+  @media (max-width: 40rem) {
+    .kbd-hint { display: none; }
   }
-  .zoom-foot button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 </style>

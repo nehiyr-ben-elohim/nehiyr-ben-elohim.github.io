@@ -1,6 +1,5 @@
 ---
 import type { Profile } from '../lib/profile'
-import { kicker } from '../lib/site'
 
 interface Props {
   notes: Profile['notes']
@@ -11,43 +10,40 @@ const { notes, label } = Astro.props
 const upcoming = notes.every(n => n.soon)
 ---
 
-<section id="notes" data-section={label} class="wrap notes">
-  <div data-reveal class="head">
-    <div class="head-title">
-      <span class="kicker-label">{kicker('notes', 'notes techniques')}</span>
+<section id="notes" data-section={label} class="notes">
+  <div class="container inner">
+    <div data-reveal class="head">
       <h2 class="section-title">Ce que j’apprends en chemin</h2>
+      {upcoming && <p class="lead">Trois notes techniques en cours d’écriture.</p>}
     </div>
-    {upcoming && <span class="soon-badge">articles à venir</span>}
-  </div>
-  <div class="grid">
-    {notes.map(n => (
-      <article data-reveal>
-        <div class="meta"><span class="tag">#{n.tag}</span><span>{n.read}{n.soon && ' · bientôt'}</span></div>
-        <h3>{n.href ? <a href={n.href}>{n.title}</a> : n.title}</h3>
-        <p>{n.text}</p>
-      </article>
-    ))}
+    <div class="list">
+      {notes.map(n => (
+        <article data-reveal>
+          <h3>{n.href ? <a href={n.href}>{n.title}</a> : n.title}</h3>
+          <p class="meta"><span class="tag">{n.tag}</span><span>{n.read} de lecture{n.soon && ', bientôt'}</span></p>
+          <p class="text">{n.text}</p>
+        </article>
+      ))}
+    </div>
   </div>
 </section>
 
 <style>
-  .notes { padding-top: clamp(56px, 8vw, 104px); padding-bottom: clamp(56px, 8vw, 104px); display: flex; flex-direction: column; gap: 32px; }
-  .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 40px; }
-  .head-title { display: flex; flex-direction: column; gap: 12px; }
-  .soon-badge { padding: 4px 10px; border: 2px dashed var(--cs-ink); font-family: var(--cs-mono); font-size: 12px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 22px; }
+  .inner { padding-block: var(--section-gap-l); display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--space-2xl) var(--gap-columns); align-items: start; }
+  .head { display: flex; flex-direction: column; gap: var(--space-md); }
+  .head .lead { color: var(--color-ink-2); }
+  .list { border-top: 2px solid var(--color-ink); }
   article {
-    padding: 22px;
-    background: #fff;
-    border: 2px solid var(--cs-ink);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    transition: transform 0.2s, box-shadow 0.2s;
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr) minmax(0, 3fr);
+    gap: var(--space-sm) var(--gap-columns);
+    align-items: baseline;
+    padding-block: var(--space-lg);
+    border-bottom: var(--rule-hair) solid var(--color-rule);
   }
-  article:hover { transform: translate(-3px, -3px); box-shadow: 7px 7px 0 var(--cs-accent); }
-  .meta { display: flex; justify-content: space-between; gap: 10px; font-family: var(--cs-mono); font-size: 12px; color: #3a3a3a; }
-  .meta .tag { padding: 1px 8px; color: var(--cs-ink); font-size: 12px; }
-  h3 { margin: 0; font-family: var(--cs-display); font-weight: 700; font-size: 21px; line-height: 1.25; }
-  p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--cs-body); }
+  .meta { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2xs); font-size: var(--text-sm); color: var(--color-muted); }
+  .text { color: var(--color-ink-2); }
+  @media (max-width: 60rem) {
+    .inner, article { grid-template-columns: minmax(0, 1fr); }
+  }
 </style>

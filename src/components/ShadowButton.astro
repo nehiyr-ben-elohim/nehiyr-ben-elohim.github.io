@@ -2,53 +2,17 @@
 interface Props {
   href: string
   size?: 'sm' | 'md' | 'lg'
-  shadow?: string
   external?: boolean
 }
 
-const { href, size = 'md', shadow = 'var(--cs-accent)', external = false } = Astro.props
-const offset = size === 'sm' ? '6px' : '8px'
+// the page's one filled button (.btn in styles/site.css)
+const { href, size = 'md', external = false } = Astro.props
 ---
 
 <a
   href={href}
-  class:list={['shadow-btn', size]}
-  style={`--shadow:${shadow};--offset:${offset}`}
+  class:list={['btn', 'shadow-btn', { lg: size === 'lg' }]}
   {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
 >
-  <span class="face"><slot /></span>
+  <slot />
 </a>
-
-<style>
-  .shadow-btn {
-    position: relative;
-    display: inline-block;
-    margin-right: var(--offset);
-    transition: transform 0.12s ease-out;
-  }
-  .shadow-btn::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    transform: translate(var(--offset), var(--offset));
-    background: var(--shadow);
-  }
-  .shadow-btn:hover {
-    transform: translate(-1px, -1px);
-    color: var(--cs-ink);
-  }
-  .face {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--cs-accent);
-    border: 3px solid var(--cs-ink);
-    font-family: var(--cs-display);
-    font-weight: 700;
-    color: var(--cs-ink);
-  }
-  .sm .face { padding: 9px 22px; font-size: 15px; }
-  .md .face { padding: 12px 28px; font-size: 17px; }
-  .lg .face { padding: 13px 34px; font-size: 18px; }
-</style>

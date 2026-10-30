@@ -22,14 +22,14 @@
     {
       "id": "client",
       "label": "j’ai un projet",
-      "promise": "J’aide les équipes produit à construire des backends fiables et des fonctionnalités ML qui passent en production.",
+      "promise": "Des backends fiables et des fonctionnalités ML qui passent en production.",
       "bar": "Un projet en tête ?",
       "request": "mission freelance"
     },
     {
       "id": "rec",
       "label": "je recrute",
-      "promise": "Un développeur backend & ML autonome, habitué au remote et au support production.",
+      "promise": "Backend & ML autonome, habitué au remote et au support production.",
       "bar": "Justin, backend & ML · dispo",
       "request": "CDI"
     }

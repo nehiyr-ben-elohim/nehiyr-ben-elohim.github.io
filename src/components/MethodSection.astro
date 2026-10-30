@@ -1,6 +1,5 @@
 ---
 import type { Profile } from '../lib/profile'
-import { kicker } from '../lib/site'
 
 interface Props {
   method: Profile['method']
@@ -11,32 +10,28 @@ const { method, label } = Astro.props
 ---
 
 <section id="methode" data-section={label} class="method">
-  <div class="wrap inner">
+  <div class="container inner">
     <div data-reveal class="head">
-      <div class="head-title">
-        <span class="kicker-label">{kicker('methode', 'travailler ensemble')}</span>
-        <h2 class="section-title">Du premier appel à la prod</h2>
-      </div>
-      <p>Un cadre simple, pour savoir à quoi t’attendre à chaque étape.</p>
+      <h2 class="section-title">Du premier appel à la prod</h2>
+      <p class="lead">Un cadre simple, pour savoir à quoi t’attendre à chaque étape.</p>
     </div>
     <ol class="steps">
-      {method.steps.map((s, i) => (
+      {method.steps.map(s => (
         <li data-reveal class="step">
-          <span class="step-n">{String(i + 1).padStart(2, '0')}</span>
-          <span class="step-t">{s.title}</span>
-          <span class="step-tag">{s.tag}</span>
-          <span class="step-text">{s.text}</span>
+          <h3 class="step-t">{s.title}</h3>
+          <p class="step-text">{s.text}</p>
+          <p class="step-tag">{s.tag}</p>
         </li>
       ))}
     </ol>
     <div class="formats-block">
-      <span class="kicker-label">› formats possibles</span>
+      <h3 class="formats-title">Trois formats possibles</h3>
       <div class="formats">
         {method.formats.map(f => (
           <div data-reveal class="format">
-            <span class="format-t">{f.title}</span>
-            <span class="format-text">{f.text}</span>
-            <span class="format-fit">→ {f.fit}</span>
+            <p class="format-t">{f.title}</p>
+            <p class="format-text">{f.text}</p>
+            <p class="format-fit">{f.fit}</p>
           </div>
         ))}
       </div>
@@ -45,34 +40,35 @@ const { method, label } = Astro.props
 </section>
 
 <style>
-  .method {
-    background-color: #fffbe3;
-    background-image: radial-gradient(rgba(17, 17, 17, 0.07) 1.3px, transparent 1.5px);
-    background-size: 14px 14px;
-    border-top: 3px solid var(--cs-ink);
-    border-bottom: 3px solid var(--cs-ink);
-  }
-  .inner { padding-top: clamp(56px, 8vw, 104px); padding-bottom: clamp(56px, 8vw, 104px); display: flex; flex-direction: column; gap: 40px; }
-  .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 40px; }
-  .head-title { display: flex; flex-direction: column; gap: 12px; }
-  .head p { margin: 0; max-width: 44ch; font-size: 17px; line-height: 1.6; color: var(--cs-body); }
-  .steps { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 20px; }
+  .method { background: var(--color-paper-2); border-block: var(--rule-hair) solid var(--color-ink); }
+  .inner { padding-block: var(--section-gap); display: flex; flex-direction: column; gap: var(--space-2xl); }
+  .head { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: end; gap: var(--space-md) var(--gap-columns); }
+  .head .lead { color: var(--color-ink-2); }
+  .steps { margin: 0; padding: 0; list-style: none; counter-reset: step; border-top: 2px solid var(--color-ink); }
   .step {
-    padding: 20px 20px 22px;
-    background: #fff;
-    border: 2px solid var(--cs-ink);
-    box-shadow: 5px 5px 0 var(--cs-ink);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 4fr) minmax(0, 4fr) minmax(0, 3fr);
+    gap: var(--space-sm) var(--gap-columns);
+    align-items: baseline;
+    padding-block: var(--space-lg);
+    border-bottom: var(--rule-hair) solid var(--color-ink);
   }
-  .step-n { align-self: flex-start; padding: 2px 9px; background: var(--cs-ink); color: var(--cs-accent); font-family: var(--cs-mono); font-size: 12px; font-weight: 700; }
-  .step-t { font-family: var(--cs-display); font-weight: 700; font-size: 21px; line-height: 1.2; }
-  .step-tag { align-self: flex-start; padding: 2px 8px; background: var(--cs-accent); font-family: var(--cs-display); font-weight: 700; font-size: 13px; }
-  .step-text, .format-text { font-size: 15px; line-height: 1.55; color: var(--cs-body); }
-  .formats-block { display: flex; flex-direction: column; gap: 14px; }
-  .formats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1px; background: var(--cs-ink); border: 2px solid var(--cs-ink); }
-  .format { background: #fff; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; }
-  .format-t { font-family: var(--cs-display); font-weight: 700; font-size: 20px; }
-  .format-fit { font-family: var(--cs-mono); font-size: 12px; color: #3a3a3a; }
+  .step::before { content: counter(step); font: var(--display-weight) var(--text-2xl)/1 var(--font-display); font-variant-numeric: tabular-nums; }
+  .step-text { color: var(--color-ink-2); }
+  .step-tag { justify-self: start; padding: 0 var(--space-xs); background: var(--color-accent); font-size: var(--text-sm); }
+  .formats-block { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--space-lg) var(--gap-columns); }
+  .formats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .format { display: flex; flex-direction: column; gap: var(--space-xs); padding: 0 var(--space-lg); border-left: var(--rule-hair) solid var(--color-ink); }
+  .format:first-child { padding-left: 0; border-left: 0; }
+  .format-t { font: var(--display-weight) var(--text-title)/1.2 var(--font-display); }
+  .format-text { color: var(--color-ink-2); }
+  .format-fit { font-size: var(--text-sm); color: var(--color-muted); }
+  @media (max-width: 60rem) {
+    .head, .formats-block { grid-template-columns: minmax(0, 1fr); }
+    .step { grid-template-columns: minmax(0, 1fr) minmax(0, 6fr); }
+    .step-text, .step-tag { grid-column: 2; }
+    .formats { grid-template-columns: minmax(0, 1fr); gap: var(--space-lg); }
+    .format, .format:first-child { padding: 0; border-left: 0; }
+  }
 </style>

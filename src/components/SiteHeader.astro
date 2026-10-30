@@ -1,6 +1,5 @@
 ---
-import ShadowButton from './ShadowButton.astro'
-import { HOME_SECTIONS, OWNER } from '../lib/site'
+import { EMAIL, HOME_SECTIONS, OWNER } from '../lib/site'
 
 interface Props {
   // home: section nav + mobile menu; project: back link
@@ -12,28 +11,34 @@ const home = variant === 'home'
 const nav = HOME_SECTIONS.filter(s => s.nav)
 ---
 
+<p class="banner">
+  <span class="container banner-inner">
+    <span>Disponible pour des missions backend et ML, réponse sous 48&nbsp;h.</span>
+    <a href={`mailto:${EMAIL}`} class="banner-link">{EMAIL}</a>
+  </span>
+</p>
 <header class="site-header">
-  <div class="wrap header-inner">
-    <a href={home ? '#top' : '/'} class="brand">
-      <span class="brand-mark">JP</span>
+  <div class="container header-inner">
+    <a href={home ? '#top' : '/'} class="brand" aria-label={`${OWNER}, accueil`}>
+      <span class="brand-mark" aria-hidden="true">JP</span>
       <span class="brand-name">{OWNER}</span>
     </a>
     {home ? (
       <>
         <nav class="desk-nav" aria-label="Sections">
-          {nav.map(n => <a href={`#${n.id}`} class="hl-link" data-nav={n.id}>{n.label}</a>)}
-          <ShadowButton href="#contact" size="sm">me contacter</ShadowButton>
+          {nav.map(n => <a href={`#${n.id}`} class="nav-link" data-nav={n.id}>{n.label}</a>)}
+          <a href="#contact" class="nav-cta">me contacter</a>
         </nav>
-        <button type="button" class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="menu-panel" data-nav-toggle>
-          <span aria-hidden="true">//</span>
+        <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="menu-panel" data-nav-toggle>
+          <span class="when-closed">menu</span><span class="when-open">fermer</span>
         </button>
       </>
     ) : (
       <nav class="project-nav" aria-label="Sections">
         <span class="project-links">
-          {nav.map(n => <a href={`/#${n.id}`} class="hl-link" aria-current={n.id === 'projets' ? 'true' : undefined}>{n.label}</a>)}
+          {nav.map(n => <a href={`/#${n.id}`} class="nav-link" aria-current={n.id === 'projets' ? 'true' : undefined}>{n.label}</a>)}
         </span>
-        <ShadowButton href="/#contact" size="sm">me contacter</ShadowButton>
+        <a href="/#contact" class="nav-cta">me contacter</a>
       </nav>
     )}
   </div>
@@ -46,81 +51,96 @@ const nav = HOME_SECTIONS.filter(s => s.nav)
 </header>
 
 <style>
+  .banner { margin: 0; background: var(--color-ink); color: var(--color-on-night-2); font-size: var(--text-sm); }
+  .banner-inner { min-height: 40px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-2xs) var(--space-lg); padding-block: var(--space-xs); }
+  .banner-link { color: var(--color-on-night); text-decoration: underline; text-underline-offset: 0.25em; }
+  .banner-link:hover { color: var(--color-accent); }
+  .banner-link:focus-visible { outline-color: var(--color-accent); }
+
   .site-header {
     position: sticky;
     top: 0;
-    z-index: 30;
-    background: rgba(255, 255, 255, 0.94);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--cs-line);
+    z-index: var(--z-sticky-nav);
+    background: var(--color-paper);
+    border-bottom: var(--rule-hair) solid var(--color-ink);
   }
-  .header-inner {
-    padding-top: 16px;
-    padding-bottom: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-  .brand { display: flex; align-items: center; gap: 12px; }
+  .header-inner { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: var(--space-lg); }
+  .brand { display: flex; align-items: center; gap: var(--space-sm); text-decoration: none; }
   .brand-mark {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     display: grid;
     place-items: center;
-    background: var(--cs-accent);
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 17px;
+    background: var(--color-accent);
+    border: 2px solid var(--color-ink);
+    font: var(--display-weight) var(--text-md)/1 var(--font-display);
   }
-  .brand-name { font-family: var(--cs-display); font-weight: 700; font-size: 17px; }
-  .project-nav { display: flex; align-items: center; gap: 12px; }
-  .project-links { display: flex; align-items: center; gap: 6px; }
-  .desk-nav { display: flex; align-items: center; gap: 6px; }
-  .desk-nav :global(.shadow-btn) { margin-left: 14px; }
+  .brand-name { font: var(--display-weight) var(--text-lg)/1 var(--font-display); white-space: nowrap; }
+  .desk-nav, .project-nav, .project-links { display: flex; align-items: center; gap: var(--space-2xs); }
+  .project-nav { gap: var(--space-md); }
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 var(--space-sm);
+    font-size: var(--text-md);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color var(--dur-short) var(--ease-out);
+  }
+  .nav-link:hover { background: var(--color-paper-3); }
+  .nav-link:active { background: var(--color-rule); }
+  .nav-link[aria-current='true'] { background: var(--color-accent); }
+  .nav-cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-left: var(--space-sm);
+    padding: 0 var(--space-md);
+    border: 2px solid var(--color-ink);
+    font: var(--display-weight) var(--text-md)/1 var(--font-display);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color var(--dur-short) var(--ease-out);
+  }
+  .nav-cta:hover { background: var(--color-accent); }
+  .nav-cta:active { background: var(--color-paper-3); }
   .menu-toggle {
-    all: unset;
-    cursor: pointer;
-    width: 44px;
-    height: 44px;
     display: none;
-    place-items: center;
-    background: var(--cs-accent);
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 20px;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 var(--space-md);
+    border: 2px solid var(--color-ink);
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font: var(--display-weight) var(--text-md)/1 var(--font-display);
+    cursor: pointer;
   }
-  .menu-toggle:focus-visible { outline: 3px solid var(--cs-ink); outline-offset: 3px; }
-  .menu-toggle[aria-expanded='true'] span { font-size: 0; }
-  .menu-toggle[aria-expanded='true'] span::after { content: '✕'; font-size: 20px; }
-  .menu-panel {
-    padding: 4px 28px 22px;
-    display: flex;
-    flex-direction: column;
-    background: #fff;
-  }
+  .menu-toggle:hover { background: var(--color-accent); }
+  .menu-toggle:active { background: var(--color-paper-3); }
+  .menu-toggle .when-open, .menu-toggle[aria-expanded='true'] .when-closed { display: none; }
+  .menu-toggle[aria-expanded='true'] .when-open { display: inline; }
+  .menu-panel { padding: 0 var(--gutter) var(--space-lg); display: flex; flex-direction: column; background: var(--color-paper); }
   .menu-panel a {
-    padding: 14px 0;
-    border-bottom: 1px solid var(--cs-line);
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 22px;
+    padding: var(--space-md) 0;
+    border-bottom: var(--rule-hair) solid var(--color-rule);
+    font: var(--display-weight) var(--text-xl)/1.2 var(--font-display);
+    text-decoration: none;
   }
-  .menu-panel .menu-contact {
-    margin-top: 16px;
-    padding: 14px;
-    text-align: center;
-    background: var(--cs-accent);
-    border: 3px solid var(--cs-ink);
-    font-size: 18px;
-  }
-  @media (max-width: 899px) {
+  .menu-panel .menu-contact { margin-top: var(--space-md); padding: var(--space-md); text-align: center; background: var(--color-accent); border: 2px solid var(--color-ink); }
+  @media (max-width: 60rem) {
     .desk-nav, .project-links { display: none; }
-    .menu-toggle { display: grid; }
+    .menu-toggle { display: inline-flex; }
+    .header-inner { min-height: 64px; }
   }
-  @media (min-width: 900px) {
+  @media (min-width: 60.0625rem) {
     .menu-panel { display: none !important; }
+  }
+  @media (max-width: 40rem) {
+    .banner-link { display: none; }
+    .project-nav .nav-cta { margin-left: 0; }
+  }
+  @media (max-width: 30rem) {
+    .brand-name { display: none; }
   }
 </style>

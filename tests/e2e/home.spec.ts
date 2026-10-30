@@ -12,19 +12,18 @@ test('hero: title, hello, facts', async ({ page }) => {
   await expect(facts.nth(2).locator('dd')).toHaveText('Backend & ML')
 })
 
-test('sections in design order, numbered kickers, nav follows', async ({ page }) => {
+test('sections in design order, plain section heads, nav follows', async ({ page }) => {
   await page.goto('/')
   const ids = await page.locator('main section[id]').evaluateAll(els => els.map(e => e.id))
   expect(ids).toEqual(['top', 'projets', 'parcours', 'competences', 'methode', 'notes', 'apropos', 'contact'])
-  await expect(page.locator('#projets .kicker-label')).toHaveText('› 01 — mes réalisations')
-  await expect(page.locator('#contact .kicker-label')).toHaveText('› 07 — un rendez-vous ?')
+  await expect(page.locator('#projets h2')).toHaveText('Projets sélectionnés')
+  await expect(page.locator('#projets .kicker-label, #contact .kicker-label')).toHaveCount(0)
   await expect(page.locator('.desk-nav a[data-nav]')).toHaveText(['projets', 'parcours', 'méthode', 'à propos'])
 })
 
-test('marquee bands are decorative, quick contact links to contact', async ({ page }) => {
+test('no marquee bands, quick contact links to contact', async ({ page }) => {
   await page.goto('/')
-  await expect(page.locator('.bands')).toHaveAttribute('aria-hidden', 'true')
-  await expect(page.locator('.bands')).toContainText('machine learning')
+  await expect(page.locator('.bands')).toHaveCount(0)
   const quick = page.locator('section[aria-label="Contact rapide"]')
   await expect(quick).toContainText('Un projet en tête ?')
   await expect(quick.locator('a[href="#contact"]')).toBeVisible()
@@ -111,13 +110,12 @@ test('interests switcher', async ({ page }) => {
   await expect(page.locator('[data-fav-panel="musics"]')).toBeHidden()
 })
 
-test('desktop nav highlights the section in view, rail follows', async ({ page }) => {
+test('desktop nav highlights the section in view', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 })
   await page.goto('/')
   await expect(page.locator('[data-nav-toggle]')).toBeHidden()
   await page.locator('.desk-nav a[href="#methode"]').click()
   await expect(page.locator('.desk-nav a[href="#methode"]')).toHaveAttribute('aria-current', 'true')
-  await expect(page.locator('[data-rail-label]')).toHaveText('méthode')
   await expect(page.locator('[data-skills-more]')).toBeHidden()
   await expect(page.locator('.skill-group:visible')).toHaveCount(6)
 })

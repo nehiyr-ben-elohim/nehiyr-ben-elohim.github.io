@@ -3,37 +3,26 @@ import ShadowButton from './ShadowButton.astro'
 import { EMAIL } from '../lib/site'
 ---
 
-<section aria-label="Contact rapide" class="wrap quick">
-  <div data-reveal class="box">
+<section aria-label="Contact rapide" class="quick">
+  <div data-reveal class="container box">
     <div class="copy">
-      <span class="title">Un projet en tête ?</span>
-      <span>Je suis disponible pour de nouvelles missions backend et ML.</span>
+      <p class="title">Un projet en tête ?</p>
+      <p>Je suis disponible pour de nouvelles missions backend et ML.</p>
     </div>
     <div class="actions">
-      <a href={`mailto:${EMAIL}`} class="email">{EMAIL}</a>
-      <ShadowButton href="#contact" size="md" shadow="var(--cs-ink)">me contacter</ShadowButton>
+      <a href={`mailto:${EMAIL}`} class="text-link email">{EMAIL}</a>
+      <ShadowButton href="#contact">me contacter</ShadowButton>
     </div>
   </div>
 </section>
 
 <style>
-  .quick { padding-bottom: clamp(56px, 7vw, 88px); }
-  .box {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px 32px;
-    padding: clamp(22px, 3vw, 34px) clamp(22px, 3vw, 40px);
-    background-color: var(--cs-accent);
-    background-image: radial-gradient(rgba(17, 17, 17, 0.07) 1.4px, transparent 1.6px);
-    background-size: 12px 12px;
-    border: 3px solid var(--cs-ink);
-  }
-  .copy { display: flex; flex-direction: column; gap: 6px; font-size: 16px; }
-  .title { font-family: var(--cs-display); font-weight: 700; font-size: clamp(24px, 2.8vw, 34px); line-height: 1.1; }
-  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; }
-  .email { font-family: var(--cs-display); font-weight: 700; font-size: 16px; border-bottom: 3px solid var(--cs-ink); overflow-wrap: anywhere; }
-  .email:hover { background: #fff; }
-  .actions :global(.shadow-btn .face) { background: #fff; padding: 11px 26px; font-size: 16px; }
+  .quick { background: var(--color-field); color: var(--color-field-ink); border-block: var(--rule-bold) solid var(--color-ink); }
+  .box { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-lg) var(--space-2xl); padding-block: var(--space-2xl); }
+  .copy { display: flex; flex-direction: column; gap: var(--space-xs); }
+  .title { font: var(--display-weight) var(--text-section)/1.05 var(--font-display); letter-spacing: var(--tracking-display); }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-md) var(--space-xl); }
+  .email { overflow-wrap: anywhere; }
+  .email:hover { background: var(--color-paper); }
+  .quick :global(.btn) { background: var(--color-paper); }
 </style>
