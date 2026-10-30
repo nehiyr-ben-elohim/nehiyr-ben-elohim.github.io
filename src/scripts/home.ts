@@ -1,5 +1,4 @@
 import { applyFilter, type FilterId } from '../lib/project-filter'
-import { railTop } from '../lib/rail'
 import { runCommand } from '../lib/terminal'
 import { prefersReducedMotion } from './motion'
 import type { Cleanup } from './types'
@@ -9,7 +8,6 @@ const press = (buttons: HTMLElement[], active: HTMLElement) =>
 
 const initActiveSection = (): Cleanup => {
   const sections = [...document.querySelectorAll<HTMLElement>('[data-section]')]
-  const label = document.querySelector<HTMLElement>('[data-rail-label]')
   if (!sections.length) return () => {}
   const links = [...document.querySelectorAll<HTMLElement>('[data-nav]')]
   let frame = 0
@@ -22,10 +20,6 @@ const initActiveSection = (): Cleanup => {
     })
     const active = sections[index]
     links.forEach(l => l.setAttribute('aria-current', String(l.dataset.nav === active.id)))
-    if (label) {
-      label.textContent = active.dataset.section ?? ''
-      label.style.top = railTop(index, sections.length)
-    }
   }
   const onScroll = () => {
     if (!frame) frame = requestAnimationFrame(update)

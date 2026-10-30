@@ -3,12 +3,11 @@ import type { ImageMetadata } from 'astro'
 import { ClientRouter } from 'astro:transitions'
 import SeoHead from '../components/SeoHead.astro'
 import { OWNER } from '../lib/site'
+import '../styles/site.css'
 
 interface Props {
   title: string
   description: string
-  // left section rail (desktop only)
-  rail?: boolean
   // reading progress in the top bar
   progress?: boolean
   image?: ImageMetadata
@@ -17,7 +16,7 @@ interface Props {
   jsonLd?: Record<string, unknown>
 }
 
-const { title, description, rail = false, progress = false, image, ogTitle, ogDescription, jsonLd } = Astro.props
+const { title, description, progress = false, image, ogTitle, ogDescription, jsonLd } = Astro.props
 ---
 
 <html lang="fr">
@@ -27,7 +26,7 @@ const { title, description, rail = false, progress = false, image, ogTitle, ogDe
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Public+Sans:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400&display=swap"
     />
     <noscript>
       <style>
@@ -38,8 +37,8 @@ const { title, description, rail = false, progress = false, image, ogTitle, ogDe
     </noscript>
     <ClientRouter />
   </head>
-  <body class:list={{ 'has-rail': rail }}>
-    <div class="top-bar" aria-hidden="true">{progress && <div class="progress" data-progress></div>}</div>
+  <body>
+    {progress && <div class="top-bar" aria-hidden="true"><div class="progress" data-progress></div></div>}
     <slot />
     <script>
       import '../scripts/lifecycle'
@@ -48,69 +47,5 @@ const { title, description, rail = false, progress = false, image, ogTitle, ogDe
 </html>
 
 <style is:global>
-  :root {
-    --cs-ink: #111;
-    --cs-accent: #fff176;
-    --cs-green: #1f5c2e;
-    --cs-muted: #4a4a4a;
-    --cs-body: #2e2e2e;
-    --cs-line: #ececec;
-    --cs-display: Quicksand, sans-serif;
-    --cs-mono: 'JetBrains Mono', monospace;
-    --rail-pad: 0px;
-  }
-  @media (min-width: 900px) {
-    .has-rail { --rail-pad: 48px; }
-  }
-  html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 80px;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-  }
-  body {
-    margin: 0;
-    background: #fff;
-    color: var(--cs-ink);
-    font-family: 'Public Sans', sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-  *, *::before, *::after { box-sizing: border-box; }
-  a { color: var(--cs-ink); text-decoration: none; }
-  a:hover { color: #000; }
-  button, input, textarea { font: inherit; }
-  ::selection { background: var(--cs-accent); }
-  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
-    outline: 3px solid var(--cs-ink);
-    outline-offset: 3px;
-  }
-  input::placeholder, textarea::placeholder { color: #6b6b6b; }
-  [hidden] { display: none !important; }
-
-  .wrap {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-left: calc(28px + var(--rail-pad));
-    padding-right: 28px;
-  }
-  .hl-link { padding: 6px 12px; font-family: var(--cs-display); font-weight: 700; font-size: 15px; }
-  .hl-link:hover, .hl-link[aria-current='true'] { background: var(--cs-accent); }
-  .kicker-label { font-family: var(--cs-display); font-weight: 700; font-size: 16px; }
-  .section-title {
-    margin: 0;
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: clamp(34px, 4.4vw, 54px);
-    line-height: 1.05;
-  }
-  .tag { padding: 3px 9px; background: #f0f0f0; font-size: 14px; color: var(--cs-body); }
-  .top-bar {
-    position: fixed;
-    inset: 0 0 auto;
-    height: 6px;
-    background: var(--cs-green);
-    z-index: 40;
-  }
-  .progress { height: 100%; width: 0; background: var(--cs-accent); border-right: 2px solid var(--cs-ink); }
+  html, body { overflow-x: clip; }
 </style>

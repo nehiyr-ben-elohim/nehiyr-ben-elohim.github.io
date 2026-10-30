@@ -1,5 +1,4 @@
 ---
-import ProjectShot from './ProjectShot.astro'
 import ShadowButton from './ShadowButton.astro'
 import type { CaseStudy } from '../lib/case-studies'
 
@@ -12,95 +11,49 @@ const href = `/projets/${p.slug}`
 ---
 
 <article data-reveal data-project-featured class="featured">
-  <div class="visual" style={`background:${p.color}`}>
-    <ProjectShot src={p.shot} name={p.title} ratio="16 / 10" sizes="(min-width: 1200px) 600px, 100vw" />
-    <span class="badge">projet phare</span>
+  <div class="figure" style={`--mark:${p.color}`}>
+    <span class="figure-v">{p.metric.v}</span>
+    <span class="figure-k">{p.metric.k}</span>
   </div>
   <div class="body">
-    <div class="kicker">
-      <span class="kind">{p.kind}</span>
-      <span class="period">{p.period}</span>
-    </div>
     <h3><a href={href}>{p.title}</a></h3>
-    <span class="role">{p.role}</span>
+    <p class="meta"><span class="kind">{p.kind.replace(/ · /g, ', ')}</span><time>{p.period}</time></p>
+    <p class="role">{p.role.replace(/ · /g, ', ')}</p>
     <p class="summary">{p.summary}</p>
-    <div class="metric">
-      <span class="metric-v">{p.metric.v}</span>
-      <span class="metric-k">{p.metric.k}</span>
-    </div>
-    <div class="tags">{p.tags.map(t => <span class="tag">{t}</span>)}</div>
+    <ul class="tags">{p.tags.map(t => <li class="tag">{t}</li>)}</ul>
     <div class="links">
-      <ShadowButton href={href} size="sm" shadow="var(--cs-ink)">lire l’étude de cas</ShadowButton>
-      {p.code && <a href={p.code} target="_blank" rel="noopener noreferrer" class="code-link">code ↗</a>}
+      <ShadowButton href={href}>lire l’étude de cas</ShadowButton>
+      {p.code && <a href={p.code} target="_blank" rel="noopener noreferrer" class="text-link">voir le code</a>}
     </div>
   </div>
 </article>
 
 <style>
-  .featured {
-    display: flex;
-    flex-wrap: wrap;
-    background: #fff;
-    border: 2px solid var(--cs-ink);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .featured:hover { transform: translate(-4px, -4px); box-shadow: 10px 10px 0 var(--cs-accent); }
-  .visual {
-    flex: 1.2 1 400px;
-    min-width: 0;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: clamp(18px, 3vw, 32px) clamp(18px, 3vw, 32px) clamp(42px, 4vw, 50px);
-  }
-  .badge {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    padding: 6px 14px;
-    background: var(--cs-ink);
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 14px;
-    color: #fff;
-  }
-  .body {
-    flex: 1 1 320px;
-    min-width: 0;
-    padding: clamp(20px, 2.4vw, 30px);
+  .featured { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--gap-columns); align-items: stretch; }
+  .figure {
+    min-height: 360px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    justify-content: flex-end;
+    gap: var(--space-sm);
+    padding: var(--space-xl);
+    background: var(--mark);
+    color: var(--color-on-night);
   }
-  .kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
-  .kind { padding: 3px 10px; background: var(--cs-accent); font-family: var(--cs-display); font-weight: 700; font-size: 13px; }
-  .period { font-family: var(--cs-mono); font-size: 13px; color: var(--cs-muted); }
-  h3 { margin: 0; font-family: var(--cs-display); font-weight: 700; font-size: clamp(24px, 2.6vw, 32px); line-height: 1.1; }
-  h3 a:hover { background: var(--cs-accent); }
-  .role { font-family: var(--cs-mono); font-size: 13px; font-weight: 700; }
-  .summary {
-    margin: 0;
-    font-size: 16px;
-    line-height: 1.6;
-    color: var(--cs-body);
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  .figure-v { font: var(--display-weight) clamp(4rem, 6vw + 1rem, 7rem)/1 var(--font-display); letter-spacing: var(--tracking-display); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .figure-k { max-width: 24ch; font-size: var(--text-lg); line-height: 1.35; }
+  .body { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-md); padding-block: var(--space-md); }
+  .meta { display: flex; flex-wrap: wrap; gap: var(--space-xs) var(--space-md); font-size: var(--text-sm); color: var(--color-muted); }
+  .kind { padding: 0 var(--space-xs); background: var(--color-accent); color: var(--color-ink); }
+  h3 { font-size: var(--text-section); line-height: 1.05; }
+  h3 a { text-decoration: none; }
+  h3 a:hover { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 0.12em; }
+  .role { font-weight: 700; }
+  .summary { max-width: 52ch; color: var(--color-ink-2); }
+  .tags { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+  .links { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-md) var(--space-xl); margin-top: var(--space-xs); }
+  @media (max-width: 60rem) {
+    .featured { grid-template-columns: minmax(0, 1fr); }
+    .figure { min-height: 240px; padding: var(--space-lg); }
   }
-  .metric {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-    padding: 10px 0;
-    border-top: 1px dotted var(--cs-ink);
-    border-bottom: 1px dotted var(--cs-ink);
-  }
-  .metric-v { font-family: var(--cs-display); font-weight: 700; font-size: clamp(26px, 2.6vw, 32px); line-height: 1; white-space: nowrap; }
-  .metric-k { font-size: 15px; line-height: 1.4; color: var(--cs-body); }
-  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .links { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: auto; padding-top: 6px; }
-  .code-link { font-family: var(--cs-display); font-weight: 700; font-size: 16px; border-bottom: 3px solid var(--cs-ink); }
-  .code-link:hover { background: var(--cs-accent); }
 </style>

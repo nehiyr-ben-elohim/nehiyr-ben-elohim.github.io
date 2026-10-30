@@ -62,7 +62,7 @@ test('en bref: problem / solution / result and 3 metrics', async ({ page }) => {
 
 test('architecture diagram and illustrative snippet', async ({ page }) => {
   await page.goto('/projets/plateforme-audit')
-  await expect(page.locator('#archi .kicker-label')).toHaveText('› 02 — architecture')
+  await expect(page.locator('#archi h2')).toHaveText('Sous le capot')
   await expect(page.locator('#archi .layer')).toHaveCount(4)
   await expect(page.locator('#archi .node.hi')).toHaveText(/API Symfony/)
   await expect(page.locator('#archi .snippet-file')).toHaveText('src/Audit/Handler/ValidateMissionHandler.php')
@@ -74,7 +74,7 @@ test('no gallery, testimonial or zoom without real content', async ({ page }) =>
   await expect(page.locator('#galerie')).toHaveCount(0)
   await expect(page.locator('#avis')).toHaveCount(0)
   await expect(page.locator('[data-zoom]')).toHaveCount(0)
-  await expect(page.locator('#suite .kicker-label')).toHaveText('› 03 — un projet similaire ?')
+  await expect(page.locator('#suite h2')).toHaveText('Un projet similaire ? On en parle autour d’un café.')
 })
 
 test('pager cards show the neighbour kind', async ({ page }) => {
@@ -94,14 +94,13 @@ test('arrow keys move between case studies', async ({ page }) => {
   await expect(page).toHaveURL(/\/projets\/plateforme-audit$/)
 })
 
-test('desktop: progress bar, rail and table of contents follow the scroll', async ({ page }) => {
+test('desktop: progress bar and table of contents follow the scroll', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 })
   await page.goto('/projets/plateforme-audit')
   await expect(page.locator('.project-links a[href="/#projets"]')).toHaveAttribute('aria-current', 'true')
   await page.locator('#archi').scrollIntoViewIfNeeded()
   await page.mouse.wheel(0, 200)
   await expect(page.locator('.cs-summary a[href="#archi"]')).toHaveAttribute('aria-current', 'true')
-  await expect(page.locator('[data-rail-label]')).toHaveText('architecture')
   await expect.poll(() => page.locator('[data-progress]').evaluate(el => parseFloat((el as HTMLElement).style.width))).toBeGreaterThan(30)
 })
 

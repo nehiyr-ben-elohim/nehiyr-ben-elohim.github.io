@@ -6,67 +6,41 @@ interface Props {
 }
 
 const { facts } = Astro.props
-const TILTS = ['-2deg', '1.5deg', '-1deg', '2deg', '-1.5deg']
 ---
 
 <dl class="facts">
-  {facts.map((f, i) => (
-    <a href={f.href} data-fact style={`--tilt:${TILTS[i % TILTS.length]}`}>
-      <dt><span>{f.k}</span><span aria-hidden="true">↗</span></dt>
+  {facts.map(f => (
+    <a href={f.href} data-fact>
+      <dt>{f.k}</dt>
       {f.n !== undefined ? (
-        <dd class="num"><span class="hl"><span data-count={f.n}>{f.n}</span>{f.suf}</span></dd>
+        <dd class="num"><span data-count={f.n}>{f.n}</span>{f.suf}</dd>
       ) : (
-        <dd class:list={{ long: (f.v ?? '').length > 14 }}>{f.v}</dd>
+        <dd>{f.v}</dd>
       )}
     </a>
   ))}
 </dl>
 
 <style>
-  .facts {
-    margin: 0;
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
-    gap: 22px 20px;
-    padding: 8px 8px 8px 0;
-  }
+  .facts { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
   a {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 10px;
-    min-height: 118px;
-    padding: 16px 18px;
-    background: #fff;
-    border: 2px solid var(--cs-ink);
-    box-shadow: 5px 5px 0 var(--cs-accent);
-    transform: rotate(var(--tilt));
-    transition: transform 0.2s, box-shadow 0.2s;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-lg);
+    border-left: var(--rule-hair) solid var(--color-ink);
+    text-decoration: none;
+    transition: background-color var(--dur-short) var(--ease-out);
   }
-  a:hover {
-    transform: rotate(0deg) translate(-2px, -2px);
-    box-shadow: 8px 8px 0 var(--cs-ink);
+  a:first-child { padding-left: 0; border-left: 0; }
+  a:hover dd { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.12em; }
+  a:active { background: var(--color-paper-3); }
+  dt { font-size: var(--text-sm); color: var(--color-muted); }
+  dd { margin: 0; font: var(--display-weight) var(--text-3xl)/1 var(--font-display); white-space: nowrap; letter-spacing: var(--tracking-display); font-variant-numeric: tabular-nums; }
+  @media (max-width: 40rem) {
+    .facts { grid-template-columns: minmax(0, 1fr); }
+    a, a:first-child { padding: var(--space-md) 0; border-left: 0; border-top: var(--rule-hair) solid var(--color-rule); }
+    a:first-child { border-top: 0; }
   }
-  dt {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-    font-family: var(--cs-mono);
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--cs-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-  dd {
-    margin: 0;
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 22px;
-    line-height: 1;
-  }
-  dd.long { font-size: 18px; }
-  dd.num { font-size: 34px; }
-  .hl { background: linear-gradient(transparent 58%, var(--cs-accent) 58%); padding: 0 3px; }
 </style>

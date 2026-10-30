@@ -1,31 +1,19 @@
 import { prefersReducedMotion } from './motion'
 import type { Cleanup } from './types'
 
-const EASE = 'cubic-bezier(.2,.8,.2,1)'
+const EASE = 'cubic-bezier(0.16, 1, 0.3, 1)'
 const timing = (duration: number, delay: number): KeyframeAnimationOptions => ({ duration, easing: EASE, fill: 'both', delay })
 const up = (y: number): Keyframe[] => [{ opacity: 0, transform: `translateY(${y}px)` }, { opacity: 1, transform: 'none' }]
 
-// [data-anim] name → entrance played once on page load
+// [data-anim] name → one settle played once on page load (fade with a short rise)
 const ENTRANCES: Record<string, [Keyframe[], KeyframeAnimationOptions]> = {
-  kicker: [up(12), timing(700, 60)],
-  title: [
-    [
-      { opacity: 0, transform: 'translateY(40px) skewY(3deg)', clipPath: 'inset(0 0 100% 0)' },
-      { opacity: 1, transform: 'none', clipPath: 'inset(0 0 0 0)' },
-    ],
-    timing(850, 140),
-  ],
-  lead: [up(24), timing(700, 320)],
-  shot: [[{ opacity: 0, transform: 'translateY(60px) scale(.96)' }, { opacity: 1, transform: 'none' }], timing(900, 420)],
-  hello: [
-    [
-      { transform: 'rotate(-14deg) scale(.6)', opacity: 0 },
-      { transform: 'rotate(3deg) scale(1.06)', opacity: 1, offset: 0.7 },
-      { transform: 'rotate(-2deg) scale(1)', opacity: 1 },
-    ],
-    timing(700, 120),
-  ],
-  code: [[{ transform: 'translate(40px,20px)', opacity: 0 }, { transform: 'none', opacity: 1 }], timing(800, 350)],
+  kicker: [up(8), timing(420, 0)],
+  title: [up(8), timing(480, 60)],
+  lead: [up(8), timing(480, 120)],
+  shot: [up(8), timing(480, 180)],
+  // the hello keeps its slight tilt while it settles
+  hello: [[{ opacity: 0, transform: 'translateY(8px) rotate(-2deg)' }, { opacity: 1, transform: 'rotate(-2deg)' }], timing(480, 0)],
+  code: [up(8), timing(480, 120)],
 }
 
 // Hidden states are set from JS only: without JS (or with reduced motion) everything stays visible.
@@ -36,7 +24,7 @@ export const initEntrance = (): Cleanup => {
     const entrance = ENTRANCES[el.dataset.anim ?? '']
     if (entrance) el.animate(...entrance)
   })
-  // fact cards: tilt in and count up once visible
+  // figures: settle and count up once visible
   const frames: number[] = []
   const countUp = (el: HTMLElement, delay: number) => {
     const to = Number(el.dataset.count)
@@ -56,29 +44,14 @@ export const initEntrance = (): Cleanup => {
         const el = entry.target as HTMLElement
         factObserver.unobserve(el)
         const siblings = [...(el.parentElement?.children ?? [])]
-        const delay = 200 + (Math.max(0, siblings.indexOf(el)) % 4) * 90
-        el.animate([{ opacity: 0, transform: 'translateY(30px) rotate(-8deg)' }, { opacity: 1 }], { duration: 650, easing: EASE, delay, fill: 'backwards' })
+        const delay = (Math.max(0, siblings.indexOf(el)) % 4) * 60
+        el.animate(up(8), { duration: 420, easing: EASE, delay, fill: 'backwards' })
         el.querySelectorAll<HTMLElement>('[data-count]').forEach(c => countUp(c, delay))
       }
     },
     { threshold: 0.2 },
   )
   document.querySelectorAll('[data-fact]').forEach(el => factObserver.observe(el))
-
-  // marquee: tracks hold repeated content, so one copy's width loops seamlessly
-  const loops = [
-    document.querySelector('[data-marquee="left"]')?.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(calc(-50% - 9px))' }], { duration: 42000, iterations: Infinity }),
-    document.querySelector('[data-marquee="right"]')?.animate([{ transform: 'translateX(calc(-33.333% - 7px))' }, { transform: 'translateX(0)' }], { duration: 36000, iterations: Infinity }),
-  ].filter((a): a is Animation => !!a)
-  const bands = document.querySelector('[data-bands]')
-  const slow = () => loops.forEach(a => a.updatePlaybackRate(0.25))
-  const normal = () => loops.forEach(a => a.updatePlaybackRate(1))
-  bands?.addEventListener('mouseenter', slow)
-  bands?.addEventListener('mouseleave', normal)
-
-  document.querySelectorAll('[data-anim="cursor"]').forEach(el =>
-    el.animate([{ opacity: 1 }, { opacity: 1, offset: 0.5 }, { opacity: 0, offset: 0.51 }, { opacity: 0 }], { duration: 1000, iterations: Infinity }),
-  )
 
   const hidden = new Map<Element, Animation>()
   const observer = new IntersectionObserver(
@@ -90,10 +63,8 @@ export const initEntrance = (): Cleanup => {
         hidden.get(el)?.cancel()
         // stagger siblings, 4 per row
         const siblings = [...(el.parentElement?.children ?? [])].filter(x => x.hasAttribute('data-reveal'))
-        const delay = (Math.max(0, siblings.indexOf(el)) % 4) * 90
-        el.animate(up(28), timing(650, delay))
-        el.querySelector('[data-bar]')?.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 900, delay: delay + 300, fill: 'backwards', easing: EASE })
-        el.querySelector('[data-dot]')?.animate([{ background: '#fff', transform: 'scale(.6)' }, { background: '#fff176', transform: 'scale(1)' }], { duration: 500, delay: delay + 250, fill: 'backwards', easing: EASE })
+        const delay = (Math.max(0, siblings.indexOf(el)) % 4) * 50
+        el.animate(up(8), timing(420, delay))
       }
     },
     { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
@@ -109,7 +80,5 @@ export const initEntrance = (): Cleanup => {
     observer.disconnect()
     factObserver.disconnect()
     frames.forEach(f => cancelAnimationFrame(f))
-    bands?.removeEventListener('mouseenter', slow)
-    bands?.removeEventListener('mouseleave', normal)
   }
 }

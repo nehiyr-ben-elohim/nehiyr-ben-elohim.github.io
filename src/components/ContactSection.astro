@@ -1,5 +1,5 @@
 ---
-import { BOOKING_URL, EMAIL, kicker, LINKEDIN_URL } from '../lib/site'
+import { BOOKING_URL, EMAIL, LINKEDIN_URL } from '../lib/site'
 import { MIN_MESSAGE } from '../lib/contact-validation'
 
 const endpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? ''
@@ -11,199 +11,179 @@ const BUDGETS = ['Moins de 3 000 €', '3 000 – 10 000 €', 'Plus de 10 000 �
 const linkedinHandle = new URL(LINKEDIN_URL).pathname.split('/').filter(Boolean).pop()
 ---
 
-<section id="contact" data-section="me contacter" class="wrap contact">
-  <div class="head">
-    <div data-reveal class="head-title">
-      <span class="kicker-label">{kicker('contact', 'un rendez-vous ?')}</span>
-      <h2 class="section-title">On se donne rendez-vous&nbsp;?</h2>
-      <p class="pitch">Nous pouvons parler de ton projet « amazing » autour d’un café.</p>
+<section id="contact" data-section="me contacter" class="contact">
+  <div class="container inner">
+    <div class="side">
+      <div data-reveal class="head-title">
+        <h2 class="section-title">On se donne rendez-vous&nbsp;?</h2>
+        <p class="pitch">Nous pouvons parler de ton projet «&nbsp;amazing&nbsp;» autour d’un café.</p>
+      </div>
+      <ul class="facts">
+        <li>Réponse sous 48&nbsp;h</li>
+        <li>Lomé, GMT+0</li>
+        <li>Disponible dès maintenant</li>
+      </ul>
     </div>
-    <div class="badges">
-      <span class="badge"><span class="live" aria-hidden="true"></span>réponse sous 48 h</span>
-      <span class="badge">Lomé · GMT+0</span>
-      <span class="badge on">dispo dès maintenant</span>
-    </div>
-  </div>
 
-  <div class="cards">
-    <div data-reveal class="card">
-      <span class="card-k">écrire un email</span>
-      <a href={`mailto:${EMAIL}`} class="card-v email">{EMAIL}</a>
-      <button type="button" class="copy" data-copy-email={EMAIL} data-js-only>copier l’email</button>
-    </div>
-    {BOOKING_URL && (
-      <a data-reveal href={BOOKING_URL} target="_blank" rel="noopener noreferrer" class="card booking">
-        <span class="card-k">réserver un appel</span>
-        <span class="card-v">30 min en visio</span>
-        <span class="card-cta">choisir un créneau ↗</span>
-      </a>
-    )}
-    <a data-reveal href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" class="card">
-      <span class="card-k">sur linkedin</span>
-      <span class="card-v"><img src="/img/devicons/linkedin.svg" alt="" width="24" height="24" />{linkedinHandle}</span>
-      <span class="card-cta">voir mon profil ↗</span>
-    </a>
-  </div>
+    <div class="act">
+      <div class="cards">
+        <div data-reveal class="card">
+          <p class="card-k">Écrire un email</p>
+          <a href={`mailto:${EMAIL}`} class="card-v email">{EMAIL}</a>
+          <button type="button" class="copy" data-copy-email={EMAIL} data-js-only>copier l’email</button>
+        </div>
+        {BOOKING_URL && (
+          <a data-reveal href={BOOKING_URL} target="_blank" rel="noopener noreferrer" class="card booking">
+            <span class="card-k">Réserver un appel</span>
+            <span class="card-v">30 min en visio</span>
+          </a>
+        )}
+        <div data-reveal class="card">
+          <p class="card-k">Sur LinkedIn</p>
+          <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" class="card-v"><img src="/img/devicons/linkedin.svg" alt="" width="24" height="24" />{linkedinHandle}</a>
+        </div>
+      </div>
 
-  {showForm ? (
-    <form data-reveal action={endpoint} method="POST" class="contact-form" data-contact-form novalidate>
-      <div class="fields">
-        <fieldset class="types">
-          <legend>C’est pour…</legend>
-          <input type="hidden" name="type" value={REQUEST_TYPES[0]} data-request-type />
-          <div role="radiogroup" aria-label="C’est pour…" class="type-list">
-            {REQUEST_TYPES.map((t, i) => (
-              <button type="button" role="radio" aria-checked={i === 0} data-request={t}>{t}</button>
-            ))}
+      {showForm ? (
+        <form data-reveal action={endpoint} method="POST" class="contact-form" data-contact-form novalidate>
+          <div class="fields">
+            <fieldset class="types">
+              <legend>C’est pour…</legend>
+              <input type="hidden" name="type" value={REQUEST_TYPES[0]} data-request-type />
+              <div role="radiogroup" aria-label="C’est pour…" class="type-list">
+                {REQUEST_TYPES.map((t, i) => (
+                  <button type="button" role="radio" aria-checked={i === 0} data-request={t}>{t}</button>
+                ))}
+              </div>
+            </fieldset>
+            <div class="grid">
+              <label>
+                <span>Comment je peux t’appeler ?</span>
+                <input name="name" autocomplete="given-name" placeholder="Ton prénom" aria-describedby="err-name" />
+                <span id="err-name" class="error" data-error="name" role="alert" hidden>Indique ton prénom.</span>
+              </label>
+              <label>
+                <span>Ton adresse email</span>
+                <input type="email" name="email" autocomplete="email" inputmode="email" placeholder="prenom@entreprise.com" aria-describedby="err-email" />
+                <span id="err-email" class="error" data-error="email" role="alert" hidden>Cette adresse email n’est pas valide.</span>
+              </label>
+              <label>
+                <span>Délai <span class="optional">(facultatif)</span></span>
+                <select name="delai">
+                  <option value="">Choisir</option>
+                  {DELAYS.map(d => <option>{d}</option>)}
+                </select>
+              </label>
+              <label>
+                <span>Budget <span class="optional">(facultatif)</span></span>
+                <select name="budget">
+                  <option value="">Choisir</option>
+                  {BUDGETS.map(b => <option>{b}</option>)}
+                </select>
+              </label>
+            </div>
+            <label>
+              <span>Alors, dis-moi</span>
+              <textarea name="message" rows="5" placeholder="Ton projet, ton contexte, ce que tu attends…" aria-describedby="err-message"></textarea>
+              <span id="err-message" class="error" data-error="message" role="alert" hidden>Écris quelques mots sur ton projet ({MIN_MESSAGE} caractères minimum).</span>
+            </label>
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="honeypot" aria-hidden="true" />
+            <p class="message-error" role="alert" hidden>Le message n’est pas parti. Réessaie dans un instant, ou écris-moi directement.</p>
+            <div class="submit-row">
+              <p class="privacy">Tes informations servent uniquement à te répondre.</p>
+              <button type="submit" class="btn lg submit"><span data-submit-label>hello</span></button>
+            </div>
           </div>
-        </fieldset>
-        <div class="grid">
-          <label>
-            <span>Comment je peux t’appeler ?</span>
-            <input name="name" autocomplete="given-name" placeholder="Ton prénom" aria-describedby="err-name" />
-            <span id="err-name" class="error" data-error="name" role="alert" hidden>Indique ton prénom.</span>
-          </label>
-          <label>
-            <span>Ton adresse email</span>
-            <input type="email" name="email" autocomplete="email" placeholder="prenom@entreprise.com" aria-describedby="err-email" />
-            <span id="err-email" class="error" data-error="email" role="alert" hidden>Cette adresse email n’est pas valide.</span>
-          </label>
-          <label>
-            <span>Délai <span class="optional">(facultatif)</span></span>
-            <select name="delai">
-              <option value="">Choisir</option>
-              {DELAYS.map(d => <option>{d}</option>)}
-            </select>
-          </label>
-          <label>
-            <span>Budget <span class="optional">(facultatif)</span></span>
-            <select name="budget">
-              <option value="">Choisir</option>
-              {BUDGETS.map(b => <option>{b}</option>)}
-            </select>
-          </label>
-        </div>
-        <label>
-          <span>Alors, dis-moi</span>
-          <textarea name="message" rows="5" placeholder="Ton projet, ton contexte, ce que tu attends…" aria-describedby="err-message"></textarea>
-          <span id="err-message" class="error" data-error="message" role="alert" hidden>Écris quelques mots sur ton projet ({MIN_MESSAGE} caractères minimum).</span>
-        </label>
-        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="honeypot" aria-hidden="true" />
-        <p class="message-error" role="alert" hidden>Oups, le message s’est perdu en route. Réessaie dans un instant.</p>
-        <div class="submit-row">
-          <span class="privacy">Tes informations servent uniquement à te répondre.</span>
-          <button type="submit" class="submit"><span class="face" data-submit-label>hello</span></button>
-        </div>
-      </div>
-      <div class="message-sent" role="status" hidden>
-        <div class="sent-card">
-          <span class="sent-title">Message envoyé, merci <span data-sent-name></span> !</span>
-          <span>Je te réponds sous 48 h.</span>
-          <button type="button" class="reset" data-contact-reset>envoyer un autre message</button>
-        </div>
-      </div>
-    </form>
-  ) : (
-    <p class="no-form">Le formulaire arrive bientôt : en attendant, écris-moi à <a href={`mailto:${EMAIL}`}>{EMAIL}</a>.</p>
-  )}
+          <div class="message-sent" role="status" hidden>
+            <p class="sent-title">Message envoyé, merci <span data-sent-name></span> !</p>
+            <p>Je te réponds sous 48&nbsp;h.</p>
+            <button type="button" class="reset text-link" data-contact-reset>envoyer un autre message</button>
+          </div>
+        </form>
+      ) : (
+        <p class="no-form">Le formulaire arrive bientôt. En attendant, l’email ci-dessus est le plus rapide.</p>
+      )}
+    </div>
+  </div>
 </section>
 
 <style>
-  .contact { padding-top: clamp(56px, 8vw, 112px); padding-bottom: clamp(56px, 8vw, 112px); display: flex; flex-direction: column; gap: 40px; }
-  .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 40px; }
-  .head-title { display: flex; flex-direction: column; gap: 12px; }
-  .head-title .section-title { line-height: 1.08; text-wrap: balance; }
-  .pitch { margin: 0; font-style: italic; font-size: 18px; line-height: 1.6; color: var(--cs-body); }
-  .badges { display: flex; flex-wrap: wrap; gap: 8px; }
-  .badge { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border: 2px solid var(--cs-ink); font-family: var(--cs-display); font-weight: 700; font-size: 14px; }
-  .badge.on { background: var(--cs-accent); }
-  .live { width: 9px; height: 9px; border-radius: 50%; background: #1f9d4a; box-shadow: 0 0 0 4px rgba(31, 157, 74, 0.18); }
-
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 18px; }
-  .card {
-    padding: 20px;
-    background: #fff;
-    border: 2px solid var(--cs-ink);
-    box-shadow: 6px 6px 0 var(--cs-accent);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    transition: transform 0.2s;
-  }
-  a.card:hover { transform: translate(-2px, -2px); }
-  .card.booking { background: var(--cs-accent); box-shadow: 6px 6px 0 var(--cs-ink); }
-  .card-k { font-family: var(--cs-mono); font-size: 12px; color: var(--cs-muted); text-transform: uppercase; letter-spacing: 0.06em; }
-  .card-v { display: flex; align-items: center; gap: 10px; font-family: var(--cs-display); font-weight: 700; font-size: 20px; }
-  .card-v img { display: block; }
-  .email { word-break: break-all; }
-  .email:hover { background: var(--cs-accent); }
-  .card-cta { margin-top: auto; font-family: var(--cs-display); font-weight: 700; font-size: 14px; }
-  .copy, .reset {
-    all: unset;
+  .inner { padding-block: var(--section-gap); display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--space-2xl) var(--gap-columns); align-items: start; }
+  .side { display: flex; flex-direction: column; gap: var(--space-xl); }
+  .head-title { display: flex; flex-direction: column; gap: var(--space-md); }
+  .pitch { font-size: var(--text-lead); font-style: italic; color: var(--color-ink-2); }
+  .facts { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; border-top: var(--rule-hair) solid var(--color-ink); }
+  .facts li { padding-block: var(--space-sm); border-bottom: var(--rule-hair) solid var(--color-rule); }
+  .act { min-width: 0; display: flex; flex-direction: column; gap: var(--space-xl); }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: var(--space-lg) var(--gap-columns); padding-bottom: var(--space-xl); border-bottom: var(--rule-hair) solid var(--color-ink); }
+  .card { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-xs); text-decoration: none; }
+  .card-k { font-size: var(--text-sm); color: var(--color-muted); }
+  .card-v { display: inline-flex; align-items: center; gap: var(--space-xs); font: var(--display-weight) var(--text-2xl)/1.15 var(--font-display); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.2em; overflow-wrap: anywhere; }
+  .card-v:hover { background: var(--color-accent); }
+  .copy {
+    min-height: 44px;
+    padding: 0 var(--space-md);
+    border: 2px solid var(--color-ink);
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-size: var(--text-sm);
     cursor: pointer;
-    align-self: flex-start;
-    font-family: var(--cs-display);
-    font-weight: 700;
+    transition: background-color var(--dur-short) var(--ease-out);
   }
-  .copy { margin-top: auto; padding: 6px 12px; border: 2px solid var(--cs-ink); background: #fff; font-size: 14px; }
-  .copy:hover, .copy[data-copied] { background: var(--cs-accent); }
-  .copy:focus-visible, .reset:focus-visible, .type-list button:focus-visible, .submit:focus-visible { outline: 3px solid var(--cs-ink); outline-offset: 3px; }
+  .copy:hover, .copy[data-copied] { background: var(--color-accent); }
+  .copy:active { background: var(--color-paper-3); }
 
-  .contact-form { display: flex; flex-direction: column; }
-  .fields { display: flex; flex-direction: column; gap: 20px; padding: clamp(20px, 3vw, 32px); border: 3px solid var(--cs-ink); background: #fff; }
+  .contact-form { min-width: 0; }
+  .fields { display: flex; flex-direction: column; gap: var(--space-lg); padding: var(--space-xl); border: 2px solid var(--color-ink); background: var(--color-paper-2); }
   .contact-form[data-sent] .fields { display: none; }
-  .types { margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 10px; }
-  .types legend, label > span:first-child { font-family: var(--cs-display); font-weight: 700; font-size: 15px; }
-  .types legend { padding: 0; margin-bottom: 10px; }
-  .type-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .types { margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; }
+  .types legend, label > span:first-child { padding: 0; margin-bottom: var(--space-xs); font-weight: 700; }
+  .type-list { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
   .type-list button {
-    all: unset;
+    min-height: 44px;
+    padding: 0 var(--space-md);
+    border: 2px solid var(--color-ink);
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-size: var(--text-md);
     cursor: pointer;
-    padding: 8px 14px;
-    border: 2px solid var(--cs-ink);
-    background: #fff;
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 15px;
+    transition: background-color var(--dur-short) var(--ease-out);
   }
-  .type-list button:hover, .type-list button[aria-checked='true'] { background: var(--cs-accent); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 18px; }
-  label { display: flex; flex-direction: column; gap: 8px; }
-  .optional { font-weight: 500; color: #5a5a5a; }
+  .type-list button:hover { background: var(--color-paper-3); }
+  .type-list button:active { background: var(--color-rule); }
+  .type-list button[aria-checked='true'] { background: var(--color-ink); color: var(--color-paper); }
+  .type-list button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-lg); }
+  label { display: flex; flex-direction: column; }
+  .optional { font-weight: 400; color: var(--color-muted); }
   input, textarea, select {
-    border: 2px solid var(--cs-ink);
-    background: #fff;
-    font-size: 16px;
-    color: var(--cs-ink);
+    border: 2px solid var(--color-ink);
     border-radius: 0;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-size: var(--text-md);
+    outline: 2px solid transparent;
+    outline-offset: -4px;
   }
-  input, select { height: 52px; padding: 0 16px; }
-  textarea { padding: 14px 16px; line-height: 1.5; resize: vertical; }
-  [aria-invalid='true'] { border-color: #b3261e; }
-  .error { font-size: 14px; font-weight: 600; color: #b3261e; }
-  .honeypot { position: absolute; left: -9999px; }
-  .message-error { margin: 0; padding: 12px 16px; border: 2px solid #b3261e; color: #b3261e; font-weight: 600; }
-  .submit-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; }
-  .privacy { font-size: 14px; color: var(--cs-muted); }
-  .submit { all: unset; cursor: pointer; position: relative; display: inline-block; margin: 0 8px 8px 0; transition: transform 0.12s ease-out; }
-  .submit::before { content: ''; position: absolute; inset: 0; transform: translate(8px, 8px); background: var(--cs-ink); }
-  .submit:hover { transform: translate(-1px, -1px); }
-  .submit:disabled { cursor: progress; opacity: 0.7; }
-  .submit .face {
-    position: relative;
-    display: block;
-    padding: 13px 44px;
-    background: var(--cs-accent);
-    border: 3px solid var(--cs-ink);
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 18px;
+  input:focus-visible, textarea:focus-visible, select:focus-visible { outline-color: var(--color-focus); }
+  input, select { min-height: 52px; padding: 0 var(--space-md); }
+  textarea { padding: var(--space-sm) var(--space-md); line-height: 1.5; resize: vertical; }
+  ::placeholder { color: var(--color-muted); }
+  [aria-invalid='true'] { border-color: var(--color-error); }
+  .error { min-height: 1lh; margin-top: var(--space-2xs); font-size: var(--text-sm); font-weight: 700; color: var(--color-error); }
+  .honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .message-error { padding: var(--space-sm) var(--space-md); border: 2px solid var(--color-error); color: var(--color-error); font-weight: 700; }
+  .submit-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-md); }
+  .privacy { font-size: var(--text-sm); color: var(--color-muted); }
+  .submit { border-color: var(--color-ink); }
+  .submit:disabled { cursor: progress; }
+  .message-sent { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-sm); padding: var(--space-xl); background: var(--color-accent); border: 2px solid var(--color-ink); }
+  .sent-title { font: var(--display-weight) var(--text-2xl)/1.1 var(--font-display); }
+  .reset { padding: 0; border: 0; background: none; color: var(--color-ink); cursor: pointer; }
+  .no-form { font-size: var(--text-lg); color: var(--color-ink-2); }
+  @media (max-width: 60rem) {
+    .inner, .grid, .cards { grid-template-columns: minmax(0, 1fr); }
+    .card-v { font-size: var(--text-lg); }
+    .fields { padding: var(--space-lg); }
   }
-  .message-sent { align-self: center; width: min(100%, 560px); position: relative; margin: 10px 12px 12px 0; transform: rotate(-1.5deg); }
-  .message-sent::before { content: ''; position: absolute; inset: 0; transform: translate(12px, 12px); background: var(--cs-ink); }
-  .sent-card { position: relative; padding: 32px; background: var(--cs-accent); border: 3px solid var(--cs-ink); display: flex; flex-direction: column; gap: 10px; font-size: 16px; }
-  .sent-title { font-family: var(--cs-display); font-weight: 700; font-size: 32px; line-height: 1.1; }
-  .reset { margin-top: 6px; padding: 6px 2px; border-bottom: 3px solid var(--cs-ink); font-size: 15px; }
-  .no-form { margin: 0; padding: 20px; border: 3px solid var(--cs-ink); font-size: 17px; }
-  .no-form a { font-weight: 700; background: linear-gradient(transparent 60%, var(--cs-accent) 60%); }
 </style>

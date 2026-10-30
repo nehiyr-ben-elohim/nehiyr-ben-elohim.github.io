@@ -1,0 +1,89 @@
+/* Hallmark · shape: Index-First (swapped from Workbench, no captures to show) · genre: editorial · theme: brand · redesign: full · draw: ef728e
+ * paper: oklch(98.6% 0.007 100) · accent: oklch(94% 0.15 104) · display: Quicksand · body: Public Sans · hero: Stage (/), Banner (/projets/*) · nav: banner over a retracting bar · footer: letter close · signature: the terminal that answers help, beside Hello world!
+ * axes: light/rounded-sans/chromatic-yellow · posture: Committed (yellow field on the hello band and the contact band) · contrast: pass · fold: pass · job: hire · v2.0.0 */
+/* Hallmark · finish-review: subagent · 6 findings · 5 resolved (contact column, middle dots, duplicated kind, facts row, terminal at 375) 1 to the owner (generic section heads) · gap: 44c still reported on both heroes */
+/* Hallmark · pre-emit critique: P4 H4 E4 S5 R4 V4 · weakest: P, a portfolio argues little; the page leads with the work as an index and lets the terminal be the one playful thing */
+/* Hallmark · answered F4 · the dark fills are the selected segment of the audience switch and the project filter, not buttons; the one filled button is .btn */
+/* Hallmark · waive 23 · posture Committed, the yellow field is the hello band and the contact band · the hello band is the brand gesture the owner asked to keep */
+/* Hallmark · waive 44c · Banner posture on the case studies, the project colour band starts above the fold · only /projets/* takes this, the home hero fills its screen */
+/* Hallmark · waive 71 · the method steps are table rows aligned on the baseline, the head sits in its row beside the numeral · row padding sets the gap, not a head margin */
+/* Hallmark · waive 77 · En bref is a three-column problem, solution, result set beside the four-row project table · the section holds two compositions side by side across twelve columns */
+/* Hallmark · dismissed 59 · ten sections, the eight ids the tests lock plus the contact band, the owner kept every section */
+/* Hallmark · dismissed 28a · the lazy images are company logos and skill icons below the fold, the LCP is the hero heading */
+/* Hallmark · project colours are owner data (case-studies.json color): the featured tile and the case-study figures band take each project's own colour, ink text on it */
+/* Hallmark · waive 47b · one dark panel, the terminal that runs the site's own commands · it is the hero's working control, not a picture of one */
+/* Hallmark · dropped the hero intro paragraph, the marquee bands, the side rail, the numbered section labels, the project placeholders · 58 and 54 name them, the user approved the test changes */
+/* Hallmark · reworded "J’aide les équipes produit à construire des backends fiables et des fonctionnalités ML qui passent en production." to "Des backends fiables et des fonctionnalités ML qui passent en production." · 58 caps the hero sentence */
+/* Hallmark · reworded "Un développeur backend & ML autonome, habitué au remote et au support production." to "Backend & ML autonome, habitué au remote et au support production." · 58 caps the hero sentence */
+@import url("./tokens.css");
+@import url("./base.css");
+
+html { scroll-behavior: smooth; scroll-padding-top: var(--space-3xl); }
+body { font-size: var(--text-md); }
+a { color: inherit; }
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, summary:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+.on-night { background: var(--color-night); color: var(--color-on-night); --color-focus: var(--color-accent); }
+.on-night ::selection { background: var(--color-accent); color: var(--color-ink); }
+
+.container { max-width: var(--container); }
+.band-pad { padding-block: var(--section-gap-s); }
+.section-pad { padding-block: var(--section-gap); }
+
+/* the brand's one button: yellow face, ink edge, ink block offset */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 48px;
+  margin: 0 var(--offset) var(--offset) 0;
+  padding: 0 var(--space-lg);
+  border: var(--rule-bold) solid var(--color-ink);
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  box-shadow: var(--offset) var(--offset) 0 var(--color-ink);
+  font: var(--display-weight) var(--text-md)/1 var(--font-display);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+}
+.btn:hover { transform: translate(-1px, -1px); box-shadow: calc(var(--offset) + 1px) calc(var(--offset) + 1px) 0 var(--color-ink); }
+.btn:active { transform: translate(var(--space-2xs), var(--space-2xs)); box-shadow: var(--space-2xs) var(--space-2xs) 0 var(--color-ink); }
+.btn:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 4px; }
+.btn:disabled, .btn[aria-disabled='true'] { opacity: 0.55; cursor: not-allowed; transform: none; }
+.btn[aria-busy='true'] { cursor: progress; }
+.on-night .btn { box-shadow: var(--offset) var(--offset) 0 var(--color-on-night); border-color: var(--color-on-night); }
+.btn.lg { min-height: 52px; padding: 0 var(--space-xl); font-size: var(--text-lg); }
+
+/* a quiet text link with an ink underline that turns yellow on hover */
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font: var(--display-weight) var(--text-md)/1.2 var(--font-display);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
+  transition: background-color var(--dur-short) var(--ease-out);
+}
+.text-link:hover { background: var(--color-accent); color: var(--color-ink); }
+.text-link:active { background: var(--color-paper-3); }
+
+.tag { padding: var(--space-3xs) var(--space-xs); background: var(--color-paper-3); color: var(--color-ink-2); font-size: var(--text-sm); }
+.on-night .tag { background: var(--color-night-2); color: var(--color-on-night-2); }
+
+/* highlighter band behind the x-height, for the hello */
+.hello-band { display: inline-block; padding: 0 var(--space-md) var(--space-xs); background: var(--color-field); color: var(--color-field-ink); transform: rotate(-2deg); }
+
+/* reading progress on the case studies */
+.top-bar { position: fixed; inset: 0 0 auto; height: var(--space-2xs); z-index: var(--z-toast); pointer-events: none; }
+.progress { height: 100%; width: 0; background: var(--color-ink); }
+
+[data-audience='client'] .for-rec,
+[data-audience='rec'] .for-client { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .btn, .text-link { transition: none; }
+}

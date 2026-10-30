@@ -8,7 +8,6 @@ import ProjectFeatured from '../components/ProjectFeatured.astro'
 import ProjectCard from '../components/ProjectCard.astro'
 import ContactSection from '../components/ContactSection.astro'
 import HeroFacts from '../components/HeroFacts.astro'
-import Bands from '../components/Bands.astro'
 import QuickContact from '../components/QuickContact.astro'
 import ExperienceSection from '../components/ExperienceSection.astro'
 import SkillsSection from '../components/SkillsSection.astro'
@@ -16,19 +15,18 @@ import MethodSection from '../components/MethodSection.astro'
 import NotesSection from '../components/NotesSection.astro'
 import AboutSection from '../components/AboutSection.astro'
 import MobileBar from '../components/MobileBar.astro'
-import Rail from '../components/Rail.astro'
 import { getCaseStudies } from '../lib/case-studies'
 import { findImage } from '../lib/images'
 import { getProfile } from '../lib/profile'
 import { applyFilter, filterCounts, FILTERS } from '../lib/project-filter'
 import { CV_PATH } from '../lib/terminal'
-import { BOOKING_URL, EMAIL, GITHUB_URL, HOME_SECTIONS, kicker, LINKEDIN_URL, OWNER } from '../lib/site'
+import { BOOKING_URL, EMAIL, GITHUB_URL, HOME_SECTIONS, LINKEDIN_URL, OWNER } from '../lib/site'
 
 const projects = getCaseStudies()
 const { featured, grid } = applyFilter(projects, 'all')
 const featuredProject = projects.find(p => p.slug === featured)
 const counts = filterCounts(projects)
-const { facts, audiences, trust, marquee, skills, experience, method, notes, about, interests } = getProfile()
+const { facts, audiences, trust, skills, experience, method, notes, about, interests } = getProfile()
 const label = (id: string) => HOME_SECTIONS.find(s => s.id === id)?.label ?? ''
 const cv = existsSync(`public${CV_PATH}`) ? CV_PATH : undefined
 const portrait = findImage(['/img/justin-portrait.png', '/img/justin-portrait.jpg'])
@@ -51,52 +49,37 @@ const jsonLd = {
   ogDescription="Des backends fiables et des fonctionnalités ML qui passent en production."
   image={portrait}
   jsonLd={jsonLd}
-  rail
 >
   <div data-audience="client">
   <SiteHeader variant="home" />
 
-  <Rail label={label('top')} />
-
   <main>
-    <div class="hero-bg">
-      <section id="top" data-section={label('top')} class="wrap hero">
-        <div class="hero-main">
-          <div class="hero-copy">
-            <div class="hero-meta">
-              <div role="radiogroup" aria-label="Je suis" class="audience" data-audience-toggle data-js-only>
-                {audiences.map((a, i) => (
-                  <button type="button" role="radio" aria-checked={i === 0} data-aud={a.id} data-request={a.request}>{a.label}</button>
-                ))}
-              </div>
-              <span class="status"><span class="dot"></span>Disponible pour des missions</span>
-            </div>
-            <h1><span data-anim="hello" class="hello">Hello world!</span></h1>
-            {audiences.map(a => <p class:list={['promise', `for-${a.id}`]}>{a.promise}</p>)}
-            <p class="intro">
-              <strong>{OWNER}</strong>, développeur backend &amp; machine learning basé à Lomé. Depuis 6 ans, je conçois des API,
-              des plateformes web et des outils data pour des équipes en France et en Afrique de l’Ouest.
-            </p>
-            <div class="hero-actions for-client">
-              {BOOKING_URL ? (
-                <ShadowButton href={BOOKING_URL} size="lg" shadow="var(--cs-ink)" external>réserver un appel</ShadowButton>
-              ) : (
-                <ShadowButton href="#contact" size="lg" shadow="var(--cs-ink)">me contacter</ShadowButton>
-              )}
-              <a href="#projets" class="coffee">voir mes projets <span aria-hidden="true">›</span></a>
-            </div>
-            <div class="hero-actions for-rec">
-              {cv && <ShadowButton href={cv} size="lg" shadow="var(--cs-ink)" external>télécharger mon CV ↓</ShadowButton>}
-              <a href="#parcours" class="coffee">voir mon parcours <span aria-hidden="true">›</span></a>
-            </div>
+    <section id="top" data-section={label('top')} class="top">
+      <div class="container hero">
+        <div class="hero-copy">
+          <div role="radiogroup" aria-label="Je suis" class="audience" data-audience-toggle data-js-only>
+            {audiences.map((a, i) => (
+              <button type="button" role="radio" aria-checked={i === 0} data-aud={a.id} data-request={a.request}>{a.label}</button>
+            ))}
           </div>
-          <div data-anim="code" class="code-card">
-            <div class="code-window">
-              <div class="code-bar">
-                <div class="dots" aria-hidden="true"><span></span><span></span><span class="on"></span></div>
-                <span class="file">justin.py</span>
-              </div>
-              <pre><code><span class="c"># bienvenue sur mon portfolio</span>
+          <h1><span data-anim="hello" class="hello-band">Hello world!</span></h1>
+          {audiences.map(a => <p class:list={['promise', 'lead', `for-${a.id}`]}>{a.promise}</p>)}
+          <div class="hero-actions for-client">
+            {BOOKING_URL ? (
+              <ShadowButton href={BOOKING_URL} size="lg" external>réserver un appel</ShadowButton>
+            ) : (
+              <ShadowButton href="#contact" size="lg">me contacter</ShadowButton>
+            )}
+            <a href="#projets" class="coffee text-link">voir mes projets</a>
+          </div>
+          <div class="hero-actions for-rec">
+            {cv && <ShadowButton href={cv} size="lg" external>télécharger mon CV</ShadowButton>}
+            <a href="#parcours" class="coffee text-link">voir mon parcours</a>
+          </div>
+        </div>
+        <figure data-anim="code" class="repl">
+          <figcaption class="repl-file">justin.py</figcaption>
+          <pre><code><span class="c"># bienvenue sur mon portfolio</span>
 <span class="k">class</span> Justin(Developer):
     role     = <span class="s">"backend &amp; machine learning"</span>
     stack    = [<span class="s">"Python"</span>, <span class="s">"Symfony"</span>, <span class="s">"Go"</span>]
@@ -105,46 +88,48 @@ const jsonLd = {
 
     <span class="k">def</span> hello(self):
         <span class="k">return</span> <span class="s">"hello world!"</span></code></pre>
-              <div class="term-log" data-term-log aria-live="polite">
-                <div><span class="term-cmd">› python justin.py</span><span class="term-out">hello world!  (tape help pour explorer le site)</span></div>
-              </div>
-              <label class="term-input" data-js-only>
-                <span class="k" aria-hidden="true">›</span>
-                <input data-term data-has-cv={cv ? '' : undefined} aria-label="Terminal : tape help" placeholder="tape help puis Entrée" autocomplete="off" spellcheck="false" />
-                <span data-anim="cursor" class="cursor" aria-hidden="true"></span>
-              </label>
-            </div>
+          <div class="term-log" data-term-log aria-live="polite">
+            <div><span class="term-cmd">$ python justin.py</span><span class="term-out">hello world!  (tape help pour explorer le site)</span></div>
+          </div>
+          <label class="term-input" data-js-only>
+            <span class="prompt" aria-hidden="true">$</span>
+            <input data-term data-has-cv={cv ? '' : undefined} aria-label="Terminal : tape help" placeholder="tape help puis Entrée" autocomplete="off" spellcheck="false" />
+          </label>
+        </figure>
+      </div>
+
+      <div class="container proof">
+        <HeroFacts facts={facts} />
+        <p data-reveal class="trust">
+          <span class="trust-k">Équipes et clients</span>
+          <span class="chips">
+            {trust.map(t => (
+              <span class="chip">{t.logo && <img src={t.logo} alt="" width="20" height="20" />}{t.name}</span>
+            ))}
+          </span>
+        </p>
+      </div>
+    </section>
+
+    <section id="projets" data-section={label('projets')} class="projects">
+      <div class="container projects-inner">
+        <div class="projects-head">
+          <div data-reveal class="section-head">
+            <h2 class="section-title">Projets sélectionnés</h2>
+            <p class="lead">Missions client et projets perso, de 2019 à aujourd’hui.</p>
+          </div>
+          <div class="filters" role="group" aria-label="Filtrer les projets">
+            {FILTERS.map(f => (
+              <button type="button" data-filter={f.id} aria-pressed={f.id === 'all'}>
+                {f.label}<span class="count">{counts[f.id]}</span>
+              </button>
+            ))}
           </div>
         </div>
-        <HeroFacts facts={facts} />
-        <div data-reveal class="trust">
-          <span class="trust-k">ils m’ont fait confiance</span>
-          {trust.map(t => (
-            <span class="chip">{t.logo && <img src={t.logo} alt="" width="20" height="20" />}{t.name}</span>
-          ))}
-        </div>
-      </section>
-    </div>
-
-    <Bands marquee={marquee} />
-
-    <section id="projets" data-section={label('projets')} class="wrap projects">
-      <div class="projects-head">
-        <div data-reveal class="section-head">
-          <span class="kicker-label">{kicker('projets', 'mes réalisations')}</span>
-          <h2 class="section-title">Projets sélectionnés</h2>
-        </div>
-        <div class="filters" role="group" aria-label="Filtrer les projets">
-          {FILTERS.map(f => (
-            <button type="button" data-filter={f.id} aria-pressed={f.id === 'all'}>
-              {f.label}<span class="count">{counts[f.id]}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-      {featuredProject && <ProjectFeatured p={featuredProject} />}
-      <div class="grid">
-        {projects.map(p => <ProjectCard p={p} hidden={!grid.includes(p.slug)} />)}
+        {featuredProject && <ProjectFeatured p={featuredProject} />}
+        <ol class="index">
+          {projects.map(p => <ProjectCard p={p} hidden={!grid.includes(p.slug)} />)}
+        </ol>
       </div>
     </section>
 
@@ -169,157 +154,118 @@ const jsonLd = {
 </SiteLayout>
 
 <style>
-
-  .hero-bg {
-    background-color: #fffbe3;
-    background-image: radial-gradient(rgba(17, 17, 17, 0.08) 1.3px, transparent 1.5px);
-    background-size: 14px 14px;
-    border-bottom: 3px solid var(--cs-ink);
-  }
-  .hero-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 18px; }
-  .audience { display: flex; border: 2px solid var(--cs-ink); background: #fff; }
-  .audience button {
-    all: unset;
-    cursor: pointer;
-    padding: 7px 14px;
-    background: #fff;
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 14px;
-  }
-  .audience button:hover, .audience button[aria-checked='true'] { background: var(--cs-accent); }
-  .promise { margin: 0; max-width: 24ch; font-family: var(--cs-display); font-weight: 700; font-size: clamp(24px, 2.6vw, 34px); line-height: 1.2; text-wrap: balance; }
-  .trust { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; padding-top: 24px; border-top: 1px dotted var(--cs-ink); }
-  .trust-k { font-family: var(--cs-mono); font-size: 12px; color: #3a3a3a; text-transform: uppercase; letter-spacing: 0.06em; margin-right: 8px; }
-  .chip { display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: #fff; border: 2px solid var(--cs-ink); font-family: var(--cs-display); font-weight: 700; font-size: 17px; }
-  .chip img { display: block; filter: grayscale(1); }
+  .top { border-bottom: var(--rule-hair) solid var(--color-ink); }
   .hero {
-    padding-top: clamp(48px, 8vw, 104px);
-    padding-bottom: clamp(56px, 8vw, 96px);
-    display: flex;
-    flex-direction: column;
-    gap: clamp(40px, 6vw, 64px);
-    /* entrance slides in from the right */
-    overflow-x: clip;
-  }
-  .hero-main { display: flex; flex-wrap: wrap; align-items: center; gap: 56px 64px; }
-  .hero-copy { flex: 1.25 1 460px; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 26px; }
-  .status {
-    display: flex;
+    min-height: calc(100dvh - 112px);
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
     align-items: center;
-    gap: 9px;
-    font-family: var(--cs-mono);
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--cs-body);
+    gap: var(--space-3xl);
+    padding-block: var(--space-xl) var(--space-2xl);
   }
-  .dot { width: 9px; height: 9px; border-radius: 50%; background: #1f9d4a; box-shadow: 0 0 0 4px rgba(31, 157, 74, 0.18); }
-  h1 {
-    margin: 0;
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: clamp(56px, 8vw, 112px);
-    line-height: 1;
-    letter-spacing: -0.015em;
+  .hero-copy { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-lg); }
+  .audience { display: inline-flex; border: 2px solid var(--color-ink); }
+  .audience button {
+    min-height: 44px;
+    padding: 0 var(--space-md);
+    border: 0;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: background-color var(--dur-short) var(--ease-out);
   }
-  .hello { display: inline-block; transform: rotate(-2deg); padding: 4px 18px 10px; background: var(--cs-accent); }
-  .intro { margin: 0; max-width: 52ch; font-size: clamp(17px, 1.6vw, 20px); line-height: 1.65; color: var(--cs-body); text-wrap: pretty; }
-  .intro strong { font-weight: 700; color: var(--cs-ink); }
-  .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 26px; padding-top: 4px; }
-  .coffee {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 4px;
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 18px;
-    border-bottom: 3px solid var(--cs-ink);
-  }
-  .coffee:hover { background: var(--cs-accent); }
+  .audience button + button { border-left: 2px solid var(--color-ink); }
+  .audience button:hover { background: var(--color-paper-3); }
+  .audience button:active { background: var(--color-rule); }
+  .audience button[aria-checked='true'] { background: var(--color-ink); color: var(--color-paper); }
+  .audience button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+  h1 { font-size: clamp(3.5rem, 6vw + 1rem, 7rem); line-height: 1; max-width: none; text-wrap: balance; }
+  .hello-band { padding: var(--space-2xs) var(--space-xl) var(--space-sm); }
+  .promise { max-width: 26ch; font-size: var(--text-xl); line-height: 1.35; color: var(--color-ink); text-wrap: balance; }
+  .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-md) var(--space-xl); }
 
-  .code-card { flex: 1 1 360px; min-width: 0; position: relative; margin: 0 12px 12px 0; }
-  .code-card::before { content: ''; position: absolute; inset: 0; transform: translate(12px, 12px); background: var(--cs-accent); }
-  .code-window { position: relative; background: var(--cs-ink); border: 3px solid var(--cs-ink); color: #ededed; }
-  .code-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 12px 16px;
-    border-bottom: 1px solid #2c2c2c;
+  .repl { min-width: 0; min-height: min(620px, 68dvh); margin: 0; display: flex; flex-direction: column; background: var(--color-night); color: var(--color-on-night); }
+  .repl-file {
+    padding: var(--space-sm) var(--space-lg);
+    border-bottom: var(--rule-hair) solid var(--color-night-rule);
+    font: var(--text-sm)/1.4 var(--font-outlier);
+    color: var(--color-on-night-muted);
   }
-  .dots { display: flex; gap: 7px; }
-  .dots span { width: 11px; height: 11px; border-radius: 50%; background: #3a3a3a; }
-  .dots .on { background: var(--cs-accent); }
-  .file { font-family: var(--cs-mono); font-size: 12px; color: #bdbdbd; }
-  pre {
-    margin: 0;
-    padding: 22px 22px 24px;
-    overflow-x: auto;
-    font-family: var(--cs-mono);
-    font-size: clamp(13px, 1.15vw, 15px);
-    line-height: 1.75;
-  }
-  pre code { font-family: inherit; }
-  .c { color: #8a8a8a; }
-  .k { color: var(--cs-accent); }
-  .s { color: #a8e6b4; }
+  pre { margin: 0; padding: var(--space-xl) var(--space-lg); overflow-x: auto; font: clamp(0.8125rem, 0.35vw + 0.7rem, 1.0625rem)/1.85 var(--font-outlier); }
+  pre code { font: inherit; }
+  .c { color: var(--color-code-comment); }
+  .k { color: var(--color-accent); }
+  .s { color: var(--color-code-string); }
   .term-log {
-    max-height: 150px;
+    flex: 1;
+    max-height: 220px;
     overflow-y: auto;
-    padding: 10px 22px 0;
-    border-top: 1px solid #2c2c2c;
-    font-family: var(--cs-mono);
-    font-size: 13px;
-    line-height: 1.6;
+    padding: var(--space-sm) var(--space-lg) 0;
+    border-top: var(--rule-hair) solid var(--color-night-rule);
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: var(--space-2xs);
+    font: var(--text-sm)/1.6 var(--font-outlier);
   }
   .term-log > :global(div) { display: flex; flex-direction: column; }
-  .term-log :global(.term-cmd) { color: #bdbdbd; }
-  .term-log :global(.term-out) { color: #ededed; white-space: pre-wrap; }
-  .term-input { display: flex; align-items: center; gap: 10px; padding: 10px 22px 14px; font-family: var(--cs-mono); font-size: 13px; color: #bdbdbd; cursor: text; }
-  .term-input input { flex: 1; min-width: 0; background: transparent; border: 0; outline: 0; color: #fff; font-family: var(--cs-mono); font-size: 13px; caret-color: var(--cs-accent); }
-  .term-input:focus-within { outline: 2px solid var(--cs-accent); outline-offset: -2px; }
-  .cursor { display: inline-block; width: 8px; height: 16px; background: var(--cs-accent); }
-
-
-  .section-head { display: flex; flex-direction: column; gap: 12px; }
-
-  .projects {
-    padding-top: clamp(56px, 8vw, 104px);
-    padding-bottom: clamp(56px, 8vw, 104px);
-    display: flex;
-    flex-direction: column;
-    gap: 36px;
+  .term-log :global(.term-cmd) { color: var(--color-on-night-muted); }
+  .term-log :global(.term-out) { color: var(--color-on-night); white-space: pre-wrap; }
+  .term-input { display: flex; align-items: center; gap: var(--space-sm); padding: var(--space-sm) var(--space-lg) var(--space-md); font: var(--text-sm)/1 var(--font-outlier); color: var(--color-accent); cursor: text; }
+  .term-input input {
+    flex: 1;
+    min-width: 0;
+    min-height: 44px;
+    padding: 0 var(--space-sm);
+    border: var(--rule-hair) solid var(--color-on-night-muted);
+    background: var(--color-night-2);
+    color: var(--color-on-night);
+    font: var(--text-sm)/1 var(--font-outlier);
+    caret-color: var(--color-accent);
+    outline: 2px solid transparent;
+    outline-offset: -3px;
   }
-  .projects-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 40px; }
-  .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+  .term-input input::placeholder { color: var(--color-on-night-muted); }
+  .term-input input:focus-visible { outline-color: var(--color-accent); }
+
+  .proof { display: flex; flex-direction: column; gap: var(--space-xl); padding-block: var(--space-2xl); }
+  .trust { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm) var(--space-lg); margin: 0; }
+  .trust-k { font-size: var(--text-sm); color: var(--color-muted); }
+  .chips { display: flex; flex-wrap: wrap; gap: var(--space-xs) var(--space-xl); }
+  .chip { display: inline-flex; align-items: center; gap: var(--space-xs); font: var(--display-weight) var(--text-lg)/1.2 var(--font-display); }
+  .chip img { filter: grayscale(1); }
+
+  .projects { padding-block: var(--section-gap); }
+  .projects-inner { display: flex; flex-direction: column; gap: var(--space-2xl); }
+  .projects-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--space-lg) var(--space-xl); }
+  .section-head { display: flex; flex-direction: column; gap: var(--space-md); }
+  .section-head .lead { color: var(--color-ink-2); }
+  .filters { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
   .filters button {
-    all: unset;
-    cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 14px;
-    border: 2px solid var(--cs-ink);
-    background: #fff;
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: 15px;
+    gap: var(--space-xs);
+    min-height: 44px;
+    padding: 0 var(--space-md);
+    border: 2px solid var(--color-ink);
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-size: var(--text-md);
+    cursor: pointer;
+    transition: background-color var(--dur-short) var(--ease-out);
   }
-  .filters button:hover, .filters button[aria-pressed='true'] { background: var(--cs-accent); }
-  .filters .count { font-family: var(--cs-mono); font-size: 12px; font-weight: 500; }
-  .filters button:focus-visible, .audience button:focus-visible { outline: 3px solid var(--cs-ink); outline-offset: 3px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 28px 24px; }
+  .filters button:hover { background: var(--color-paper-3); }
+  .filters button:active { background: var(--color-rule); }
+  .filters button[aria-pressed='true'] { background: var(--color-ink); color: var(--color-paper); }
+  .filters button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+  .filters .count { font-size: var(--text-sm); font-variant-numeric: tabular-nums; opacity: 0.75; }
+  .index { margin: 0; padding: 0; list-style: none; border-top: 2px solid var(--color-ink); }
 
-
-
-</style>
-
-<style is:global>
-  [data-audience='client'] .for-rec,
-  [data-audience='rec'] .for-client { display: none !important; }
+  @media (max-width: 40rem) {
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; padding-inline: var(--space-md); }
+  }
+  @media (max-width: 60rem) {
+    .hero { min-height: 0; grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); padding-block: var(--space-xl); }
+    .repl { min-height: 0; }
+  }
 </style>

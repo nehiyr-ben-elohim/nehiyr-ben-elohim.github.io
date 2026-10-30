@@ -2,62 +2,61 @@
 import { EMAIL, GITHUB_URL, LINKEDIN_URL, OWNER } from '../lib/site'
 
 interface Props {
-  // home: dark footer with the big "hello world!" and social links
+  // home: the letter close, a big "hello world!" signed off with the links
   big?: boolean
 }
 
 const { big = false } = Astro.props
 ---
 
-<footer class:list={['site-footer', { big }]}>
-  <div class="wrap footer-inner">
+<footer class:list={['site-footer', { big, 'on-night': big }]}>
+  <div class="container footer-inner">
     {big && (
       <div class="footer-top">
-        <span class="footer-hello">hello world!</span>
-        <div class="socials">
-          <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="social">
-            <img src="/img/devicons/linkedin.svg" alt="" width="24" height="24" class="mono" />
-          </a>
-          <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="social">
-            <img src="/img/devicons/github.svg" alt="" width="24" height="24" />
-          </a>
-          <a href={`mailto:${EMAIL}`} aria-label="Email" class="social at">@</a>
-        </div>
+        <p class="sign-off">
+          <span class="footer-hello hello-band">hello world!</span>
+          <span class="signature">{OWNER}, depuis Lomé.</span>
+        </p>
+        <ul class="socials">
+          <li><a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" class="social">LinkedIn</a></li>
+          <li><a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" class="social">GitHub</a></li>
+          <li><a href={`mailto:${EMAIL}`} class="social">{EMAIL}</a></li>
+        </ul>
       </div>
     )}
     <div class="footer-bottom">
-      <span>© 2026 {OWNER} · Lomé, Togo</span>
-      <a href="#top" class="hl-link to-top">haut de page ↑</a>
+      <p>© 2026 {OWNER}, Lomé, Togo</p>
+      <a href="#top" class="to-top text-link">haut de page</a>
     </div>
   </div>
 </footer>
 
 <style>
-  .site-footer { border-top: 1px solid var(--cs-line); }
-  .footer-inner { padding-top: 24px; padding-bottom: 24px; display: flex; flex-direction: column; gap: 36px; }
-  .footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; font-size: 14px; color: #3a3a3a; }
-  .big { background: var(--cs-ink); color: #fff; border-top: 0; }
-  .big .footer-inner { padding-top: clamp(48px, 7vw, 80px); padding-bottom: 28px; }
-  .big .footer-bottom { padding-top: 20px; border-top: 1px solid #333; color: #cfcfcf; }
-  .big .to-top { color: var(--cs-accent); }
-  .big .to-top:hover { background: transparent; color: #fff; }
-  .footer-top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; }
-  .footer-hello {
-    display: inline-block;
-    transform: rotate(-2deg);
-    padding: 4px 18px 10px;
-    background: var(--cs-accent);
-    color: var(--cs-ink);
-    font-family: var(--cs-display);
-    font-weight: 700;
-    font-size: clamp(48px, 8vw, 104px);
-    line-height: 1;
+  .site-footer { border-top: var(--rule-hair) solid var(--color-ink); }
+  .footer-inner { display: flex; flex-direction: column; gap: var(--space-2xl); padding-block: var(--space-lg); }
+  .footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm); font-size: var(--text-sm); color: var(--color-muted); }
+  .big { border-top: 0; }
+  .big .footer-inner { padding-block: var(--space-3xl) var(--space-lg); }
+  .big .footer-bottom { padding-top: var(--space-md); border-top: var(--rule-hair) solid var(--color-night-rule); color: var(--color-on-night-muted); }
+  .big .to-top:hover { color: var(--color-ink); }
+  .footer-top { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); align-items: end; gap: var(--space-xl) var(--gap-columns); }
+  .sign-off { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-lg); }
+  .footer-hello { padding: var(--space-2xs) var(--space-xl) var(--space-sm); font: var(--display-weight) clamp(3.5rem, 7vw + 1rem, 8rem)/1 var(--font-display); letter-spacing: var(--tracking-display); }
+  .signature { font: var(--display-weight) var(--text-xl)/1.2 var(--font-display); }
+  .socials { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; border-top: var(--rule-hair) solid var(--color-night-rule); }
+  .social {
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    border-bottom: var(--rule-hair) solid var(--color-night-rule);
+    font: var(--display-weight) var(--text-lg)/1.2 var(--font-display);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    transition: color var(--dur-short) var(--ease-out);
   }
-  .socials { display: flex; gap: 10px; }
-  .social { width: 48px; height: 48px; display: grid; place-items: center; background: var(--cs-accent); }
-  .social:hover { background: #fff; }
-  .social img { display: block; }
-  .mono { filter: grayscale(1) brightness(0); }
-  .at { color: var(--cs-ink); font-family: var(--cs-display); font-weight: 700; font-size: 20px; }
-  .at:hover { color: var(--cs-ink); }
+  .social:hover { color: var(--color-accent); }
+  .social:active { color: var(--color-on-night-2); }
+  @media (max-width: 60rem) {
+    .footer-top { grid-template-columns: minmax(0, 1fr); }
+  }
 </style>
